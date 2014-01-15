@@ -70,6 +70,7 @@ public class Person extends Tile implements Actor {
     }
 
     protected void setImage(int x, int y) {
+    	System.out.println(imgName);
         try {
             if ((onClick != null && !onClick.active) || onClick == null) {
                 if (wasTalking && wasTalkingToYou) {
@@ -166,9 +167,4 @@ public class Person extends Tile implements Actor {
 
 	}
 
-	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
-	}
-    
 }

@@ -197,53 +197,63 @@ public class JSONObject {
     		Class c = Class.forName((String)parameters.get("class"));
     		Object o = c.newInstance();
 
-    		Field[] fields = c.getDeclaredFields();
+    		boolean has_superclass = true;
+    		
+    		while(has_superclass){
+    		
+    			Field[] fields = c.getDeclaredFields();
 
-    		for(Field field : fields){
-    			Object param = parameters.get(field.getName());
+    			for(Field field : fields){
+    				Object param = parameters.get(field.getName());
+					System.out.println(field.getName() + " " + param);
+    				boolean is_transient = Modifier.isTransient(field.getModifiers());
 
-    			boolean is_transient = Modifier.isTransient(field.getModifiers());
+    				if(param != null && !is_transient){
 
-    			if(param != null && !is_transient){
+    					// Need to get into protected stuff
+    					field.setAccessible(true);
 
-    				// Need to get into protected stuff
-    				field.setAccessible(true);
+    					Class type = field.getType();
 
-    				Class type = field.getType();
-    				
-    				if(type == int.class)
-    					field.setInt(o, ((Float)param).intValue());
-    				else if(type == float.class)
-    					field.setFloat(o, ((Float)param).floatValue());
-    				else if(type == boolean.class)
-    					field.setBoolean(o, ((Boolean)param).booleanValue());
-    				else if(type.isArray()){
+    					if(type == int.class)
+    						field.setInt(o, ((Float)param).intValue());
+    					else if(type == float.class)
+    						field.setFloat(o, ((Float)param).floatValue());
+    					else if(type == boolean.class)
+    						field.setBoolean(o, ((Boolean)param).booleanValue());
+    					else if(type.isArray()){
 
-						Object[] params = (Object[])param;
-						String type_name = type.toString();
+							Object[] params = (Object[])param;
+							String type_name = type.toString();
 
-						if(type_name.equals("class [I")){
+							if(type_name.equals("class [I")){
 
-    						int[] ints = new int[params.length];
+    							int[] ints = new int[params.length];
 
-    						for(int i = 0; i < params.length; i++)
-    							ints[i] = ((Float)params[i]).intValue();
+    							for(int i = 0; i < params.length; i++)
+    								ints[i] = ((Float)params[i]).intValue();
 
-    						field.set(o, ints);
+    							field.set(o, ints);
 
-    					} else {
+							} else {
 
-    						type_name = type_name.substring(8, type_name.length()-1);
-    						Object arr = Array.newInstance(Class.forName(type_name), params.length);
-    						for(int i = 0; i < params.length; i++)
-    							Array.set(arr, i, params[i]);
-    						field.set(o, arr);
+    							type_name = type_name.substring(8, type_name.length()-1);
+    							Object arr = Array.newInstance(Class.forName(type_name), params.length);
+    							for(int i = 0; i < params.length; i++)
+    								Array.set(arr, i, params[i]);
+    							field.set(o, arr);
 
-    					}
+    						}
     					
-    				} else
-    					field.set(o, type.cast(param));
+    					} else
+    						field.set(o, type.cast(param));
+    				}
     			}
+    			
+    			c = c.getSuperclass();
+
+    			if(c == Object.class) has_superclass = false;
+
     		}
 
     		((JSON)o).fromJSON(parameters);

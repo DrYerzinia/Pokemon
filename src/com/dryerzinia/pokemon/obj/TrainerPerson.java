@@ -157,9 +157,4 @@ public class TrainerPerson extends Person implements Actor {
 
 	}
 
-	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
-	}
-
 }
