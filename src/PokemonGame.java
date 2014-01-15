@@ -1555,7 +1555,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
         // if(!read) {
         System.out.println("Loading from file");
-        load(new File("saveReg.dat"), true);
+        load(new File("save.json"), true);
 
         Iterator<Tile> itt = mtile.iterator();
         while (itt.hasNext()) {
@@ -1889,7 +1889,15 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
     public void save(File f) {
         try {
 
-            FileOutputStream fos = new FileOutputStream(f);
+        	PrintWriter json_writer = new PrintWriter(f);
+
+        	json_writer.print(JSONArray.arrayListToJSON(mtile));
+        	json_writer.print("\n");
+        	json_writer.print(JSONArray.arrayListToJSON(level));
+        	
+        	json_writer.close();
+
+          /*FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream((OutputStream) fos);
             oos.writeInt(mtile.size());
             for (int i = 0; i < mtile.size(); i++) {
@@ -1900,7 +1908,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
                 oos.writeObject(level.get(i));
             }
             oos.flush();
-            oos.close();
+            oos.close();*/
 
         } catch (Exception x) {
             x.printStackTrace();
@@ -1915,11 +1923,27 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
             mtile = new ArrayList<Tile>();
             level = new ArrayList<Level>();
 
-            ObjectInputStream ois;
-            
             System.out.println("f.getName(): "+ f.getCanonicalPath());
+
+            BufferedReader json_reader = new BufferedReader(new FileReader(f));
+
+			String json_1 = json_reader.readLine();
+			String json_2 = json_reader.readLine();
+
+			json_reader.close();
+		
+			Object[] tiles = JSONObject.JSONToArray(json_1);
+			Object[] levels = JSONObject.JSONToArray(json_2);
+
+            for(int i = 0; i < tiles.length; i++)
+            	mtile.add((Tile)tiles[i]);
+
+            for(int i = 0; i < levels.length; i++)
+                level.add((Level)levels[i]);
             
-            if (local) {
+        /* 
+            ObjectInputStream ois;
+        if (local) {
                 ois = new ObjectInputStream(getClass().getClassLoader()
                         .getResource(f.getName()).openStream()); // ??? WTH IS
                                                                  // LOCAL
@@ -1940,11 +1964,12 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
             for (int i = 0; i < numberOfLevels; i++) {
                 level.add((Level) ois.readObject());
             }
-
+		*/
         } catch (Exception x) {
             x.printStackTrace();
         }
 
+        numberOfLevels = level.size();// TODO Erradicate this variable
         for (int i = 0; i < numberOfLevels; i++) {
 
             for (int x = 0; x < level.get(i).g.g.length; x++) {

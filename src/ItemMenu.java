@@ -10,11 +10,11 @@ public class ItemMenu extends ScrollMenu {
 
     Player p;
 
-    ItemCountMenu itemCountMenu;
-    boolean itemCountMenuActive = false;
-    GMenu ItemAsk;
-    public SelectionMenu yesnoMenu;
-    boolean yesnoMenuActive = false;
+    transient ItemCountMenu itemCountMenu;
+    transient boolean itemCountMenuActive = false;
+    transient GMenu ItemAsk;
+    public transient SelectionMenu yesnoMenu;
+    transient boolean yesnoMenuActive = false;
 
     public ItemMenu(ArrayList<Item> items, int x, int y, int w, int h, int wm) {
         this.x = x;
@@ -225,5 +225,20 @@ public class ItemMenu extends ScrollMenu {
         System.out.println("???");
         return true;
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("ScrollMenu", "ItemMenu");
+		// TODO figure out wtf is transient
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
 
 }

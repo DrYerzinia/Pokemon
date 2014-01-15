@@ -133,4 +133,19 @@ public class ScrollMenu extends SelectionMenu {
         return currentToken.length;
     }
 
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("SelectionMenu", "ScrollMenu");
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
+
 }

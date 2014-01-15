@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.HashMap;
 
 public class StatDispMenu extends GMenu {
 
@@ -28,5 +29,25 @@ public class StatDispMenu extends GMenu {
         g.drawString("" + p.getSpeed(), 45 + x * 16, 65 + y * 16);
         g.drawString("" + p.getSpecial(), 45 + x * 16, 85 + y * 16);
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("GMenu", "SelectionMenu");
+		json = json.substring(0,json.length()-1);
+
+	    json += ",'p':" + JSONObject.objectToJSON(p);
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
 
 }

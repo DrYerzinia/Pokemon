@@ -1,10 +1,11 @@
 import java.awt.*;
+import java.util.HashMap;
 
 public class MoneyMenu extends GMenu {
 
     private static final long serialVersionUID = -4996520434232882739L;
 
-    Player p;
+    transient Player p;
 
     public MoneyMenu(Player p) {
         this.p = p;
@@ -24,5 +25,20 @@ public class MoneyMenu extends GMenu {
         g.drawString("MONEY", 105, 10);
         g.drawString("$ " + p.getMoney(), 90, 20);
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("GMenu", "SelectionMenu");
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
 
 }

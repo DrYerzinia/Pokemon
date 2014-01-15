@@ -6,6 +6,7 @@ public class SelectionMenu extends GMenu {
     static final long serialVersionUID = 5709845116293032515L;
 
     protected int widthM;
+
     public transient int selection = 0;
 
     public transient boolean exitOnLast = true;
@@ -15,6 +16,7 @@ public class SelectionMenu extends GMenu {
 
     public transient Overlay overlays[];
     public transient OverlayO toset;
+
     public GMenu submenus[];
 
     public transient GMenu submenu = null;
@@ -221,5 +223,27 @@ public class SelectionMenu extends GMenu {
         else if (selection < (h - 2) * widthM + 1)
             selection++;
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("GMenu", "SelectionMenu");
+		json = json.substring(0,json.length()-1);
+
+	    json += ",'widthM':" + widthM;
+
+	    json += ",'submenus':" + JSONArray.objectArrayToJSON(submenus);
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
 
 }

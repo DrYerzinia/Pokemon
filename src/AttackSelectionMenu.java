@@ -191,4 +191,25 @@ public class AttackSelectionMenu extends SelectionMenu {
         else if (selection < (h - 2) * 2 + 1)
             selection++;
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("SelectionMenu", "AttackSelectionMenu");
+		json = json.substring(0,json.length()-1);
+
+	    json += ",'p':" + JSONObject.objectToJSON(p);
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
+
 }

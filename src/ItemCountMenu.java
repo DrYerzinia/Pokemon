@@ -1,10 +1,13 @@
 import java.awt.*;
+import java.util.HashMap;
 
 public class ItemCountMenu extends GMenu {
 
-    int index;
-    int price;
-    int count;
+	private static final long serialVersionUID = -6111554869637680375L;
+
+	transient int index;
+    transient int price;
+    transient int count;
 
     public ItemCountMenu(int index, int price) {
         this.index = index;
@@ -40,5 +43,20 @@ public class ItemCountMenu extends GMenu {
         if (count == 0)
             count = 99;
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("GMenu", "ItemCountMenu");
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
 
 }

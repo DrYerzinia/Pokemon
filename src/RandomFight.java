@@ -1,10 +1,12 @@
 import java.io.*;
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.*;
 
-public class RandomFight implements Serializable, DeepCopy {
+public class RandomFight implements Serializable, DeepCopy, JSON {
 
     static final long serialVersionUID = -7322792374197388454L;
 
@@ -64,6 +66,28 @@ public class RandomFight implements Serializable, DeepCopy {
 
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
+    }
+
+    @Override
+    public String toJSON(){
+
+    	String json = "{'class':'RandomFight'";
+    	
+        json += ",'pokemon':" + JSONArray.objectArrayToJSON(pokemon);
+
+        json += ",'chance':" + JSONArray.intArrayToJSON(chance);
+
+        json += ",'total':" + total;
+
+        json += "}";
+
+        return json;
+
+    }
+
+    @Override
+    public void fromJSON(HashMap<String, Object> json){
+    	// TODO Auto-generated method stub
     }
 
     public Object deepCopy() {

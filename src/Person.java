@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.HashMap;
 import java.awt.*;
 
 public class Person extends Tile implements Actor {
@@ -140,4 +141,31 @@ public class Person extends Tile implements Actor {
             g = (GMenu) onClick.deepCopy();
         return new Person(new String(imgName), canBeSteppedOn, g, dir);
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("Tile", "Person");
+		json = json.substring(0,json.length()-1);
+
+		json += ",'px':" + px;
+		json += ",'py':" + py;
+
+		json += ",'dir':" + dir;
+		json += ",'x':" + x;
+		json += ",'y':" + y;
+		json += ",'level':" + level;
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
+
 }

@@ -205,4 +205,24 @@ public class PokemonBoxMenu extends ScrollMenu {
         return true;
     }
 
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("ScrollMenu", "PokemonBoxMenu");
+		json = json.substring(0,json.length()-1);
+
+		json += ",'mode':" + mode;
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
+    
 }

@@ -384,7 +384,7 @@ public class MysqlConnect {
         } finally {
             try {
                 is.close();
-            } catch (IOException ioe) {
+            } catch (Exception e) {
             }
         }
 

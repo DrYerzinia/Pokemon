@@ -2,7 +2,7 @@ import java.io.*;
 import java.awt.*;
 import java.util.*;
 
-public class GMenu implements Serializable, DeepCopy {
+public class GMenu implements Serializable, DeepCopy, JSON {
 
     static final long serialVersionUID = -6634161359468271631L;
 
@@ -259,5 +259,31 @@ public class GMenu implements Serializable, DeepCopy {
             g = (GMenu) nextmenu.deepCopy();
         return new GMenu(new String(message), g, x, y, w, h);
     }
+
+	@Override
+	public String toJSON() {
+
+    	String json = "{'class':'GMenu'";
+
+    	json += ",'message':" + JSONObject.stringToJSON(message);
+
+		json += ",'x':" + x;
+		json += ",'y':" + y;
+		json += ",'w':" + w;
+		json += ",'h':" + h;
+
+		json += ",'nextmenu':" + JSONObject.objectToJSON(nextmenu);
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

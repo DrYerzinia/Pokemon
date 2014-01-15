@@ -2,7 +2,7 @@ import java.io.*;
 import java.awt.*;
 import java.util.*;
 
-public class Grid implements Serializable {
+public class Grid implements Serializable, JSON {
 
     static final long serialVersionUID = 8900706544643827271L;
 
@@ -311,5 +311,60 @@ public class Grid implements Serializable {
     public void initLevelReference(Level l) {
         this.l = l;
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = "{'class':'Grid'";
+		
+		json += ",'g':[";
+        for (int x = 0; x < g.length; x++) {
+    		json += "[";
+        	for (int y = 0; y < g[0].length; y++) {
+        		json += "[";
+                for (int j = 0; j < g[x][y].size(); j++) {
+                    json += g[x][y].get(j).id;
+            		if(j != g[x][y].size()-1) json+= ",";
+                }
+        		json += "]";
+        		if(y != g[0].length-1) json+= ",";
+            }
+        	json += "]";
+    		if(x != g.length-1) json+= ",";
+        }
+        json += "]";	
+
+		json += "}";
+
+		return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+
+		Object[] g_map_0 = (Object[]) json.get("g");
+		
+		g = new ArrayList[g_map_0.length][((Object[])g_map_0[0]).length];
+
+		for(int x = 0; x < g_map_0.length; x++){
+			
+			Object[] g_map_1 = (Object[]) g_map_0[x];
+			for(int y = 0; y < g_map_1.length; y++){
+
+				Object[] g_map_2 = (Object[]) g_map_1[y];
+				g[x][y] = new ArrayList<Tile>();
+
+				for(int z = 0; z < g_map_2.length; z++){
+					g[x][y].add(
+						new Tile(
+							((Float)g_map_2[z]).intValue()
+						)
+					);
+				}
+
+			}
+		}
+	}
 
 }

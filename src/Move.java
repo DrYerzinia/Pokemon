@@ -1,10 +1,12 @@
 import java.io.*;
 import java.awt.*;
 import java.util.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 
-public class Move implements Serializable, DeepCopy {
+public class Move implements Serializable, DeepCopy, JSON {
 
     static final long serialVersionUID = -6011340993523914499L;
 
@@ -217,5 +219,34 @@ public class Move implements Serializable, DeepCopy {
         }
 
     }
+
+	@Override
+	public String toJSON() {
+
+		String json = "{'class':'Move'";
+
+	    json += ",'effmod':" + effmod;
+
+	    json += ",'name':" + JSONObject.stringToJSON(name);
+	    json += ",'description':" + JSONObject.stringToJSON(description);
+
+	    json += ",'effect':" + JSONObject.stringToJSON(effect);
+	    json += ",'type':" + JSONObject.stringToJSON(type);
+
+	    json += ",'currentpp':" + currentpp;
+	    json += ",'pp':" + pp;
+	    json += ",'dmg':" + dmg;
+	    json += ",'accuracy':" + accuracy;
+	    
+	    json += "}";
+	    
+	    return json;
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

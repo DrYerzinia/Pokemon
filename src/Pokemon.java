@@ -1,10 +1,12 @@
 import java.io.*;
 import java.awt.*;
 import java.util.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 
-public class Pokemon implements Serializable, DeepCopy {
+public class Pokemon implements Serializable, DeepCopy, JSON {
 
     static final long serialVersionUID = 6487354042212056227L;
 
@@ -649,5 +651,46 @@ public class Pokemon implements Serializable, DeepCopy {
         }
 
     }
+
+	@Override
+	public String toJSON() {
+
+    	String json = "{'class':'Pokemon'";
+
+    	json += ",'name':" + JSONObject.stringToJSON(name);
+    	json += ",'nickName':" + JSONObject.stringToJSON(nickName);
+
+    	json += ",'Species':" + JSONObject.stringToJSON(Species);
+
+    	json += ",'level':" + level;
+    	json += ",'currentHP':" + currentHP;
+    	json += ",'hpSE':" + hpSE;
+    	json += ",'attackSE':" + attackSE;
+    	json += ",'defenseSE':" + defenseSE;
+    	json += ",'speedSE':" + speedSE;
+    	json += ",'specialSE':" + specialSE;
+
+    	json += ",'idNo':" + idNo;
+    	json += ",'EXP':" + EXP;
+
+    	json += ",'status':" + JSONObject.stringToJSON(status);
+    	json += ",'ot':" + JSONObject.stringToJSON(ot);
+
+    	json += ",'moves':" + JSONArray.objectArrayToJSON(moves);
+
+	    json += ",'location':" + location;
+
+	    json += ",'remoteSetDamage':" + remoteSetDamage;
+
+        json += "}";
+
+        return json;
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

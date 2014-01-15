@@ -1,7 +1,8 @@
 import java.io.*;
+import java.util.HashMap;
 import java.awt.*;
 
-public class Tile implements Serializable, ReferenceInit, DeepCopy {
+public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
 
     static final long serialVersionUID = 5044137701176237619L;
 
@@ -150,6 +151,41 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy {
 
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
+    }
+
+    public String toJSON(){
+
+    	String json = "{'class':'Tile'";
+
+    	json += ",'imgName':" + JSONObject.stringToJSON(imgName);
+
+        json += ",'canBeSteppedOn':" + canBeSteppedOn;
+
+        json += ",'id':" + id;
+
+        json += ",'pixleOffsetX':" + pixelOffsetX;
+        json += ",'pixleOffsetY':" + pixelOffsetY;
+
+        json += ",'changeToLevel':" + changeToLevel;
+        json += ",'leaveDirection':" + leaveDirection;
+        json += ",'exitDir':" + exitDir;
+        json += ",'xnew':" + xnew;
+        json += ",'ynew':" + ynew;
+
+        json += ",'onClick':" + JSONObject.objectToJSON(onClick);
+
+        json += ",'rf':"+ JSONObject.objectToJSON(rf);
+        
+        json += "}";
+
+        return json;
+        
+    }
+
+    public void fromJSON(HashMap<String, Object> json){
+
+    	loadImage();
+
     }
 
     public void initializeSecondaryReferences(Grid g) {

@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.HashMap;
 
 public class TrainerPerson extends Person implements Actor {
 
@@ -124,4 +125,34 @@ public class TrainerPerson extends Person implements Actor {
         return new TrainerPerson(new String(imgName), canBeSteppedOn, onClick,
                 dir, x, y, viewDist);
     }
+    
+	@Override
+	public String toJSON() {
+
+		String json = super.toJSON();
+		json = json.replaceFirst("Person", "TrainerPerson");
+		json = json.substring(0,json.length()-1);
+
+		json += ",'px':" + px;
+		json += ",'py':" + py;
+
+		json += ",'face':" + face;
+		json += ",'x':" + x;
+		json += ",'y':" + y;
+		json += ",'con':" + con;
+		json += ",'viewDist':" + viewDist;
+
+		json += ",'hasBeenFought':" + hasBeenFought;
+
+        json += "}";
+
+        return json;
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+	}
+
 }

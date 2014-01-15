@@ -2,7 +2,7 @@ import java.io.*;
 import java.awt.*;
 import java.util.*;
 
-public class Level implements Serializable {
+public class Level implements Serializable, JSON {
 
     static final long serialVersionUID = -5293673761061322573L;
 
@@ -146,6 +146,28 @@ public class Level implements Serializable {
 
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
+    }
+
+    public String toJSON(){
+
+    	String json = "{'class':'Level'";
+    	
+    	json += ",'g':" + JSONObject.objectToJSON(g);
+
+        json += ",'borders':" + JSONArray.intArrayToJSON(borders);
+        json += ",'borderoffset':" + JSONArray.intArrayToJSON(borderoffset);
+        json += ",'id':" + id;
+
+        json += "}";
+
+        return json;
+
+    }
+
+    public void fromJSON(HashMap<String, Object> json){
+
+    	g.initLevelReference(this);
+
     }
 
     public void initLevelReferences(ArrayList<Level> l) {
