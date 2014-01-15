@@ -701,8 +701,10 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
-		
+
+		getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+        loadImg();
+
 	}
 
 }

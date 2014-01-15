@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
@@ -304,6 +305,7 @@ public class MysqlConnect {
                 if (location < 6)
                     poke2[location] = p;
                 // else
+                p.getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
                 poke.add(p);
                 // for(int j = 0; j < 15; j++)
                 // System.out.println(q.get(i+j)+",");

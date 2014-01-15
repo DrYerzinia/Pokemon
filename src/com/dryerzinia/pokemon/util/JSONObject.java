@@ -205,7 +205,7 @@ public class JSONObject {
 
     			for(Field field : fields){
     				Object param = parameters.get(field.getName());
-					System.out.println(field.getName() + " " + param);
+
     				boolean is_transient = Modifier.isTransient(field.getModifiers());
 
     				if(param != null && !is_transient){
@@ -319,7 +319,7 @@ public class JSONObject {
 	 * @return String with special characters escaped
 	 */
     public static String escapeJava(String str){
-    	return str.replaceAll("\n", "\\\\n").replaceAll("'", "\\c");
+    	return str.replaceAll("\n", "\\\\n").replaceAll("'", "\\\\c");
     }
 
 	/**
