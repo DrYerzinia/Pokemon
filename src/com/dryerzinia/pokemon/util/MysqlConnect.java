@@ -1,446 +1,535 @@
-package com.dryerzinia.pokemon.util;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import com.dryerzinia.pokemon.PokemonGame;
-import com.dryerzinia.pokemon.obj.Item;
-import com.dryerzinia.pokemon.obj.Move;
-import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.obj.Pokeball;
-import com.dryerzinia.pokemon.obj.Pokemon;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Properties;
 
 public class MysqlConnect {
 
-    public static final int Q_PHP = 0;
-    public static final int Q_SQL = 1;
-    public static final int Q_FILE = 2;
+	public static boolean localized = false;
 
-    public static boolean localized = false;
+	// hard-coded for now; change this
+	private static String username;
+	private static String password;
+	private static String dbname;
+	private static String server;
+	private static int port;
 
-    private static int mode = Q_PHP;
+	/**
+	 * Gets a connection to the database.
+	 * 
+	 * @return the connection to the database
+	 * @throws SQLException
+	 */
+	private static Connection getConnection() throws SQLException {
+		Connection conn = null;
+		Properties credentials = new Properties();
+		credentials.put("user", username);
+		credentials.put("password", password);
 
-    public MysqlConnect() {
-    }
+		conn = DriverManager.getConnection("jdbc:mysql://" + server + ":"
+				+ port + "/" + dbname, credentials);
+		System.out.println("Connected to the database.");
+		return conn;
+	}
 
-    public static void main(String args[]) {
+	/**
+	 * Save player data to the database
+	 * 
+	 * @param player
+	 *            the Player whose data to save
+	 */
+	public static void savePlayerData(Player player) {
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false); // transactions possible
+			saveCharacterData(connection, player);
+			saveItemData(connection, player);
+			savePokemonData(connection, player);
+			connection.commit(); // commit all changes
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			if (connection != null) {
+				try {
+					System.err.println("Transaction is being rolled back.");
+					connection.rollback();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			}
+		} finally {
+			try {
+				// revert to default mode
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-        // String username = JOptionPane.showInputDialog(null, "Username:",
-        // "Username", JOptionPane.QUESTION_MESSAGE);
-        // String password = JOptionPane.showInputDialog(null, "Password:",
-        // "Password", JOptionPane.QUESTION_MESSAGE);
-        // login(username, password);
-        // saveCharacterStatus(new Player(1, 2, 1, 0, 9, "DrYerzinia"));
-        // getCharacterPokemon(2);
+	/**
+	 * Save character data to the database
+	 * 
+	 * @param connection
+	 *            connection to the database
+	 * @param player
+	 *            the character's player
+	 */
+	private static void saveCharacterData(Connection connection, Player player)
+			throws SQLException {
+		String sql = "UPDATE PokemonUsers SET x = ?, y = ?, "
+				+ "level = ?, Dir = ?, LPCX = ?, LPCY = ?, LPCLEVEL = ?, "
+				+ "Money = ? WHERE UserName = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, player.x);
+			stmt.setInt(2, player.y);
+			stmt.setInt(3, player.level); // current level player is on
+			stmt.setInt(4, player.dir); // player direction
+			stmt.setInt(5, player.lpcx); // player's last x position
+			stmt.setInt(6, player.lpcy); // player's last y position
+			stmt.setInt(7, player.lpclevel); // last level player was on
+			stmt.setInt(8, player.money);
+			stmt.setString(9, player.name);
+			stmt.executeUpdate();
+		}
+	}
 
-        // getCharacterItems(6);
+	/**
+	 * Save the items of the given player
+	 * 
+	 * @param connection
+	 * @param player
+	 */
+	private static void saveItemData(Connection connection, Player player)
+			throws SQLException {
+		Iterator<Item> itemIter = player.items.iterator();
+		while (itemIter.hasNext()) {
+			Item item = itemIter.next();
+			if (item.number == 0) {
+				removeItem(connection, player, item);
+				continue;
+			}
+			if (item.number > 0) {
+				if (item.added) // item marked for adding to db
+					addItem(connection, player, item);
+				else
+					updateItem(connection, player, item);
+			}
+		}
+	}
 
-    }
+	/**
+	 * Removes an item from the database for the given player.
+	 * 
+	 * @param connection
+	 * @param player
+	 * @param item
+	 */
+	private static void removeItem(Connection connection, Player player,
+			Item item) throws SQLException {
+		String sql = "DELETE FROM PokemonItems "
+				+ "WHERE ownerid = ? AND name = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, player.id);
+			stmt.setString(2, item.name);
+			stmt.executeUpdate();
+		}
+	}
 
-    public static void saveCharacterStatus(Player p) {
+	/**
+	 * Adds an item to the database for the given player.
+	 * 
+	 * @param connection
+	 * @param player
+	 * @param item
+	 */
+	private static void addItem(Connection connection, Player player, Item item)
+			throws SQLException {
+		String sql = "INSERT INTO PokemonItems " + "VALUES (?, ?, ?, ?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, player.id);
+			stmt.setString(2, item.name);
+			stmt.setString(3, item.description);
+			stmt.setString(4, item.use);
+			stmt.setInt(5, item.number);
+			stmt.executeUpdate();
+		}
+	}
 
-        // Save Location
+	/**
+	 * Updates an item already in the database for the given player.
+	 * 
+	 * @param connection
+	 * @param player
+	 * @param item
+	 */
+	private static void updateItem(Connection connection, Player player,
+			Item item) throws SQLException {
+		String sql = "UPDATE PokemonItems SET number = ? "
+				+ "WHERE ownerid = ? AND name = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, item.number);
+			stmt.setInt(2, player.id);
+			stmt.setString(3, item.name);
+			stmt.executeUpdate();
+		}
+	}
 
-        // if(p.x == 5 && p.y == 5 && p.level == 9) return;
+	/**
+	 * Save pokemon data for the given player.
+	 * 
+	 * @param connection
+	 * @param player
+	 */
+	private static void savePokemonData(Connection connection, Player player)
+			throws SQLException {
+		Iterator<Pokemon> pokemonIter = player.poke.box.iterator();
+		while (pokemonIter.hasNext()) {
+			Pokemon pokemon = pokemonIter.next();
+			if (pokemon.added) // recently caught pokemon
+				addPokemon(connection, player, pokemon);
+			else
+				updatePokemon(connection, player, pokemon);
+		}
+	}
 
-        String query = "UPDATE PokemonUsers SET x = " + p.x + ", y = " + p.y
-                + ", level = " + p.level + ", Dir = " + p.dir + ", LPCX = "
-                + p.lpcx + ", LPCY = " + p.lpcy + ", LPCLEVEL = " + p.lpclevel
-                + ", Money = " + p.money + " WHERE UserName = '" + p.name
-                + "';";
-        sendQuery(query);
-        System.out.println("Saving: " + query);
+	/**
+	 * Adds a pokemon to the given player in the db
+	 * 
+	 * @param connection
+	 * @param player
+	 * @param pokemon
+	 * @throws SQLException
+	 */
+	private static void addPokemon(Connection connection, Player player,
+			Pokemon pokemon) throws SQLException {
+		String sql = "INSERT INTO Pokemon (location, nickName, level, curenthp, "
+				+ "totalhp, attack, defense, speed, special, Exp, status, "
+				+ "ownerid, idNo, Species) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, pokemon.location);
+			stmt.setString(2, pokemon.nickName);
+			stmt.setInt(3, pokemon.level);
+			stmt.setInt(4, pokemon.currentHP);
+			stmt.setInt(5, pokemon.hpSE);
+			stmt.setInt(6, pokemon.attackSE);
+			stmt.setInt(7, pokemon.defenseSE);
+			stmt.setInt(8, pokemon.speedSE);
+			stmt.setInt(9, pokemon.specialSE);
+			stmt.setInt(10, pokemon.EXP);
+			stmt.setString(11, pokemon.status);
+			stmt.setInt(12, player.id);
+			stmt.setInt(13, pokemon.idNo);
+			stmt.setString(14, pokemon.Species);
+			stmt.executeUpdate();
+		}
+		addPokemonMoves(connection, pokemon);
+	}
 
-        // Save Item
+	/**
+	 * Inserts moves for a pokemon into the db
+	 * 
+	 * @param connection
+	 * @param pokemon
+	 * @throws SQLException
+	 */
+	private static void addPokemonMoves(Connection connection, Pokemon pokemon)
+			throws SQLException {
+		String sql = "INSERT INTO PokemonMoves VALUES (?,?,?,?,?,?,?,?,?)";
 
-        Iterator<Item> iti = p.items.iterator();
-        while (iti.hasNext()) {
-            Item it = iti.next();
-            if (it.number > 0) {
-                if (!it.added) {
-                    query = "UPDATE PokemonItems SET number = " + it.number
-                            + " WHERE ownerid = " + p.id + " AND name = '"
-                            + it.name + "'";
-                    System.out.println("ITM:" + query);
-                    sendQuery(query);
-                } else {
-                    query = "INSERT INTO PokemonItems VALUES (" + p.id + ", '"
-                            + it.name + "', '" + it.description + "', '"
-                            + it.use + "', " + it.number + ");";
-                    System.out.println("ITM:" + query);
-                    sendQuery(query);
-                }
-            } else if (it.number == 0) {
-                query = "DELETE FROM PokemonItems WHERE ownerid = " + p.id
-                        + " AND name = '" + it.name + "'";
-                sendQuery(query);
-            }
-        }
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			for (int i = 0; i < 4; i++) {
+				if (pokemon.moves[i] == null)
+					break;
 
-        // Save Pokemon
+				stmt.setInt(1, pokemon.idNo);
+				stmt.setString(2, pokemon.moves[i].name);
+				stmt.setString(3, pokemon.moves[i].description);
+				stmt.setString(4, pokemon.moves[i].effect);
+				stmt.setString(5, pokemon.moves[i].type);
+				stmt.setInt(6, pokemon.moves[i].currentpp);
+				stmt.setInt(7, pokemon.moves[i].pp);
+				stmt.setInt(8, pokemon.moves[i].dmg);
+				stmt.setInt(9, pokemon.moves[i].accuracy);
+				stmt.addBatch();
+			}
+			stmt.executeBatch();
+		}
+	}
 
-        // DEBUG
-        System.out.println(p.getName() + "'s pokemon: ");
-        Iterator<Pokemon> itpoke = p.poke.box.iterator();
-        while (itpoke.hasNext()) {
-            Pokemon po = itpoke.next();
-            System.out.println(po.getName());
-        }
-        // END
+	/**
+	 * Updates an existing pokemon in the db for a given player.
+	 * 
+	 * @param connection
+	 * @param player
+	 * @param pokemon
+	 * @throws SQLException
+	 */
+	private static void updatePokemon(Connection connection, Player player,
+			Pokemon pokemon) throws SQLException {
+		String sql = "UPDATE Pokemon SET location = ?, nickName = ?, "
+				+ "level = ?, currentHp = ?, attack = ?, defense = ?, "
+				+ "speed = ?, special = ?, Exp = ?, status = ?, "
+				+ "Species = ? WHERE ownerid = ? AND id = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, pokemon.location);
+			stmt.setString(2, pokemon.nickName);
+			stmt.setInt(3, pokemon.level);
+			stmt.setInt(4, pokemon.currentHP);
+			stmt.setInt(5, pokemon.attackSE);
+			stmt.setInt(6, pokemon.defenseSE);
+			stmt.setInt(7, pokemon.speedSE);
+			stmt.setInt(8, pokemon.specialSE);
+			stmt.setInt(9, pokemon.EXP);
+			stmt.setString(10, pokemon.status);
+			stmt.setString(11, pokemon.Species);
+			stmt.setInt(12, player.id);
+			stmt.setInt(13, pokemon.idNo);
+			stmt.executeUpdate();
+		}
+		updatePokemonMoves(connection, pokemon);
+	}
 
-        Iterator<Pokemon> itp = p.poke.box.iterator();
-        while (itp.hasNext()) {
-            Pokemon po = itp.next();
-            if (!po.added) {
-                query = "UPDATE Pokemon SET location = " + po.location
-                        + ", nickName = '" + po.nickName + "', level = "
-                        + po.level + ", currenthp = " + po.currentHP
-                        + ", attack = " + po.attackSE + ", defense = "
-                        + po.defenseSE + ", speed = " + po.speedSE
-                        + ", special = " + po.specialSE + ", Exp = " + po.EXP
-                        + ", status = '" + po.status + "', Species = '"
-                        + po.getSpecies() + "' WHERE ownerid = " + p.id
-                        + " AND id = " + po.idNo + ";";
-                System.out.println("POK:" + query);
-                for (int i = 0; i < 4; i++) {
-                    if (po.moves[i] == null)
-                        break;
-                    String query2 = "UPDATE PokemonMoves SET currentpp = "
-                            + po.moves[i].currentpp + ", pp = '"
-                            + po.moves[i].pp + "' WHERE pokemonid = " + po.idNo
-                            + " AND name = '" + po.moves[i].name + "'";
-                    System.out.println("MOV:" + query2);
-                    sendQuery(query2);
-                }
-                sendQuery(query);
-            } else {
-                query = "INSERT INTO Pokemon (location, nickName, level, currenthp, totalhp, attack, defense, speed, special, Exp, status, ownerid, idNo, Species) VALUES ("
-                        + po.location
-                        + ", '"
-                        + po.nickName
-                        + "', "
-                        + po.level
-                        + ", "
-                        + po.currentHP
-                        + ", 0, "
-                        + po.attackSE
-                        + ", "
-                        + po.defenseSE
-                        + ", "
-                        + po.speedSE
-                        + ", "
-                        + po.specialSE
-                        + ", "
-                        + po.EXP
-                        + ", '"
-                        + po.status
-                        + "', "
-                        + p.id
-                        + ", '"
-                        + po.idNo
-                        + "', '"
-                        + po.Species
-                        + "');";
-                System.out.println("POK:" + query);
-                sendQuery(query);
-                query = "SELECT id FROM Pokemon WHERE ownerid = " + p.id
-                        + " AND idNo = " + po.idNo + ";";
-                ArrayList<String> q = sendQuery(query);
-                po.idNo = Integer.parseInt(q.get(0));
-                query = "UPDATE Pokemon SET idNo = " + po.idNo
-                        + " WHERE ownerid = " + p.id + " AND id = " + po.idNo
-                        + ";";
-                sendQuery(query);
-                for (int i = 0; i < 4; i++) {
-                    if (po.moves[i] == null)
-                        break;
-                    String query2 = "INSERT INTO PokemonMoves VALUES ("
-                            + po.idNo + ", '" + po.moves[i].name + "', '"
-                            + po.moves[i].description + "', '"
-                            + po.moves[i].effect + "', '" + po.moves[i].type
-                            + "', " + po.moves[i].currentpp + ", "
-                            + po.moves[i].pp + ", " + po.moves[i].dmg + ", "
-                            + po.moves[i].accuracy + ");";
-                    System.out.println("MOV:" + query2);
-                    sendQuery(query2);
-                }
-            }
-        }
+	/**
+	 * Updates the moves for an existing pokemon in the db
+	 * 
+	 * @param connection
+	 * @param pokemon
+	 * @throws SQLException
+	 */
+	private static void updatePokemonMoves(Connection connection,
+			Pokemon pokemon) throws SQLException {
+		String sql = "UPDATE PokemonMoves SET currentpp = ?, pp = ? "
+				+ "WHERE pokemonid = ? AND name = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			for (int i = 0; i < 4; i++) {
+				if (pokemon.moves[i] == null)
+					break;
 
-    }
+				stmt.setInt(1, pokemon.moves[i].currentpp);
+				stmt.setInt(2, pokemon.moves[i].pp);
+				stmt.setInt(3, pokemon.idNo);
+				stmt.setString(4, pokemon.moves[i].name);
+				stmt.addBatch();
+			}
+			stmt.executeBatch();
+		}
+	}
 
-    public static class PokemonContainer {
+	// TODO: store numbers in the DB as numbers and stop parsing strings..
 
-    	public ArrayList<Pokemon> box;
-    	public Pokemon belt[];
+	/**
+	 * Get a list of items that the given character has.
+	 * 
+	 * @param userid
+	 *            the id of the character
+	 * @return
+	 */
+	public static ArrayList<Item> getCharacterItems(int userid) {
+		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
+		ArrayList<Item> items = new ArrayList<Item>();
+		try (Connection connection = getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        public PokemonContainer() {
+			stmt.setInt(1, userid);
+			ResultSet results = stmt.executeQuery();
+			while (results.next()) {
+				String itemName = results.getString("name");
+				Item item = null;
 
-            box = new ArrayList<Pokemon>();
-            belt = new Pokemon[6];
+				if (itemName.equals("pokeball"))
+					item = new Pokeball();
+				else
+					item = new Item();
 
-        }
+				item.name = itemName;
+				item.description = results.getString("description");
+				item.use = results.getString("usee"); // what is this?
+				item.number = Integer.parseInt(results.getString("number"));
+				items.add(item);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 
-        public PokemonContainer(ArrayList<Pokemon> box, Pokemon belt[]) {
-            this.box = box;
-            this.belt = belt;
-        }
+		return items;
+	}
 
-        public Pokemon getFirstOut() {
-            return belt[0];
-        }
+	/**
+	 * Get the pokemon of the given character.
+	 * 
+	 * @param userid
+	 *            the id of the character
+	 * @return a PokemonContainer containing box and belt pokemon.
+	 */
+	public static PokemonContainer getCharacterPokemon(int userid) {
+		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
+		ArrayList<Pokemon> boxPokemon = new ArrayList<Pokemon>();
+		Pokemon[] beltPokemon = new Pokemon[6];
 
-        public int getFirstHealthy() {
-            for (int i = 0; i < 6; i++)
-                if (belt[i] != null && belt[i].currentHP > 0)
-                    return i;
-            return -1;
-        }
+		try (Connection connection = getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        public void printHP() {
-            for (int i = 0; i < 6; i++)
-                if (belt[i] != null)
-                    System.out.println(i + ": " + belt[i].name + " HP: " + belt[i].getCurrentHP() + "/" + belt[i].getTotalHP());
-        }
-        
-    }
+			stmt.setInt(1, userid);
+			ResultSet results = stmt.executeQuery();
+			while (results.next()) {
+				Pokemon pokemon = new Pokemon();
+				pokemon.location = results.getInt("location");
+				pokemon.nickName = results.getString("nickName");
+				pokemon.level = results.getInt("level");
+				pokemon.currentHP = results.getInt("currenthp");
+				pokemon.attackSE = results.getInt("attack");
+				pokemon.defenseSE = results.getInt("defense");
+				pokemon.speedSE = results.getInt("speed");
+				pokemon.specialSE = results.getInt("special");
+				pokemon.idNo = results.getInt("idno");
+				pokemon.EXP = results.getInt("EXP");
+				pokemon.status = results.getString("status"); // stored in db as
+																// int -
+																// problem?
+				pokemon.Species = results.getString("species");
 
-    public static ArrayList<Item> getCharacterItems(int userid) {
+				fetchAndSetMoves(connection, pokemon);
 
-        ArrayList<Item> item = new ArrayList<Item>();
+				if (pokemon.location < 6)
+					beltPokemon[pokemon.location] = pokemon;
+				else
+					boxPokemon.add(pokemon);
+			}
 
-        String query = "SELECT * FROM PokemonItems WHERE ownerid = " + userid
-                + ";";
-        ArrayList<String> q = sendQuery(query);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 
-        if (q.size() > 2) {
-            for (int i = 0; i < q.size(); i = i + 5) {
-                if (q.get(i + 1).toLowerCase().equals("pokeball")) {
-                    Pokeball it = new Pokeball();
-                    it.name = q.get(i + 1);
-                    it.description = q.get(i + 2);
-                    it.use = q.get(i + 3);
-                    it.number = Integer.parseInt(q.get(i + 4));
-                    item.add(it);
-                } else {
-                    Item it = new Item();
-                    it.name = q.get(i + 1);
-                    it.description = q.get(i + 2);
-                    it.use = q.get(i + 3);
-                    it.number = Integer.parseInt(q.get(i + 4));
-                    item.add(it);
-                }
-            }
-        }
+		return new PokemonContainer(boxPokemon, beltPokemon);
+	}
 
-        return item;
+	/**
+	 * Sets the moves for the given pokemon.
+	 * 
+	 * @param connection
+	 * @param pokemon
+	 * @throws SQLException
+	 */
+	private static void fetchAndSetMoves(Connection connection, Pokemon pokemon)
+			throws SQLException {
+		String sql = "SELECT * FROM PokemonMoves WHERE pokemonid = ?";
+		Move[] moves = new Move[4];
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, pokemon.idNo);
+			ResultSet results = stmt.executeQuery();
 
-    }
+			int nMoves = 0; // counting the number of moves (more than 4 is
+							// invalid)
+			while (results.next()) {
+				if (nMoves > 4) {
+					System.err.println("The pokemon has more than 4 moves!");
+					// custom exception? InvalidNumberOfMovesException
+				}
+				Move move = new Move();
+				move.name = results.getString("name");
+				move.description = results.getString("description");
+				move.effect = results.getString("effect");
+				move.type = results.getString("effect");
+				move.currentpp = results.getInt("currentpp");
+				move.pp = results.getInt("pp");
+				move.dmg = results.getInt("dmg");
+				move.accuracy = results.getInt("accuracy");
+				nMoves++;
+			}
 
-    public static PokemonContainer getCharacterPokemon(int userid) {
+			pokemon.moves = moves;
+		}
+	}
 
-        ArrayList<Pokemon> poke = new ArrayList<Pokemon>();
-        Pokemon poke2[] = new Pokemon[6];
+	/**
+	 * Log in and retrieve player information
+	 * 
+	 * @param username
+	 * @param password
+	 * @return the Player whose credentials match username and password, or
+	 *         null.
+	 */
+	public static Player login(String username, String password) {
+		String sql = "SELECT * FROM PokemonUsers WHERE UserName = ? AND Password = ?";
+		Player player = null;
+		try (Connection connection = getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        String query = "SELECT * FROM Pokemon WHERE ownerid = " + userid + ";";
-        ArrayList<String> q = sendQuery(query);
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			ResultSet results = stmt.executeQuery();
 
-        if (q.size() > 2) {
+			int nUsers = 0;
+			while (results.next()) {
+				if (nUsers > 1) {
+					System.err
+							.println("Multiple users for the same information!");
+					// MultipleUsersException?
+				}
+				player = new Player();
+				player.id = results.getInt("id");
+				player.x = results.getInt("x");
+				player.y = results.getInt("y");
+				player.dir = results.getInt("dir");
+				player.level = results.getInt("level");
+				player.name = results.getString("UserName");
+				player.imgName = results.getString("picture");
+				player.lpcx = results.getInt("lpcx");
+				player.lpcy = results.getInt("lpcy");
+				player.lpclevel = results.getInt("lpclevel");
+				player.money = results.getInt("money");
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 
-            for (int i = 0; i < q.size(); i = i + 15) {
-                // for(int j = 0; j < 15; j++){
-                Pokemon p = new Pokemon();
-                int id = Integer.parseInt(q.get(i + 0));
-                // Integer.parseInt(q.get(i*15+1));
-                int location = Integer.parseInt(q.get(i + 2));
-                p.location = location;
-                p.nickName = q.get(i + 3);
-                p.level = Integer.parseInt(q.get(i + 4));
-                // p.totalHP = Integer.parseInt(q.get(i+5));
-                p.currentHP = Integer.parseInt(q.get(i + 6));
-                p.attackSE = Integer.parseInt(q.get(i + 7));
-                p.defenseSE = Integer.parseInt(q.get(i + 8));
-                p.speedSE = Integer.parseInt(q.get(i + 9));
-                p.specialSE = Integer.parseInt(q.get(i + 10));
-                p.idNo = Integer.parseInt(q.get(i + 11));
-                p.idNo = id;
-                p.EXP = Integer.parseInt(q.get(i + 12));
-                p.status = q.get(i + 13);
-                p.Species = q.get(i + 14);
-                p.name = p.Species;
-                p.ot = p.nickName;
-                System.out.println("K:" + p.Species);
-                /*
-                 * if(p.Species.equals("Pikachu")){ p.type = "Eletric"; p.type2
-                 * = "None"; }
-                 */
+		return player;
+	}
 
-                String query2 = "SELECT * FROM PokemonMoves WHERE pokemonid = "
-                        + id + ";";
-                ArrayList<String> q2 = sendQuery(query2);
+	/**
+	 * Helper class for the concept of box and belt pokemon This is unchanged
+	 * from the original.
+	 */
+	public static class PokemonContainer {
 
-                Move[] moves = new Move[4];
-                for (int k = 0; k < q2.size(); k = k + 9) {
-                    // for(int l = 0; l < 9; l++){
-                    Move m = new Move();
-                    m.name = q2.get(k + 1);
-                    m.description = q2.get(k + 2);
-                    m.effect = q2.get(k + 3);
-                    m.type = q2.get(k + 4);
-                    m.currentpp = Integer.parseInt(q2.get(k + 5));
-                    m.pp = Integer.parseInt(q2.get(k + 6));
-                    m.dmg = Integer.parseInt(q2.get(k + 7));
-                    m.accuracy = Integer.parseInt(q2.get(k + 8));
-                    if (k / 9 < 4) {
-                        moves[k / 9] = m;
-                    } else {
-                        System.err
-                                .println("Error: This Pokemon Has More Than 4 Moves?!?!?!");
-                    }
-                    // }
-                    // try{for(int l = 0; l < 18; l++)
-                    // System.out.println(q2.get(k+l)+",");}catch(Exception x){}
-                }
-                p.moves = moves;
-                if (location < 6)
-                    poke2[location] = p;
-                // else
-                p.getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
-                poke.add(p);
-                // for(int j = 0; j < 15; j++)
-                // System.out.println(q.get(i+j)+",");
-            }
-        }
+		ArrayList<Pokemon> box;
+		Pokemon belt[];
 
-        return new PokemonContainer(poke, poke2);
+		public PokemonContainer() {
 
-    }
+			box = new ArrayList<Pokemon>();
+			belt = new Pokemon[6];
 
-    public static Player login(String username, String password) {
+		}
 
-        Player p = null;
+		public PokemonContainer(ArrayList<Pokemon> box, Pokemon belt[]) {
+			this.box = box;
+			this.belt = belt;
+		}
 
-        try {
+		public Pokemon getFirstOut() {
+			return belt[0];
+		}
 
-            String query = "SELECT * FROM PokemonUsers WHERE UserName = '"
-                    + username + "' AND Password = '" + password + "';";
-            ArrayList<String> q = sendQuery(query);
-            System.out.println("Loading: " + query);
+		public int getFirstHealthy() {
+			for (int i = 0; i < 6; i++)
+				if (belt[i] != null && belt[i].currentHP > 0)
+					return i;
+			return -1;
+		}
 
-            System.out.println(Integer.parseInt(q.get(0)) + " "
-                    + Integer.parseInt(q.get(4)) + " "
-                    + Integer.parseInt(q.get(5)) + " "
-                    + Integer.parseInt(q.get(7)) + " "
-                    + Integer.parseInt(q.get(6)) + " " + q.get(1) + " "
-                    + q.get(8));
+		public void printHP() {
+			for (int i = 0; i < 6; i++)
+				if (belt[i] != null)
+					System.out.println(i + ": " + belt[i].name + " HP: "
+							+ belt[i].getCurrentHP() + "/"
+							+ belt[i].getTotalHP());
+		}
 
-            p = new Player(Integer.parseInt(q.get(0)), Integer.parseInt(q
-                    .get(4)), Integer.parseInt(q.get(5)), Integer.parseInt(q
-                    .get(7)), Integer.parseInt(q.get(6)), q.get(1), q.get(8));
-
-            p.lpcx = Integer.parseInt(q.get(9));
-            p.lpcy = Integer.parseInt(q.get(10));
-            p.lpclevel = Integer.parseInt(q.get(11));
-            p.money = Integer.parseInt(q.get(12));
-
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
-
-        return p;
-
-    }
-
-    public static ArrayList<String> sendQuery(String query) {
-        switch (mode) {
-        case Q_SQL:
-            return sendQueryMySQL(query);
-        case Q_FILE:
-            return sendQueryFile(query);
-        case Q_PHP:
-            return sendQueryPHP(query);
-        }
-        return null;
-    }
-
-    public static ArrayList<String> sendQueryPHP(String query) {
-        ArrayList<String> data = new ArrayList<String>();
-        URL u;
-        InputStream is = null;
-        BufferedReader dis;
-        String s = null;
-        String ur = null;
-        if (localized)
-            ur = "http://localhost/query.php?query=" + fixQuery(query);
-        else
-            ur = "http://dryerzinia.comxa.com/query.php?query="
-                    + fixQuery(query);
-        System.out.println();
-        try {
-
-            u = new URL(ur);
-            dis = new BufferedReader(new InputStreamReader(u.openStream()));
-            s = dis.readLine();
-            String[] result = s.split(",");
-            for (int i = 0; i < result.length; i++)
-                data.add(result[i]);
-            while ((s = dis.readLine()) != null)
-                ;
-        } catch (Exception x) {
-            System.out.println(query);
-            System.out.println(s);
-            x.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (Exception e) {
-            }
-        }
-
-        return data;
-    }
-
-    public static ArrayList<String> sendQueryMySQL(String query) {
-        return null;
-    }
-
-    public static ArrayList<String> sendQueryFile(String query) {
-        return null;
-    }
-
-    private static String fixQuery(String s) {
-        String r = "";
-        for (int i = 0; i < s.length(); i++) {
-            switch (s.charAt(i)) {
-            case ' ':
-                r += "%20";
-                break;
-            case '\'':
-                r += "%27";
-                break;
-            case '=':
-                r += "%3D";
-                break;
-            default:
-                r += s.charAt(i);
-                break;
-            }
-        }
-        return r;
-    }
-    /*
-     * public static class UserPositionData {
-     * 
-     * int x, y, level;
-     * 
-     * public UserPositionData(int x, int y, int level){
-     * 
-     * this.x = x; this.y = y; this.level = level;
-     * 
-     * }
-     * 
-     * public String toString(){ return "X: "+x+"\nY: "+y+"\nLevel: "+level; }
-     * 
-     * }
-     */
+	}
 }

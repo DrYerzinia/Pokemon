@@ -1,5 +1,14 @@
-package com.dryerzinia.pokemon;
+/*
 
+By: ???
+
+TODO:
+Write CMD line args parser
+Add port for remote control window via network
+Add a CMD line option to open a control window
+In control window enable observer mode
+
+ */
 
 import java.io.*;
 import java.net.*;
@@ -65,6 +74,12 @@ public class PokemonServer {
 
         MysqlConnect.localized = localized;
 
+        MysqlConnect.username = "root";
+        MysqlConnect.password = "VrvJMUASBqsz8LtA796J";
+        MysqlConnect.dbname = "Pokemon";
+        MysqlConnect.server = "localhost";
+        MysqlConnect.port = 3306;
+        
         oos2 = new ArrayList<ObjectOutputStream>();
 
         System.setProperty("java.awt.headless", "false");
@@ -105,7 +120,7 @@ public class PokemonServer {
                 try {
                     Thread.sleep(120000);
                     for (int i = 0; i < players.size(); i++) {
-                        MysqlConnect.saveCharacterStatus(players.get(i)
+                        MysqlConnect.savePlayerData(players.get(i)
                                 .getPlayer());
                     }
                 } catch (Exception x) {
@@ -139,7 +154,7 @@ public class PokemonServer {
             if (!p.hasMessageLast45()) {
                 System.out.println("Player " + p.getPlayer().getName()
                         + " not responsive");
-                MysqlConnect.saveCharacterStatus(p.getPlayer());
+                MysqlConnect.savePlayerData(p.getPlayer());
                 itp.remove();
                 System.out.println("Player REMOVED!!!");
             }
@@ -574,7 +589,7 @@ public class PokemonServer {
 
     public synchronized void remove(Player p) {
         if (p.level != -1)
-            MysqlConnect.saveCharacterStatus(p);
+            MysqlConnect.savePlayerData(p);
         Iterator<PlayerInstanceData> i = players.iterator();
         while (i.hasNext()) {
             Player p2 = i.next().getPlayer();
