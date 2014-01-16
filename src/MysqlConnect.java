@@ -329,7 +329,7 @@ public class MysqlConnect {
 	 * @return
 	 */
 	public static ArrayList<Item> getCharacterItems(int userid)
-			throws SQLException {
+			{
 		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
 		ArrayList<Item> items = new ArrayList<Item>();
 		try (Connection connection = getConnection();
@@ -352,10 +352,13 @@ public class MysqlConnect {
 				item.number = Integer.parseInt(results.getString("number"));
 				items.add(item);
 			}
-
-			return items;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
+		
+		return items;
 	}
+	
 
 	/**
 	 * Get the pokemon of the given character.
@@ -365,7 +368,7 @@ public class MysqlConnect {
 	 * @return a PokemonContainer containing box and belt pokemon.
 	 */
 	public static PokemonContainer getCharacterPokemon(int userid)
-			throws SQLException {
+			{
 		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
 		ArrayList<Pokemon> boxPokemon = new ArrayList<Pokemon>();
 		Pokemon[] beltPokemon = new Pokemon[6];
@@ -400,8 +403,12 @@ public class MysqlConnect {
 					boxPokemon.add(pokemon);
 			}
 
-			return new PokemonContainer(boxPokemon, beltPokemon);
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
+		
+		return new PokemonContainer(boxPokemon, beltPokemon);
 	}
 
 	/**
@@ -450,8 +457,7 @@ public class MysqlConnect {
 	 * @return the Player whose credentials match username and password, or
 	 *         null.
 	 */
-	public static Player login(String username, String password)
-			throws SQLException {
+	public static Player login(String username, String password) {
 		String sql = "SELECT * FROM PokemonUsers WHERE UserName = ? AND Password = ?";
 		Player player = null;
 		try (Connection connection = getConnection();
@@ -481,9 +487,11 @@ public class MysqlConnect {
 				player.lpclevel = results.getInt("lpclevel");
 				player.money = results.getInt("money");
 			}
-
-			return player;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
+		
+		return player;
 	}
 
 	/**
