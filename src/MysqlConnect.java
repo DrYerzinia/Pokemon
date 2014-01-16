@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -304,80 +305,42 @@ public class MysqlConnect {
 		stmt.executeBatch();
 		}
 	}
-	
-	/*********************************************************************
-	 * TODO: EDIT BELOW SO IT USES JDBC
+
+    
+	/**
+	 * Get a list of items that the given character has.
+	 * @param userid
+	 * @return
 	 */
-
-
-    public static class PokemonContainer {
-
-        ArrayList<Pokemon> box;
-        Pokemon belt[];
-
-        public PokemonContainer() {
-
-            box = new ArrayList<Pokemon>();
-            belt = new Pokemon[6];
-
-        }
-
-        public PokemonContainer(ArrayList<Pokemon> box, Pokemon belt[]) {
-            this.box = box;
-            this.belt = belt;
-        }
-
-        public Pokemon getFirstOut() {
-            return belt[0];
-        }
-
-        public int getFirstHealthy() {
-            for (int i = 0; i < 6; i++)
-                if (belt[i] != null && belt[i].currentHP > 0)
-                    return i;
-            return -1;
-        }
-
-        public void printHP() {
-            for (int i = 0; i < 6; i++)
-                if (belt[i] != null)
-                    System.out.println(i + ": " + belt[i].name + " HP: " + belt[i].getCurrentHP() + "/" + belt[i].getTotalHP());
-        }
-        
+    public static ArrayList<Item> getCharacterItems(int userid) 
+    		throws SQLException {
+    	String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
+    	ArrayList<Item> items = new ArrayList<Item>();
+    	try(
+    			Connection connection = getConnection();
+    			PreparedStatement stmt = connection.prepareStatement(sql)) {
+    		stmt.setInt(1, userid);
+    		ResultSet results = stmt.executeQuery();
+    		while (results.next()) {
+    			String itemName = results.getString("name");
+    			Item item = null;
+    			
+    			if (itemName.equals("pokeball"))
+    				item = new Pokeball();
+    			else
+    				item = new Item();
+    			
+    			item.name = itemName;
+				item.description = results.getString("description");
+				item.use = results.getString("usee"); // what is this?
+				item.number = Integer.parseInt(results.getString("number"));
+				items.add(item);
+    		}
+    		
+    		return items;
+    	}
     }
-
-    public static ArrayList<Item> getCharacterItems(int userid) {
-
-        ArrayList<Item> item = new ArrayList<Item>();
-
-        String query = "SELECT * FROM PokemonItems WHERE ownerid = " + userid
-                + ";";
-        ArrayList<String> q = sendQuery(query);
-
-        if (q.size() > 2) {
-            for (int i = 0; i < q.size(); i = i + 5) {
-                if (q.get(i + 1).toLowerCase().equals("pokeball")) {
-                    Pokeball it = new Pokeball();
-                    it.name = q.get(i + 1);
-                    it.description = q.get(i + 2);
-                    it.use = q.get(i + 3);
-                    it.number = Integer.parseInt(q.get(i + 4));
-                    item.add(it);
-                } else {
-                    Item it = new Item();
-                    it.name = q.get(i + 1);
-                    it.description = q.get(i + 2);
-                    it.use = q.get(i + 3);
-                    it.number = Integer.parseInt(q.get(i + 4));
-                    item.add(it);
-                }
-            }
-        }
-
-        return item;
-
-    }
-
+    	      
     public static PokemonContainer getCharacterPokemon(int userid) {
 
         ArrayList<Pokemon> poke = new ArrayList<Pokemon>();
@@ -493,5 +456,42 @@ public class MysqlConnect {
     
     static ArrayList<String> sendQuery(String sql) {
     	return null;
+    }
+    
+    
+    public static class PokemonContainer {
+
+        ArrayList<Pokemon> box;
+        Pokemon belt[];
+
+        public PokemonContainer() {
+
+            box = new ArrayList<Pokemon>();
+            belt = new Pokemon[6];
+
+        }
+
+        public PokemonContainer(ArrayList<Pokemon> box, Pokemon belt[]) {
+            this.box = box;
+            this.belt = belt;
+        }
+
+        public Pokemon getFirstOut() {
+            return belt[0];
+        }
+
+        public int getFirstHealthy() {
+            for (int i = 0; i < 6; i++)
+                if (belt[i] != null && belt[i].currentHP > 0)
+                    return i;
+            return -1;
+        }
+
+        public void printHP() {
+            for (int i = 0; i < 6; i++)
+                if (belt[i] != null)
+                    System.out.println(i + ": " + belt[i].name + " HP: " + belt[i].getCurrentHP() + "/" + belt[i].getTotalHP());
+        }
+        
     }
 }
