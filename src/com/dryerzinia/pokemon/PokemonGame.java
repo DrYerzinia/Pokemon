@@ -213,7 +213,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Bulbasaur";
         Pokemon p2 = new Pokemon("Venasaur", "", "", 5, 21, 21, 10, 10, 10, 10,
-                0, 3, 0, "", "", "", "", null, bs);
+                0, 3, 0, "", "", "", null, bs);
         p2.Species = "Venasaur";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -232,7 +232,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Bulbasaur";
         Pokemon p1 = new Pokemon("Ivysaur", "", "", 5, 21, 21, 10, 10, 10, 10,
-                0, 2, 0, "", "", "", "", null, bs);
+                0, 2, 0, "", "", "", null, bs);
         p1.Species = "Ivysaur";
         basePokemon.add(p1);
         bs.baseExp = 64;
@@ -250,7 +250,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Bulbasaur";
         Pokemon p = new Pokemon("Bulbasaur", "", "", 5, 21, 21, 10, 10, 10, 10,
-                0, 1, 0, "", "", "", "", null, bs);
+                0, 1, 0, "", "", "", null, bs);
         p.Species = "Bulbasaur";
         basePokemon.add(p);
 
@@ -268,7 +268,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "";
         p2 = new Pokemon("Charzard", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 3,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Charzard";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -286,7 +286,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "";
         p1 = new Pokemon("Charmeleon", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 5,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Charmeleon";
         basePokemon.add(p1);
         bs.baseExp = 65;
@@ -303,7 +303,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "";
         p = new Pokemon("Charmander", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 4,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Charmander";
         basePokemon.add(p);
 
@@ -320,7 +320,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Water";
         bs.smallImageName = "";
         p2 = new Pokemon("Blastoise", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 9,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Blastoise";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -338,7 +338,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Water";
         bs.smallImageName = "";
         p1 = new Pokemon("Wartortle", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 8,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Wartortle";
         basePokemon.add(p1);
         bs.baseExp = 66;
@@ -355,7 +355,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Water";
         bs.smallImageName = "";
         p = new Pokemon("Squirtle", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 4, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Squirtle";
         basePokemon.add(p);
 
@@ -373,7 +373,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Caterpie";
         p2 = new Pokemon("Butterfree", "", "", 5, 21, 21, 10, 10, 10, 10, 0,
-                17, 0, "", "", "", "", null, bs);
+                17, 0, "", "", "", null, bs);
         p2.Species = "Butterfree";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -391,7 +391,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 10;
         bs.smallImageName = "Caterpie";
         p1 = new Pokemon("Metapod", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Metapod";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -409,7 +409,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 7;
         bs.smallImageName = "Caterpie";
         p = new Pokemon("Caterpie", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Caterpie";
         basePokemon.add(p);
 
@@ -427,7 +427,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Caterpie";
         p2 = new Pokemon("Beedrill", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Beedrill";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -446,7 +446,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 10;
         bs.smallImageName = "Caterpie";
         p1 = new Pokemon("Kakuna", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p1.Species = "Kakuna";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -465,7 +465,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 7;
         bs.smallImageName = "Caterpie";
         p = new Pokemon("Weedle", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Weedle";
         basePokemon.add(p);
 
@@ -483,7 +483,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Pidgey";
         p2 = new Pokemon("Pidgeot", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 18,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Pidgeot";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -500,7 +500,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Pidgey";
         p1 = new Pokemon("Pidgeotto", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 17,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Pidgeotto";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -519,7 +519,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Pidgey";
         p = new Pokemon("Pidgey", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 16, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Pidgey";
         basePokemon.add(p);
 
@@ -536,7 +536,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Rattata";
         p = new Pokemon("Raticate", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Raticate";
         basePokemon.add(p);
         bs = new Pokemon.BaseStats();
@@ -554,7 +554,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 20;
         bs.smallImageName = "Rattata";
         p = new Pokemon("Rattata", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Rattata";
         basePokemon.add(p);
 
@@ -572,7 +572,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Pidgey";
         p = new Pokemon("Fearow", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Fearow";
         basePokemon.add(p);
         bs = new Pokemon.BaseStats();
@@ -591,7 +591,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 20;
         bs.smallImageName = "Pidgey";
         p = new Pokemon("Spearow", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Spearow";
         basePokemon.add(p);
 
@@ -608,7 +608,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Poison";
         bs.smallImageName = "";
         p = new Pokemon("Arbok", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Arbok";
         basePokemon.add(p);
         bs = new Pokemon.BaseStats();
@@ -626,7 +626,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.evolvesAt = 22;
         bs.smallImageName = "";
         p = new Pokemon("Ekans", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 23, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Ekans";
         basePokemon.add(p);
 
@@ -643,7 +643,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Eletric";
         bs.smallImageName = "";
         p2 = new Pokemon("Raichu", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 26, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p2.Species = "Raichu";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -661,7 +661,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Eletric";
         bs.smallImageName = "Pikachu";
         p = new Pokemon("Pikachu", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 25, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Pikachu";
         basePokemon.add(p);
 
@@ -678,7 +678,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Ground";
         bs.smallImageName = "";
         p2 = new Pokemon("Sandslash", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 26,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Sandslash";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -696,7 +696,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Ground";
         bs.smallImageName = "";
         p = new Pokemon("Sandshrew", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 27,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Sandshrew";
         basePokemon.add(p);
 
@@ -714,7 +714,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Ground";
         bs.smallImageName = "Mankey";
         p2 = new Pokemon("Nidoqueen", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 31,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Nidoqueen";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -732,7 +732,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Poison";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Nidorina", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 30,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Nidorina";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -748,7 +748,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Poison";
         bs.smallImageName = "Mankey";
         p = new Pokemon("NidoranF", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "NidoranF";
         basePokemon.add(p);
 
@@ -766,7 +766,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Ground";
         bs.smallImageName = "Mankey";
         p2 = new Pokemon("Nidoking", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 34,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Nidoking";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -784,7 +784,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Poison";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Nidorino", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Nidorino";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -802,7 +802,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Poison";
         bs.smallImageName = "Mankey";
         p = new Pokemon("NidoranM", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "NidoranM";
         basePokemon.add(p);
 
@@ -819,7 +819,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Clefable", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 36,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Clefable";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -837,7 +837,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Clefairy", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 35,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Clefairy";
         basePokemon.add(p);
 
@@ -854,7 +854,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Ninetales", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 38,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Ninetales";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -872,7 +872,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Vulpix", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 37, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Vulpix";
         basePokemon.add(p);
 
@@ -889,7 +889,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Wigglytuff", "", "", 5, 21, 21, 10, 10, 10, 10, 0,
-                40, 0, "", "", "", "", null, bs);
+                40, 0, "", "", "", null, bs);
         p1.Species = "Wigglytuff";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -907,7 +907,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Jigglypuff", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 39,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Jigglypuff";
         basePokemon.add(p);
 
@@ -925,7 +925,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Golbat", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 42, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p1.Species = "Golbat";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -944,7 +944,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Flying";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Zubat", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 41, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Zubat";
         basePokemon.add(p);
 
@@ -962,7 +962,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Mankey";
         p2 = new Pokemon("Vileplume", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 45,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p2.Species = "Vileplume";
         basePokemon.add(p2);
         bs = new Pokemon.BaseStats();
@@ -979,7 +979,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Gloom", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 44, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p1.Species = "Gloom";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -998,7 +998,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Poison";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Oddish", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 43, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Oddish";
         basePokemon.add(p);
 
@@ -1016,7 +1016,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Grass";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Parasect", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 47,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Parasect";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1035,7 +1035,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Grass";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Paras", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 46, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Paras";
         basePokemon.add(p);
 
@@ -1053,7 +1053,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Grass";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Venomoth", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 49,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Venomoth";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1072,7 +1072,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type2 = "Grass";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Venonat", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 46, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Venonat";
         basePokemon.add(p);
 
@@ -1089,7 +1089,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Ground";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Dugtrio", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 51,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Dugtrio";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1107,7 +1107,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Ground";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Diglett", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 50, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Diglett";
         basePokemon.add(p);
 
@@ -1124,7 +1124,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Persian", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 53,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Persian";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1142,7 +1142,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Normal";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Meowth", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 52, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Meowth";
         basePokemon.add(p);
 
@@ -1159,7 +1159,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Water";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Golduck", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 55,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Golduck";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1177,7 +1177,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Water";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Psyduck", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 54, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Psyduck";
         basePokemon.add(p);
 
@@ -1194,7 +1194,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fighting";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Primeape", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Primeape";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1212,7 +1212,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fighting";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Mankey", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19, 0,
-                "", "", "", "", null, bs);
+                "", "", "", null, bs);
         p.Species = "Mankey";
         basePokemon.add(p);
 
@@ -1229,7 +1229,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "Mankey";
         p1 = new Pokemon("Arcanine", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p1.Species = "Arcanine";
         basePokemon.add(p1);
         bs = new Pokemon.BaseStats();
@@ -1247,7 +1247,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         bs.type = "Fire";
         bs.smallImageName = "Mankey";
         p = new Pokemon("Growlithe", "", "", 5, 21, 21, 10, 10, 10, 10, 0, 19,
-                0, "", "", "", "", null, bs);
+                0, "", "", "", null, bs);
         p.Species = "Growlithe";
         basePokemon.add(p);
 

@@ -71,7 +71,7 @@ public class FMTCSendAttackResult extends ClientMessage {
 
             // If its a switch pokemon move
             if (f.toUseU.getName().equals(Fight.SwitchPokemon.getName())) {
-                f.info.set(new GMenu("Go! " + f.out.name + "!", 0, 6, 10, 3)); // Use
+                f.info.set(new GMenu("Go! " + f.out.nickName + "!", 0, 6, 10, 3)); // Use
                                                                                // appropriate
                                                                                // switch
                                                                                // message

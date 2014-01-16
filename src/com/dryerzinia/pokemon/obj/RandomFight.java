@@ -39,7 +39,7 @@ public class RandomFight implements Serializable, DeepCopy, JSON {
     public String toString() {
         String s = "";
         for (int i = 0; i < pokemon.length; i++) {
-            s += "Pokemon:" + pokemon[i].name + " Chance:" + chance[i] + ",";
+            s += "Pokemon:" + pokemon[i].Species + " Chance:" + chance[i] + ",";
         }
         return s;
     }
@@ -189,7 +189,7 @@ public class RandomFight implements Serializable, DeepCopy, JSON {
                 RandomFight rf = (RandomFight) sub.s;
                 for (int i = 0; i < rf.pokemon.length; i++) {
                     final int ii = i;
-                    final JLabel pLB = new JLabel("N:" + rf.pokemon[i].name
+                    final JLabel pLB = new JLabel("N:" + rf.pokemon[i].Species
                             + ",L:" + rf.pokemon[i].level);
                     pLB.addMouseListener(new MouseAdapter() {
                         public void mousePressed(MouseEvent e) {
@@ -250,7 +250,7 @@ public class RandomFight implements Serializable, DeepCopy, JSON {
             System.out.println("1");
             sub.s = rf;
             System.out.println("SubAdded...");
-            final JLabel pLB = new JLabel("N:" + p.name + ",L:" + p.level);
+            final JLabel pLB = new JLabel("N:" + p.Species + ",L:" + p.level);
             pLB.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     if (e.getModifiers() == InputEvent.BUTTON3_MASK) {

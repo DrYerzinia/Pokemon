@@ -24,7 +24,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     public transient Image sprites[];
 
-    public String name;
     public String nickName;
 
     public String Species;
@@ -41,7 +40,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     public int EXP;
 
     public String status;
-    public String ot;
 
     public Move moves[] = null;
 
@@ -58,12 +56,12 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     public Pokemon() {
     }
 
-    public Pokemon(String name, String nickName, String description, int level,
+    public Pokemon(String Species, String nickName, String description, int level,
             int totalHP, int currentHP, int attack, int defense, int speed,
             int special, int idNo, int no, int EXP, String status, String type,
-            String type2, String ot, Move moves[]) {
+            String type2, Move moves[]) {
 
-        this.name = name;
+    	this.Species = Species;
         this.nickName = nickName;
 
         this.level = level;
@@ -75,7 +73,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         this.idNo = idNo;
 
         this.status = status;
-        this.ot = ot;
 
         loadImg();
 
@@ -83,12 +80,12 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     }
 
-    public Pokemon(String name, String nickName, String description, int level,
+    public Pokemon(String Species, String nickName, String description, int level,
             int totalHP, int currentHP, int attack, int defense, int speed,
             int special, int idNo, int no, int EXP, String status, String type,
-            String type2, String ot, Move moves[], BaseStats bs) {
+            String type2, Move moves[], BaseStats bs) {
 
-        this.name = name;
+    	this.Species = Species;
         this.nickName = nickName;
 
         this.level = level;
@@ -100,7 +97,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         this.idNo = idNo;
 
         this.status = status;
-        this.ot = ot;
 
         this.pokeBase = bs;
 
@@ -200,17 +196,17 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
         sprites = new Image[11];
 
-        sprites[0] = PokemonGame.images.getSprite(name + "U.png");
-        sprites[1] = PokemonGame.images.getSprite(name + "D.png");
-        sprites[2] = PokemonGame.images.getSprite(name + "L.png");
-        sprites[3] = PokemonGame.images.getSprite(name + "R.png");
-        sprites[4] = PokemonGame.images.getSprite(name + "MU.png");
-        sprites[5] = PokemonGame.images.getSprite(name + "MD.png");
-        sprites[6] = PokemonGame.images.getSprite(name + "ML.png");
-        sprites[7] = PokemonGame.images.getSprite(name + "MR.png");
-        sprites[8] = PokemonGame.images.getSprite(name + "P.png");
-        sprites[9] = PokemonGame.images.getSprite(name + "B.png");
-        sprites[10] = PokemonGame.images.getSprite(name + "F.png");
+        sprites[0] = PokemonGame.images.getSprite(Species + "U.png");
+        sprites[1] = PokemonGame.images.getSprite(Species + "D.png");
+        sprites[2] = PokemonGame.images.getSprite(Species + "L.png");
+        sprites[3] = PokemonGame.images.getSprite(Species + "R.png");
+        sprites[4] = PokemonGame.images.getSprite(Species + "MU.png");
+        sprites[5] = PokemonGame.images.getSprite(Species + "MD.png");
+        sprites[6] = PokemonGame.images.getSprite(Species + "ML.png");
+        sprites[7] = PokemonGame.images.getSprite(Species + "MR.png");
+        sprites[8] = PokemonGame.images.getSprite(Species + "P.png");
+        sprites[9] = PokemonGame.images.getSprite(Species + "B.png");
+        sprites[10] = PokemonGame.images.getSprite(Species + "F.png");
         try {
             sprites[1] = PokemonGame.images.getSprite(pokeBase.smallImageName
                     + "D.png");
@@ -229,7 +225,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         Iterator<Pokemon> p = poke.iterator();
         while (p.hasNext()) {
             Pokemon po = p.next();
-            if (po.Species.equals(name) || po.Species.equals(Species)) {
+            if (po.Species.equals(Species)) {
                 pokeBase = po.pokeBase;
                 try {
                     sprites[1] = PokemonGame.images
@@ -250,7 +246,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     public void set(Pokemon p) {
 
-        this.name = p.name;
         this.nickName = p.nickName;
 
         this.level = p.level;
@@ -266,7 +261,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         this.Species = p.Species;
 
         this.status = p.status;
-        this.ot = p.ot;
 
         this.location = p.location;
 
@@ -359,7 +353,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     public String getName() {
         if (nickName != null)
             return nickName;
-        return name;
+        return Species;
     }
 
     public String toString() {
@@ -389,10 +383,10 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
                 moves2[i] = null;
             }
         }
-        return new Pokemon(new String(name + ""), new String(nickName + ""),
+        return new Pokemon(new String(Species + ""), new String(nickName + ""),
                 "", level, 0, currentHP, attackSE, defenseSE, speedSE,
                 specialSE, idNo, 0, EXP, new String(status + ""), "", "",
-                new String(ot + ""), moves2);
+                moves2);
     }
 
     public String getType() {
@@ -642,7 +636,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
                         PokemonGame.pokeg.baseMoves);
                 if (p.moves == null)
                     p.moves = new Move[4];
-                p.name = p.Species;
                 p.nickName = p.Species;
                 p.level = Integer.parseInt(levelTF.getText());
                 p.hpSE = Integer.parseInt(hpTF.getText());
@@ -670,7 +663,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     	String json = "{'class':'" + this.getClass().getName() + "'";
 
-    	json += ",'name':" + JSONObject.stringToJSON(name);
     	json += ",'nickName':" + JSONObject.stringToJSON(nickName);
 
     	json += ",'Species':" + JSONObject.stringToJSON(Species);
@@ -687,7 +679,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     	json += ",'EXP':" + EXP;
 
     	json += ",'status':" + JSONObject.stringToJSON(status);
-    	json += ",'ot':" + JSONObject.stringToJSON(ot);
 
     	json += ",'moves':" + JSONArray.objectArrayToJSON(moves);
 

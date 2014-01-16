@@ -181,9 +181,9 @@ public class PokemonView extends Overlay {
                 g.drawString("IDNo/", 80, 115);
                 g.drawString("" + PokemonGame.pokeg.Char.poke.belt[stats].idNo,
                         100, 125);
-                if (PokemonGame.pokeg.Char.poke.belt[stats].ot != null) {
+                if (PokemonGame.pokeg.Char.poke.belt[stats].nickName != null) {
                     g.drawString("OT/", 80, 135);
-                    g.drawString(PokemonGame.pokeg.Char.poke.belt[stats].ot,
+                    g.drawString(PokemonGame.pokeg.Char.poke.belt[stats].nickName,
                             100, 145);
                 }
 
@@ -262,7 +262,7 @@ public class PokemonView extends Overlay {
     public void battleswitch() {
         if (currout == selection) {
             choosem = new GMenu(
-                    PokemonGame.pokeg.Char.poke.belt[selection].name
+                    PokemonGame.pokeg.Char.poke.belt[selection].nickName
                             + " is\nalready out!", 0, 6, 10, 3);
             opa = false;
             wait = true;

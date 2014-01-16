@@ -401,9 +401,6 @@ public class MysqlConnect {
 																// int -
 																// problem?
 				pokemon.Species = results.getString("species");
-
-				pokemon.name = pokemon.Species;
-				pokemon.ot = pokemon.nickName;
 				
 	            pokemon.getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
 				
@@ -544,7 +541,7 @@ public class MysqlConnect {
 		public void printHP() {
 			for (int i = 0; i < 6; i++)
 				if (belt[i] != null)
-					System.out.println(i + ": " + belt[i].name + " HP: "
+					System.out.println(i + ": " + belt[i].Species + " HP: "
 							+ belt[i].getCurrentHP() + "/"
 							+ belt[i].getTotalHP());
 		}

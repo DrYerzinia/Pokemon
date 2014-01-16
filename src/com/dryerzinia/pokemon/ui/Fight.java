@@ -285,8 +285,8 @@ public class Fight extends Overlay implements Serializable {
             if (player.poke.belt[i] == null) {
                 player.poke.belt[i] = p;
                 p.location = i;
-                p.nickName = p.name;
-                p.Species = p.name;
+                p.nickName = p.Species;
+                p.Species = p.Species;
                 return;
             }
         }
@@ -666,12 +666,12 @@ public class Fight extends Overlay implements Serializable {
                     if (PokemonGame.pokeg.Char.poke.belt[i].level == PokemonGame.pokeg.Char.poke.belt[i]
                             .evolvesAt()) {
                         info.set(new GMenu("What? "
-                                + PokemonGame.pokeg.Char.poke.belt[i].name
+                                + PokemonGame.pokeg.Char.poke.belt[i].nickName
                                 + "\nis evolving!", 0, 6, 10, 3).nextmenu = new GMenu(
-                                PokemonGame.pokeg.Char.poke.belt[i].name
+                                PokemonGame.pokeg.Char.poke.belt[i].nickName
                                         + " evolved\ninto "
                                         + PokemonGame.pokeg.Char.poke.belt[i]
-                                                .evolvesTo().name + "!", 0, 6,
+                                                .evolvesTo().Species + "!", 0, 6,
                                 10, 3));
                         Pokemon p = PokemonGame.pokeg.Char.poke.belt[i];
                         PokemonGame.pokeg.Char.poke.belt[i] = new Pokemon(
@@ -681,8 +681,8 @@ public class Fight extends Overlay implements Serializable {
                         else
                             PokemonGame.pokeg.Char.poke.belt[i].nickName = PokemonGame.pokeg.Char.poke.belt[i]
                                     .getSpecies();
-                        System.out.println("nic" + p.nickName + "nam" + p.name);
-                        PokemonGame.pokeg.Char.poke.belt[i].name = p.nickName;
+                        System.out.println("nic" + p.nickName + "nam" + p.Species);
+                        PokemonGame.pokeg.Char.poke.belt[i].nickName = p.nickName;
                         PokemonGame.pokeg.Char.poke.belt[i].speedSE = p.speedSE;
                         PokemonGame.pokeg.Char.poke.belt[i].attackSE = p.attackSE;
                         PokemonGame.pokeg.Char.poke.belt[i].defenseSE = p.defenseSE;
@@ -775,7 +775,7 @@ public class Fight extends Overlay implements Serializable {
             activePokemonC = ((PokemonView) ol.o).switchto;
             out = PokemonGame.pokeg.Char.poke.belt[activePokemonC];
             out.used = true;
-            info.set(new GMenu("Go! " + out.name + "!", 0, 6, 10, 3));
+            info.set(new GMenu("Go! " + out.nickName + "!", 0, 6, 10, 3));
             switching = false;
             waitcompstart = true;
             turn = false;
@@ -879,7 +879,7 @@ public class Fight extends Overlay implements Serializable {
             compfinished = false;
         } else if (!turn) {
             if (out.currentHP == 0) {
-                info.set(new GMenu(out.name + "\nfainted!", 0, 6, 10, 3));
+                info.set(new GMenu(out.nickName + "\nfainted!", 0, 6, 10, 3));
                 pokesw = true;
             } else {
                 if (firstTurn == enemy) {
@@ -895,7 +895,7 @@ public class Fight extends Overlay implements Serializable {
             }
         } else if (attack != -1) {
             if (out.currentHP == 0) {
-                info.set(new GMenu(out.name + "\nfainted!", 0, 6, 10, 3));
+                info.set(new GMenu(out.nickName + "\nfainted!", 0, 6, 10, 3));
                 pokesw = true;
             } else if (firstTurn == enemy) {
                 info.set(new GMenu(out.getName() + "\nused " + toUseU.getName()
@@ -947,7 +947,7 @@ public class Fight extends Overlay implements Serializable {
                         //          activePokemonC));
 
                     } else {
-                        info.set(new GMenu(out.name + " enough!\nCome back!",
+                        info.set(new GMenu(out.nickName + " enough!\nCome back!",
                                 0, 6, 10, 3));
                         switching = true;
                         fightMenuActive = false;
