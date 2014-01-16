@@ -1,3 +1,5 @@
+package com.dryerzinia.pokemon.util;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,16 +9,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.Item;
+import com.dryerzinia.pokemon.obj.Move;
+import com.dryerzinia.pokemon.obj.Player;
+import com.dryerzinia.pokemon.obj.Pokeball;
+import com.dryerzinia.pokemon.obj.Pokemon;
+
 public class MysqlConnect {
 
 	public static boolean localized = false;
 
 	// hard-coded for now; change this
-	private static String username;
-	private static String password;
-	private static String dbname;
-	private static String server;
-	private static int port;
+	public static String username;
+	public static String password;
+	public static String dbname;
+	public static String server;
+	public static int port;
 
 	/**
 	 * Gets a connection to the database.
@@ -367,7 +376,7 @@ public class MysqlConnect {
 	 * @return a PokemonContainer containing box and belt pokemon.
 	 */
 	public static PokemonContainer getCharacterPokemon(int userid) {
-		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
+		String sql = "SELECT * FROM Pokemon WHERE ownerid = ?";
 		ArrayList<Pokemon> boxPokemon = new ArrayList<Pokemon>();
 		Pokemon[] beltPokemon = new Pokemon[6];
 
@@ -386,19 +395,25 @@ public class MysqlConnect {
 				pokemon.defenseSE = results.getInt("defense");
 				pokemon.speedSE = results.getInt("speed");
 				pokemon.specialSE = results.getInt("special");
-				pokemon.idNo = results.getInt("idno");
+				pokemon.idNo = results.getInt("id");
 				pokemon.EXP = results.getInt("EXP");
 				pokemon.status = results.getString("status"); // stored in db as
 																// int -
 																// problem?
 				pokemon.Species = results.getString("species");
 
+				pokemon.name = pokemon.Species;
+				pokemon.ot = pokemon.nickName;
+				
+	            pokemon.getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+				
 				fetchAndSetMoves(connection, pokemon);
 
 				if (pokemon.location < 6)
 					beltPokemon[pokemon.location] = pokemon;
-				else
-					boxPokemon.add(pokemon);
+
+				boxPokemon.add(pokemon);
+
 			}
 
 		} catch (SQLException ex) {
@@ -439,6 +454,9 @@ public class MysqlConnect {
 				move.pp = results.getInt("pp");
 				move.dmg = results.getInt("dmg");
 				move.accuracy = results.getInt("accuracy");
+				System.out.println(move.name);
+				moves[nMoves] = move;
+				
 				nMoves++;
 			}
 
@@ -497,8 +515,8 @@ public class MysqlConnect {
 	 */
 	public static class PokemonContainer {
 
-		ArrayList<Pokemon> box;
-		Pokemon belt[];
+		public ArrayList<Pokemon> box;
+		public Pokemon belt[];
 
 		public PokemonContainer() {
 

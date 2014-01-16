@@ -260,6 +260,7 @@ public class FMTSSelectedAttack extends ServerMessage {
 
             if(f.currentPlayer.poke.getFirstHealthy() == -1) System.out.println("BLACKED OUT");
             if(f.enemyPlayer.poke.getFirstHealthy() == -1) System.out.println("BLACKED OUT");
+
             System.out.println("Current:");
             f.currentPlayer.poke.printHP();
             System.out.println("Enemy:");
