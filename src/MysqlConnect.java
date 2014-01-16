@@ -328,8 +328,7 @@ public class MysqlConnect {
 	 *            the id of the character
 	 * @return
 	 */
-	public static ArrayList<Item> getCharacterItems(int userid)
-			{
+	public static ArrayList<Item> getCharacterItems(int userid) {
 		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
 		ArrayList<Item> items = new ArrayList<Item>();
 		try (Connection connection = getConnection();
@@ -355,10 +354,9 @@ public class MysqlConnect {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return items;
 	}
-	
 
 	/**
 	 * Get the pokemon of the given character.
@@ -367,8 +365,7 @@ public class MysqlConnect {
 	 *            the id of the character
 	 * @return a PokemonContainer containing box and belt pokemon.
 	 */
-	public static PokemonContainer getCharacterPokemon(int userid)
-			{
+	public static PokemonContainer getCharacterPokemon(int userid) {
 		String sql = "SELECT * FROM PokemonItems WHERE ownerid = ?";
 		ArrayList<Pokemon> boxPokemon = new ArrayList<Pokemon>();
 		Pokemon[] beltPokemon = new Pokemon[6];
@@ -403,11 +400,10 @@ public class MysqlConnect {
 					boxPokemon.add(pokemon);
 			}
 
-			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return new PokemonContainer(boxPokemon, beltPokemon);
 	}
 
@@ -490,7 +486,7 @@ public class MysqlConnect {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return player;
 	}
 
