@@ -34,10 +34,17 @@ public class MysqlConnect {
 	 * @throws SQLException
 	 */
 	private static Connection getConnection() throws SQLException {
+
 		Connection conn = null;
 		Properties credentials = new Properties();
 		credentials.put("user", username);
 		credentials.put("password", password);
+
+		try {
+			Class.forName ("com.mysql.jdbc.Driver").newInstance(); 
+		} catch(Exception x){
+			x.printStackTrace();
+		}
 
 		conn = DriverManager.getConnection("jdbc:mysql://" + server + ":"
 				+ port + "/" + dbname, credentials);
