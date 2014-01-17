@@ -192,9 +192,14 @@ public class JSONObject {
     		last_comma = comma;
     	}
 
+    	String class_name = (String) parameters.get("class");
+    	
+    	if(class_name == null)
+    		return parameters;
+
     	try {
 
-    		Class c = Class.forName((String)parameters.get("class"));
+    		Class c = Class.forName(class_name);
     		Object o = c.newInstance();
 
     		boolean has_superclass = true;

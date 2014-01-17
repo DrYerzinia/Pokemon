@@ -1976,7 +1976,8 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
             System.out.println("f.getName(): "+ f.getCanonicalPath());
 
-            BufferedReader json_reader = new BufferedReader(new FileReader(f));
+            BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+                    PokemonGame.class.getClassLoader().getResourceAsStream("save.json")));
 
 			String json_1 = json_reader.readLine();
 			String json_2 = json_reader.readLine();
@@ -1991,31 +1992,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
             for(int i = 0; i < levels.length; i++)
                 level.add((Level)levels[i]);
-            
-        /* 
-            ObjectInputStream ois;
-        if (local) {
-                ois = new ObjectInputStream(getClass().getClassLoader()
-                        .getResource(f.getName()).openStream()); // ??? WTH IS
-                                                                 // LOCAL
-            } else {
-                FileInputStream fis = new FileInputStream(f);
-                ois = new ObjectInputStream((InputStream) fis);
-            }
-            int l = ois.readInt();
-            for (int i = 0; i < l; i++) {
-                try {
-                    Tile t = (Tile) ois.readObject();
-                    mtile.add(t);
-                } catch (Exception x) {
-                    x.printStackTrace();
-                }
-            }
-            numberOfLevels = ois.readInt();
-            for (int i = 0; i < numberOfLevels; i++) {
-                level.add((Level) ois.readObject());
-            }
-		*/
+
         } catch (Exception x) {
             x.printStackTrace();
         }
@@ -2242,11 +2219,10 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public void writeSettingsData(File f) {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(
-                    new FileOutputStream(f));
-            oos.writeObject(username);
-            oos.writeObject(password);
-            oos.writeObject(location);
+        	BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        	json_writer.write("{'username':'" + username + "','password':'" + password + "','location':'" + location + "'}");
+        	json_writer.flush();
+        	json_writer.close();
         } catch (Exception x) {
             System.out.println("Failed to write settings data.");
         }
@@ -2254,13 +2230,16 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public void readSettingsData(File f) {
         try {
-            ObjectInputStream ois = new ObjectInputStream(
-                    new FileInputStream(f));
-            username = (String) ois.readObject();
-            password = (String) ois.readObject();
-            location = (String) ois.readObject();
+        	BufferedReader json_reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+        	String json = json_reader.readLine();
+        	json_reader.close();
+        	HashMap<String, Object> json_obj = (HashMap<String, Object>) JSONObject.JSONToObject(json);
+        	username = (String) json_obj.get("username");
+            password = (String) json_obj.get("password");
+            location = (String) json_obj.get("location");
         } catch (Exception x) {
             System.out.println("Failed to read settings data.");
+            x.printStackTrace();
         }
     }
 
