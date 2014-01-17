@@ -12,14 +12,22 @@ public class JSONArray {
    
     	if(array == null) return "null";
     	
-    	String json = "";
+    	StringBuilder json = new StringBuilder();
 
-    	json += "[";
-        for(int i = 0; i < array.length-1; i++)
-        	json += JSONObject.objectToJSON(array[i]) + ",";
-        json += JSONObject.objectToJSON(array[array.length-1]) + "]";
+    	json.append("[");
 
-        return json;
+    	for(JSON obj : array){
+
+    		json.append(JSONObject.objectToJSON(obj));
+    		json.append(",");
+
+    	}
+
+    	json.deleteCharAt(json.length() - 1);
+
+       	json.append("]");
+
+        return json.toString();
 
     }
 

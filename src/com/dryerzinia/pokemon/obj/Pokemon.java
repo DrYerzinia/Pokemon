@@ -356,6 +356,12 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         return Species;
     }
 
+    public BaseStats getBaseStats(){
+
+    	return pokeBase;
+
+    }
+
     public String toString() {
         return getName();
     }
@@ -413,7 +419,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         return Species;
     }
 
-    public static class BaseStats {
+    public static class BaseStats implements JSON {
 
         public int height;
         public int weight;
@@ -437,9 +443,9 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         public int rareness;
 
         public int evolvesAt;
-        public Pokemon evolvesTo;
 
-        ArrayList<Move> leanedMoves;
+        public transient Pokemon evolvesTo;
+        public transient HashMap<Integer, Move> learnedMoves;
 
         public BaseStats() {
 
@@ -449,6 +455,62 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
             return "att:" + attack + ",def:" + defense + ",spd:" + speed
                     + ",spe:" + special;
         }
+
+		@Override
+		public String toJSON() {
+
+			String json = "{'class':'" + this.getClass().getName() + "'"
+
+		    	+ ",'height':" + height
+		    	+ ",'weight':" + weight
+	  			+ ",'no':" + no
+
+	  			+ ",'type':" + JSONObject.stringToJSON(type)
+	  			+ ",'type2':" + JSONObject.stringToJSON(type2)
+	  			+ ",'description':" + JSONObject.stringToJSON(description)
+
+	  			+ ",'smallImageName':" + JSONObject.stringToJSON(smallImageName)
+
+	  			+ ",'attack':" + attack
+	  			+ ",'defense':" + defense
+	  			+ ",'speed':" + speed
+	  			+ ",'special':" + special
+	  			+ ",'hp':" + hp
+
+	  			+ ",'baseExp':" + baseExp
+	  			+ ",'growthRate':" + growthRate
+
+	  			+ ",'rareness':" + rareness
+
+	  			+ ",'evolvesAt':" + evolvesAt
+	  			+ ",'evolvesTo':"
+	  				 + JSONObject.stringToJSON(
+	  				   (evolvesTo != null) ? evolvesTo.getSpecies() : null )
+
+	  			+ ",'learnedMoves':" + "null" // TODO Obvious
+
+		        + "}";
+			
+	        return json;
+
+		}
+
+		@Override
+		public void fromJSON(HashMap<String, Object> json) {
+
+			// TODO fix move references
+			String evolve = (String) json.get("evolvesTo");
+
+			if(evolve != null){
+				for(Pokemon pokemon : PokemonGame.pokeg.basePokemon){
+					if(pokemon.getSpecies().equals(evolve)){
+						evolvesTo = pokemon;
+						break;
+					}
+				}
+			}
+
+		}
 
     }
 
@@ -661,32 +723,32 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 	@Override
 	public String toJSON() {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'";
-
-    	json += ",'nickName':" + JSONObject.stringToJSON(nickName);
-
-    	json += ",'Species':" + JSONObject.stringToJSON(Species);
-
-    	json += ",'level':" + level;
-    	json += ",'currentHP':" + currentHP;
-    	json += ",'hpSE':" + hpSE;
-    	json += ",'attackSE':" + attackSE;
-    	json += ",'defenseSE':" + defenseSE;
-    	json += ",'speedSE':" + speedSE;
-    	json += ",'specialSE':" + specialSE;
-
-    	json += ",'idNo':" + idNo;
-    	json += ",'EXP':" + EXP;
-
-    	json += ",'status':" + JSONObject.stringToJSON(status);
-
-    	json += ",'moves':" + JSONArray.objectArrayToJSON(moves);
-
-	    json += ",'location':" + location;
-
-	    json += ",'remoteSetDamage':" + remoteSetDamage;
-
-        json += "}";
+    	String json = "{'class':'" + this.getClass().getName() + "'"
+	
+	    	+ ",'nickName':" + JSONObject.stringToJSON(nickName)
+	
+	    	+ ",'Species':" + JSONObject.stringToJSON(Species)
+	
+	    	+ ",'level':" + level
+	    	+ ",'currentHP':" + currentHP
+	    	+ ",'hpSE':" + hpSE
+	    	+ ",'attackSE':" + attackSE
+	    	+ ",'defenseSE':" + defenseSE
+	    	+ ",'speedSE':" + speedSE
+	    	+ ",'specialSE':" + specialSE
+	
+	    	+ ",'idNo':" + idNo
+	    	+ ",'EXP':" + EXP
+	
+	    	+ ",'status':" + JSONObject.stringToJSON(status)
+	
+	    	+ ",'moves':" + JSONArray.objectArrayToJSON(moves)
+	
+		    + ",'location':" + location
+	
+		    + ",'remoteSetDamage':" + remoteSetDamage
+	
+	        + "}";
 
         return json;
 	}
@@ -694,8 +756,22 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
-		getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
-        loadImg();
+		// TODO If base exists in hashmap GRAB IT!
+		Pokemon.BaseStats bs = (Pokemon.BaseStats) json.get("pokeBase");
+
+		if(bs != null){
+
+			pokeBase = bs;
+
+			// If this object has a pokeBase reference this pokemon must be
+			// a base Pokemon we reference from for stat information so we
+			// add it to basePokemon list in the Global PokemonGame object
+			PokemonGame.pokeg.basePokemon.add(this);
+
+		} else
+			getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+
+		loadImg();
 
 	}
 

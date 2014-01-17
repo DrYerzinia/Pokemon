@@ -30,32 +30,44 @@ public class SMLogin extends ServerMessage {
     }
 
     public void proccess(ObjectInputStream ois,
-            PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
+            PokemonServer.PlayerInstanceData pid) throws ClassNotFoundException,
             IOException {
 
-        p.writeClientMessage(new LoginSuccessMessage());
+        Player player = pid.getPlayer();
+        player.name = username;
 
-        Player p2 = p.getPlayer();
-        p2.name = username;
+        if (PokemonServer.pokes.isLoggedIn(player)) {
 
-        if (PokemonServer.pokes.isLoggedIn(p2)) {
-            p.writeClientMessage(new BadPasswordMessage());
+        	System.out.println("Error: Player is already logged into server!");
+
+            pid.writeClientMessage(new AlreadyLoggedInMessage());
             // throw new Exception("Already Logged In...");
+
         }
 
-        Player p3 = MysqlConnect.login(username, password);
-        if (p3 == null) {
-            p.writeClientMessage(new AlreadyLoggedInMessage());
-            // throw new Exception("Loggin Failure...");
+        System.out.println("Loggin Attempt: " + username + ":" + password);
+
+        Player login_result = MysqlConnect.login(username, password);
+        if (login_result == null) {
+
+        	System.out.println("Error: Credentials do not exist in Database!");
+
+        	pid.writeClientMessage(new BadPasswordMessage());
+            // throw new Exception("Login Failure...");
+
         } else {
-            p.setLoggedIn(true);
+
+            System.out.println("Client logged in successfully!");
+            System.out.println("Loading Player information from database!");
+
+        	pid.writeClientMessage(new LoginSuccessMessage());
+            pid.setLoggedIn(true);
+
+            player.set(login_result);
+            player.poke = MysqlConnect.getCharacterPokemon(player.getID());
+            player.items = MysqlConnect.getCharacterItems(player.getID());
+            
         }
-
-        System.out.println("Logged IN!");
-
-        p2.set(p3);
-        p2.poke = MysqlConnect.getCharacterPokemon(p2.getID());
-        p2.items = MysqlConnect.getCharacterItems(p2.getID());
 
     }
 
