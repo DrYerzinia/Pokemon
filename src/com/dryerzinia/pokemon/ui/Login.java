@@ -39,7 +39,7 @@ public class Login extends Overlay {
 
         else {
 
-            int start = 10;
+            int start = 9;
 
             g.drawString(location.substring(0, 9), 80, 80);
 

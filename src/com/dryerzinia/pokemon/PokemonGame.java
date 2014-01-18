@@ -54,7 +54,6 @@ import com.dryerzinia.pokemon.util.ImageLoader;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
-import com.dryerzinia.pokemon.util.event.JXpad;
 
 import java.awt.event.*;
 import java.applet.*;
@@ -173,8 +172,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
     private Thread t;
 
     public java.util.Timer pinger;
-
-    JXpad xp;
 
     public class PingerTask extends TimerTask {
         public void run() {
