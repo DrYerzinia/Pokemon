@@ -745,13 +745,11 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
     }
 
     public void heal() {
-        Char.lpcx = Char.x;
+
+    	Char.lpcx = Char.x;
         Char.lpcy = Char.y;
         Char.lpclevel = Char.level;
-        System.out.println("heal() called");
-        System.out.println("Char.x: " + Char.x);
-        System.out.println("Char.y: " + Char.y);
-        System.out.println("Char.level: " + Char.level);
+
         healcancel = true;
         healing = false;
         healMenuActive = false;
@@ -1445,10 +1443,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
             } else {
 
                 if (Char != null && level.get(Char.level).midmove) {
-
-                    System.out.println("Char.x: " + Char.x);
-                    System.out.println("Char.y: " + Char.y);
-                    System.out.println("Char.level: " + Char.level);
 
                     if (Char.dir == 0) {
                         level.get(Char.level).moveUp();

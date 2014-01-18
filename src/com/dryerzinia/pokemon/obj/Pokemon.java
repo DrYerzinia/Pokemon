@@ -188,7 +188,6 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     public int calcStat(int additive, int n) {
         // change the zero do a random dv
-        System.out.println("!!!:"+nickName);
         return (int) ((((pokeBase.attack + 0) * 2 + getStatPoints(n)) * level / 100) + additive);
     }
 

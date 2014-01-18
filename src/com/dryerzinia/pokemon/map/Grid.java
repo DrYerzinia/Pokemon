@@ -206,7 +206,6 @@ public class Grid implements Serializable, JSON {
         int r[] = new int[5];
         r[0] = -1;
 
-        System.out.println("X:" + x + ",Y:" + y + ",L:" + l.id);
         if (x < 0 && l.borderL != null && l.borderL[0] != null) {
             r[0] = l.borders[0];
             r[1] = l.borderL[0].g.getWidth() - 5;

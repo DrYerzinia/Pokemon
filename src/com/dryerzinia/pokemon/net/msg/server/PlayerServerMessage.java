@@ -40,10 +40,6 @@ public class PlayerServerMessage extends ServerMessage {
 
         thisPlayer.set(receivedPlayer);
 
-        // DEBUG
-        System.out.println("PokemonServer.pokes.players.size(); "
-                + PokemonServer.pokes.players.size());
-
         Iterator<PokemonServer.PlayerInstanceData> plyrIt = PokemonServer.pokes.players
                 .iterator();
         while (plyrIt.hasNext()) {

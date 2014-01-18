@@ -70,7 +70,7 @@ public class Person extends Tile implements Actor {
     }
 
     protected void setImage(int x, int y) {
-    	System.out.println(imgName);
+
         try {
             if ((onClick != null && !onClick.active) || onClick == null) {
                 if (wasTalking && wasTalkingToYou) {
