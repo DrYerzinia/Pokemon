@@ -528,51 +528,80 @@ public class PokemonServer {
         return false;
     }
 
+    /**
+     * Thread for communicating with Client
+     */
     public class listener extends Thread {
 
         InputStream is;
         OutputStream os;
 
-        Streamer s;
+        Streamer streamer;
 
-        PlayerInstanceData p;
+        PlayerInstanceData pid;
 
         boolean kill = false;
 
-        public listener(Streamer s, PlayerInstanceData p) {
-            this.s = s;
+        public listener(Streamer streamer, PlayerInstanceData pid) {
+
+        	this.streamer = streamer;
+
             try {
-                this.is = s.getInputStream();
-                this.os = s.getOutputStream();
-            } catch (Exception x) {
+
+            	this.is = streamer.getInputStream();
+                this.os = streamer.getOutputStream();
+
+            } catch (IOException ioe) {
+
+            	System.err.println("Could not open Stream to/from client.");
+
             }
-            this.p = p;
+
+            this.pid = pid;
+
         }
 
+        /**
+         * Run loop for listining to messages from client and proccessing them
+         */
         public void run() {
-            Player p2 = null;
-            ObjectInputStream ois = null;
-            boolean loggedIn = false;
-            try {
-                ois = new ObjectInputStream(is);
-                while (true) {
-                    ServerMessage receivedMessage = (ServerMessage) ois
-                            .readObject();
-                    p.recivedMessage();
-                    receivedMessage.proccess(ois, p);
-                }
-            } catch (Exception x) {
-                x.printStackTrace();
+
+            try (ObjectInputStream ois = new ObjectInputStream(is)) {
+
+            	while(true){
+
+            		ServerMessage receivedMessage = (ServerMessage) ois.readObject();
+                    pid.recivedMessage();
+                    receivedMessage.proccess(ois, pid);
+
+            	}
+
+            } catch (EOFException eofe) {
+
+            	System.out.println("Client " + pid.getPlayer().getName() + " disconnected");
+
+            } catch (IOException ioe) {
+
+            	System.err.println("IOException occured!");
+            	System.err.println("Client " + pid.getPlayer().getName() + "disconnected!");
+
+            	ioe.printStackTrace();
+
+            } catch (ClassNotFoundException cnfe) { 
+
+            	System.err.println("Received unknown message from Client");
+
+            	cnfe.printStackTrace();
+
             } finally {
-                try {
-                    // ois.close();
-                    // s.close();
-                } catch (Exception x) {
-                }
-                if (loggedIn)
-                    remove(p.getPlayer());
+
+            	// Remove player from list of connected players
+                if (pid.isLoggedIn())
+                	// Save player
+                    remove(pid.getPlayer());
                 else
-                    removeNoSave(p);
+                	// Dont save anything for players who never logged in successfully
+                    removeNoSave(pid);
             }
         }
     }
