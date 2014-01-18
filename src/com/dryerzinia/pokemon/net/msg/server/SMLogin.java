@@ -45,7 +45,7 @@ public class SMLogin extends ServerMessage {
 
         }
 
-        System.out.println("Loggin Attempt: " + username + ":" + password);
+        System.out.println("Login Attempt: " + username + ":" + password);
 
         Player login_result = MysqlConnect.login(username, password);
         if (login_result == null) {

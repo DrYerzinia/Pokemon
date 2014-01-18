@@ -30,28 +30,12 @@ import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 
 public class PokemonServer {
 
     public static final int PORT_NUM = 53879;
-
-    public static final int ID_PLAYER = 0;
-    public static final int ID_MESSAGE = 1;
-    public static final int ID_LOGIN = 2;
-    public static final int ID_LOAD = 3;
-    public static final int ID_GET_PLAYER = 4;
-    public static final int ID_GET_POKEMON = 5;
-    public static final int ID_GET_ITEM = 6;
-    public static final int ID_SEND_ACT = 7;
-    public static final int ID_LOG_OFF = 8;
-    public static final int ID_PING = 9;
-    public static final int ID_ALL_READY_LOGGED = 10;
-    public static final int ID_BAD_PASSWORD = 11;
-    public static final int ID_LOGIN_SUCCESS = 12;
-    public static final int ID_FIGHT_MESSAGE = 13;
 
     public static final int CM_TCP = 0;
     public static final int CM_DATAGRAM = 1;
@@ -149,15 +133,30 @@ public class PokemonServer {
     }
 
     public synchronized void closeNonResponse() {
-        Iterator<PlayerInstanceData> itp = players.iterator();
-        while (itp.hasNext()) {
-            PlayerInstanceData p = itp.next();
-            if (!p.hasMessageLast45()) {
-                System.out.println("Player " + p.getPlayer().getName()
+
+    	Iterator<PlayerInstanceData> pid_iterator = players.iterator();
+
+    	while(pid_iterator.hasNext()) {
+            
+    		PlayerInstanceData pid = pid_iterator.next();
+
+    		/* Players who have not send a message in the last 45 seconds
+    		 * Are removed from the game, They should ping at least once
+    		 * every 30 seconds to show they are Connected particularly
+    		 * for UDP connections this is important.
+    		 */
+            if (!pid.hasMessageLast45()) {
+
+            	System.out.println("Player " + pid.getPlayer().getName()
                         + " not responsive");
-                MysqlConnect.savePlayerData(p.getPlayer());
-                itp.remove();
-                System.out.println("Player REMOVED!!!");
+                
+                MysqlConnect.savePlayerData(pid.getPlayer());
+
+                // Remove PlayerInstanceData from server
+                pid_iterator.remove();
+                // TODO Proper disconnect and killing of all threads
+                System.out.println("Player kicked!");
+
             }
         }
     }
@@ -222,11 +221,17 @@ public class PokemonServer {
             ssock = new ServerSocket();
             ssock.bind(new InetSocketAddress(PORT_NUM));
 
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
+            (new TcpListener()).start();
 
-        (new TcpListener()).start();
+        } catch (BindException be) {
+
+        	System.err.println("Unable to bind to port: " + be.getMessage());
+        	System.err.println("Not listening on TCP!");
+
+        } catch (IOException ioe){
+
+        	ioe.printStackTrace();
+        }
 
     }
 
@@ -236,8 +241,11 @@ public class PokemonServer {
 
             (new DatagramListener(new DatagramSocket(PORT_NUM))).start();
 
-        } catch (Exception x) {
-            System.out.println("Datagram Listener failed to start");
+        } catch (SocketException se) {
+
+        	System.err.println("Could not attach to UDP Socket: " + se.getMessage());
+        	System.err.println("Not listening on UDP!");
+
         }
 
     }
@@ -290,47 +298,77 @@ public class PokemonServer {
         private HashMap<Integer, DatagramSocketStreamer> dss = new HashMap<Integer, DatagramSocketStreamer>();
 
         public DatagramListener(DatagramSocket ds) {
-            this.ds = ds;
+
+        	this.ds = ds;
+
         }
 
         public void run() {
-            DatagramPacket dp = new DatagramPacket(new byte[10000], 10000);
 
-            try {
-                while (true) {
-                    ds.receive(dp);
-                    ByteInputStream bis = new ByteInputStream(dp.getData());
-                    int id = bis.readInt();
-                    int len = bis.readInt();
-                    byte[] data = new byte[len];
-                    for (int i = 0; i < len; i++)
-                        data[i] = (byte) bis.read();
-                    DatagramSocketStreamer dssi = dss.get(new Integer(id));
-                    if (dssi == null) {
-                        InetAddress from = dp.getAddress();
-                        int fport = dp.getPort();
-                        Player p = getNextPlayer();
-                        int id2 = p.getID();
-                        PlayerInstanceData pid = new PlayerInstanceData();
-                        pid.setPlayer(p);
-                        dssi = new DatagramSocketStreamer(ds,
-                                new InetSocketAddress(from, fport), id2);
-                        ObjectOutputStream oos = new ObjectOutputStream(
-                                dssi.getOutputStream());
-                        pid.setOutputStream(oos);
-                        pid.setSockID(id2);
-                        sendID(dssi, oos);
-                        Thread t = new listener(dssi, pid);
-                        t.start();
-                        pid.setListener(t);
-                        dss.put(new Integer(id2), dssi);
-                    } else
-                        dssi.addToByteArray(data);
-                }
-            } catch (Exception x) {
-                System.err.println("Failed to recive packet.");
-                x.printStackTrace();
-            }
+        	DatagramPacket dp = new DatagramPacket(new byte[10000], 10000);
+
+        	while(true) {
+
+        		try {
+        		
+        			ds.receive(dp);
+
+	        		try (ByteInputStream bis = new ByteInputStream(dp.getData())) {
+	
+	        			int id = bis.readInt();
+	                    int len = bis.readInt();
+	
+	                    byte[] data = new byte[len];
+	
+	                    for (int i = 0; i < len; i++)
+	                        data[i] = (byte) bis.read();
+	
+	                    DatagramSocketStreamer dssi = dss.get(new Integer(id));
+	
+	                    if (dssi == null) {
+	
+	                    	InetAddress from = dp.getAddress();
+	
+	                    	int fport = dp.getPort();
+	                        Player p = getNextPlayer();
+	                        int id2 = p.getID();
+	                        PlayerInstanceData pid = new PlayerInstanceData();
+	                        pid.setPlayer(p);
+	
+	                        dssi = new DatagramSocketStreamer(ds,
+	                                new InetSocketAddress(from, fport), id2);
+	
+	                        ObjectOutputStream oos = new ObjectOutputStream(dssi.getOutputStream());
+	
+	                        pid.setOutputStream(oos);
+	                        pid.setSockID(id2);
+	
+	                        sendID(dssi, oos);
+	
+	                        Thread t = new listener(dssi, pid);
+	                        t.start();
+	                        pid.setListener(t);
+	
+	                        dss.put(new Integer(id2), dssi);
+	
+	                    } else {
+	                     
+	                    	dssi.addToByteArray(data);
+	                    
+	        			}
+	        		
+	        		} catch(IOException ioe){
+	        			
+	        			System.err.println("Error while reading Packet: " + ioe.getMessage());
+	
+	        		}
+
+        		} catch(IOException ioe){
+
+        			System.err.println("Failed to read datagram packet: " + ioe.getMessage());
+
+        		}
+        	}
         }
 
         public void sendID(DatagramSocketStreamer dss, ObjectOutputStream oos)
@@ -357,19 +395,6 @@ public class PokemonServer {
             break;
         }
 
-    }
-
-    public static int arrayListRemove(ArrayList al, Object o) {
-        int removed = 0;
-        Iterator it = al.iterator();
-        while (it.hasNext()) {
-            Object o2 = it.next();
-            if (o2.equals(o)) {
-                it.remove();
-                removed++;
-            }
-        }
-        return removed;
     }
 
     public synchronized void replace(Player p) {
@@ -444,7 +469,7 @@ public class PokemonServer {
                 break;
             case 'f':
                 try {
-                    int sp = s.indexOf(' ', 3);
+
                     String name = s.substring(3, s.length());
                     if (name.equals(p2.getName()))
                         break;
@@ -651,7 +676,7 @@ public class PokemonServer {
         public PlayerInstanceData(Player p, long l, Thread t) {
             this.p = p;
             lastRecivedMessageTime = l;
-            Thread listeningThread = t;
+            listeningThread = t;
         }
 
         boolean hasMessageLast45() {
@@ -661,7 +686,7 @@ public class PokemonServer {
         }
 
         public void stop() {
-            listeningThread.stop();
+            listeningThread.interrupt();
         }
 
         public Player getPlayer() {
@@ -681,7 +706,7 @@ public class PokemonServer {
         }
 
         public void setSockID(int id) {
-            int sockID = id;
+            sockID = id;
         }
 
         public int getSockID() {
@@ -803,39 +828,6 @@ public class PokemonServer {
 
             oos.flush();
             oos.reset();
-        }
-
-        public synchronized void SendAttackSelection(int sel)
-                throws IOException {
-            oos.writeInt(ID_FIGHT_MESSAGE);
-            oos.writeInt(Fight.FM_ATTACK_SELECTION);
-            oos.writeInt(sel);
-            oos.flush();
-        }
-
-        public synchronized void SendFightMessage(int type, int message)
-                throws IOException {
-            oos.writeInt(ID_FIGHT_MESSAGE);
-            oos.writeInt(type);
-            oos.writeInt(message);
-            oos.flush();
-        }
-
-        public synchronized void SendDamageCheck(int outDamage, int enemyDamage)
-                throws IOException {
-            oos.writeInt(ID_FIGHT_MESSAGE);
-            oos.writeInt(Fight.FM_DAMAGE_CHECK);
-            oos.writeInt(outDamage);
-            oos.writeInt(enemyDamage);
-            oos.flush();
-        }
-
-        public synchronized void SendPokemonSwitch(Pokemon p)
-                throws IOException {
-            oos.writeInt(ID_FIGHT_MESSAGE);
-            oos.writeInt(Fight.FM_POKEMON_SWITCH);
-            oos.writeObject(p);
-            oos.flush();
         }
 
     }

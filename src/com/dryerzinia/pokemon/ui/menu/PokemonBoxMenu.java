@@ -190,12 +190,13 @@ public class PokemonBoxMenu extends ScrollMenu {
 
         // TODO: Needs to be Serialized funtion in Pokemon Game
 
+        /*
         try {
             PokemonGame.pokeg.oos2.writeInt(PokemonServer.ID_GET_POKEMON);
             PokemonGame.pokeg.oos2.writeObject(p);
         } catch (Exception x) {
             x.printStackTrace();
-        }
+        }*/
 
         // Fight.sendNowPokemon();
         // TODO: FIX THIS!
