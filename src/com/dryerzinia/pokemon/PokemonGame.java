@@ -72,8 +72,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public static PokemonGame pokeg;
 
-    public String controller = "/dev/js0";
-
     public MapEditor me;
 
     public static ArrayList<Class> allClasses = new ArrayList<Class>();
