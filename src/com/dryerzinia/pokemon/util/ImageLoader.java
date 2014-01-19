@@ -12,8 +12,15 @@ public class ImageLoader {
 
     public static boolean useImageIO = false;
 
+    public boolean in_a_jar = false;
+    
     public ImageLoader() {
-        sprites = new HashMap<String, Image>();
+
+    	if(-1 != ImageLoader.class.getResource("ImageLoader.class").toString().indexOf(".jar!"))
+    		in_a_jar = true;
+    	
+    	sprites = new HashMap<String, Image>();
+
     }
 
     public Image loadImage(String filename) {
@@ -23,7 +30,12 @@ public class ImageLoader {
         URL url = null;
 
         try {
-            url = getClass().getClassLoader().getResource(filename);
+
+        	if(in_a_jar)
+                url = new URL("jar:" + ImageLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI() + "!/" + filename);
+        	else
+        		url = getClass().getClassLoader().getResource(filename);
+
             if (useImageIO)
                 return ImageIO.read(url);
             else
