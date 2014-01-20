@@ -74,8 +74,8 @@ public class PokemonServer {
 
         MysqlConnect.localized = localized;
 
-        MysqlConnect.username = "root";
-        MysqlConnect.password = "VrvJMUASBqsz8LtA796J";
+        MysqlConnect.username = "pokemon";
+        MysqlConnect.password = "UhSz6NKQVhN7ByWuzRug";
         MysqlConnect.dbname = "Pokemon";
         MysqlConnect.server = "localhost";
         MysqlConnect.port = 3306;

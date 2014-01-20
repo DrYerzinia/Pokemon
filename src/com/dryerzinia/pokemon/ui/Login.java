@@ -2,6 +2,8 @@ package com.dryerzinia.pokemon.ui;
 import java.awt.*;
 import java.awt.event.*;
 
+import com.dryerzinia.pokemon.PokemonGame;
+
 public class Login extends Overlay {
 
     public String username = "";
@@ -13,7 +15,7 @@ public class Login extends Overlay {
     public void draw(Graphics g) {
 
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, 160, 144);
+        g.fillRect(0, 0, PokemonGame.APP_HEIGHT, PokemonGame.APP_WIDTH+PokemonGame.CHAT_HEIGHT);
         g.setColor(Color.WHITE);
         g.setFont(new Font("monospaced", 0, 16));
         g.drawString("LOGIN", 50, 20);

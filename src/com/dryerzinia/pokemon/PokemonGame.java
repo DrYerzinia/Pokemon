@@ -1,3 +1,12 @@
+/**
+ * The Entry point for the PokemonGame application.  A configuration file should
+ * be saved in the same folder as the JAR named PokemonGame.json with the default
+ * username password location and transport mode (TCP, UDP) to populate in the
+ * Login menu.
+ * 
+ * @author DrYerzinia <dryerzinia@gmail.com>
+ */
+
 package com.dryerzinia.pokemon;
 
 import java.io.*;
@@ -33,7 +42,6 @@ import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.Tile;
-import com.dryerzinia.pokemon.obj.Pokemon.BaseStats;
 import com.dryerzinia.pokemon.ui.Login;
 import com.dryerzinia.pokemon.ui.Overlay;
 import com.dryerzinia.pokemon.ui.OverlayO;
@@ -44,7 +52,6 @@ import com.dryerzinia.pokemon.ui.editor.MapEditor;
 import com.dryerzinia.pokemon.ui.editor.Sub;
 import com.dryerzinia.pokemon.ui.editor.SubListener;
 import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
-import com.dryerzinia.pokemon.ui.editor.UltimateEdit.SuperCommandLine;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.ui.menu.ItemMenu;
 import com.dryerzinia.pokemon.ui.menu.MenuEvent;
@@ -100,6 +107,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public Image bi;
     public Graphics bg;
+
     public Image cbi;
     public Graphics cbg;
 
@@ -506,30 +514,45 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
                     5, 4, 1);
 
             shoppingMainMenu.exitOnLast = false;
+
             shoppingMainMenu.addMenuListener(new AbstractMenuListener() {
-                public void MenuPressed(MenuEvent e) {
-                    int i = e.getSelection();
-                    if (e.isLast() || e.getButton() == MenuEvent.X) {
-                        if (!currMenu.message.equals("Thank You!\n ")) {
-                            currMenu = new GMenu("Thank You!\n ", 0, 6, 10, 3);
+
+            	public void MenuPressed(MenuEvent e) {
+
+            		if (e.isLast() || e.getButton() == MenuEvent.X) {
+
+            			if (!currMenu.message.equals("Thank You!\n ")) {
+
+            				currMenu = new GMenu("Thank You!\n ", 0, 6, 10, 3);
                             moneyQuiting = true;
-                            Iterator<Item> iti = Char.items.iterator();
-                            while (iti.hasNext()) {
-                                Item ite = iti.next();
-                                if (ite.number == 0)
-                                    iti.remove();
-                                writeItem(ite);
+
+                            Iterator<Item> item_iterator = Char.items.iterator();
+
+                            while(item_iterator.hasNext()) {
+
+                            	Item item = item_iterator.next();
+
+                            	if (item.number == 0)
+                                    item_iterator.remove();
+
+                            	writeItem(item);
+
                             }
-                        } else {
-                            moneyMenuActive = false;
+
+            			} else {
+
+            				moneyMenuActive = false;
                             currMenu = null;
                             moneyQuiting = false;
-                        }
-                    } else {
-                        currMenu = new GMenu("Take your time.\n ", 0, 6, 10, 3);
-                        System.out.println("tt");
-                    }
-                    System.out.println("ps");
+
+            			}
+
+            		} else {
+
+            			currMenu = new GMenu("Take your time.\n ", 0, 6, 10, 3);
+
+            		}
+
                 }
             });
 
@@ -604,16 +627,22 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     }
 
-    // All the outputs to the server class, Syncronized to insure no stream
-    // corruption from possible sending of 1 message interupting another
-    public synchronized void writeItem(Item ite) {
-        try {
-            oos2.writeObject(new GetItemServerMessage(ite));
+    /* All the outputs to the server class, Synchronized to insure no stream
+     * corruption from possible sending of one message interrupting another
+     */
+    public synchronized void writeItem(Item item) {
+
+    	try {
+
+    		oos2.writeObject(new GetItemServerMessage(item));
             oos2.flush();
-        } catch (Exception x) {
-            System.err.println("Write Item Failed...");
-            x.printStackTrace();
-        }
+
+    	} catch (IOException ioe) {
+
+    		System.err.println("Write Item Failed: " + ioe.getMessage());
+
+    	}
+
     }
 
     public synchronized void writeLoadMessage() {
@@ -854,32 +883,32 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         buymenu.p = Char;
         sellmenu.p = Char;
         buymenu.prices = true;
+
         buymenu.addMenuListener(new AbstractMenuListener() {
-            public void MenuPressed(MenuEvent e) {
-                int i = e.getSelection();
-                if ((e.isLast() && e.getButton() == MenuEvent.Z)
-                        || e.getButton() == MenuEvent.X) {
-                    currMenu = new GMenu("Is there anything\nelse I can do?",
-                            0, 6, 10, 3);
-                    System.out.println("else");
-                }
+
+        	public void MenuPressed(MenuEvent e) {
+            
+        		if((e.isLast() && e.getButton() == MenuEvent.Z)
+                 || e.getButton() == MenuEvent.X)
+        			currMenu = new GMenu("Is there anything\nelse I can do?", 0, 6, 10, 3);
+
             }
         });
+
         sellmenu.addMenuListener(new AbstractMenuListener() {
             public void MenuPressed(MenuEvent e) {
-                int i = e.getSelection();
-                if ((e.isLast() && e.getButton() == MenuEvent.Z)
-                        || e.getButton() == MenuEvent.X) {
-                    currMenu = new GMenu("Is there anything\nelse I can do?",
-                            0, 6, 10, 3);
-                    System.out.println("else");
-                }
+
+                if((e.isLast() && e.getButton() == MenuEvent.Z)
+                 || e.getButton() == MenuEvent.X)
+                	currMenu = new GMenu("Is there anything\nelse I can do?", 0, 6, 10, 3);
+
             }
         });
     }
 
     public void save(File f) {
-        try {
+
+    	try {
 
         	PrintWriter json_writer = new PrintWriter(f);
 
@@ -1041,77 +1070,124 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public class DatagramListener extends Thread {
 
-        public DatagramSocket ds;
-        private DatagramSocketStreamer dss;
+        public DatagramSocket datagram_socket;
+        private DatagramSocketStreamer datagram_socket_streamer;
 
-        public DatagramListener(DatagramSocket ds, DatagramSocketStreamer dss) {
-            this.ds = ds;
-            this.dss = dss;
+        public DatagramListener(DatagramSocket datagram_socket, DatagramSocketStreamer datagram_socket_streamer) {
+
+        	this.datagram_socket = datagram_socket;
+            this.datagram_socket_streamer = datagram_socket_streamer;
+
         }
 
         public void run() {
-            DatagramPacket dp = new DatagramPacket(new byte[10000], 10000);
+
+        	DatagramPacket dp = new DatagramPacket(new byte[10000], 10000);
 
             try {
-                while (true) {
-                    ds.receive(dp);
-                    ByteInputStream bis = new ByteInputStream(dp.getData());
-                    int id = bis.readInt();
+
+            	while(true){
+
+                	datagram_socket.receive(dp);
+
+                	ByteInputStream bis = new ByteInputStream(dp.getData());
+
+                	/* Throw away read of ID
+                	 * TODO Should we even send this int???
+                	 */
+                	bis.readInt();
                     int len = bis.readInt();
+
                     byte[] data = new byte[len];
+
                     for (int i = 0; i < len; i++)
                         data[i] = (byte) bis.read();
-                    dss.addToByteArray(data);
-                }
-            } catch (Exception x) {
-                if (!reconnecting)
+
+                    datagram_socket_streamer.addToByteArray(data);
+
+            	}
+
+            } catch (IOException ioe) {
+
+            	System.err.println("Failed to recieve datagram packet: " + ioe.getMessage());
+            	System.err.println("Attempting to reconnect...");
+            	
+            	if (!reconnecting)
                     attemptReconnect();
-                System.err.println("Failed to recive packet.");
-                x.printStackTrace();
+
             }
         }
     }
 
     public void attemptReconnect() {
-        removeKeyListener(this);
-        t.stop();
-        Image rci = createImage(APP_WIDTH, APP_HEIGHT - CHAT_HEIGHT);
-        Graphics g = rci.getGraphics();
+
+    	removeKeyListener(this);
+
+    	t.stop();
+
+    	Image reconnect_image = createImage(APP_WIDTH, APP_HEIGHT - CHAT_HEIGHT);
+        Graphics g = reconnect_image.getGraphics();
+
         g.drawImage(bi, 0, 0, null);
         g.setColor(Color.RED);
         g.drawString("Lost Connection", 25, 50);
         g.drawString("Attempting Reconnect...", 10, 90);
+
         Graphics g2 = getGraphics();
-        bg.drawImage(rci, 0, 0, null);
+
+        bg.drawImage(reconnect_image, 0, 0, null);
         g2.drawImage(bi, 0, 0, 320, 288, 0, 0, 160, 144, null);
+
         reconnecting = true;
+
         int failed = 0;
-        while (true) {
-            try {
-                if (failed >= 6) {
-                    reconnecting = false;
-                    t = new Thread(this);
-                    t.start();
-                    break;
-                } else {
-                    t = new Thread(this);
-                    t.start();
-                }
-                Thread.sleep(5000);
-                if (reconnecting) {
-                    failed++;
-                    t.stop();
-                } else
-                    break;
-            } catch (Exception x) {
-                System.out.println("Reconnect failed...");
+
+        while(true) {
+
+        	if(failed >= 6) {
+
+        		reconnecting = false;
+                t = new Thread(this);
+                t.start();
+                break;
+
+            } else {
+
+              	t = new Thread(this);
+                t.start();
+
             }
+
+            try {
+
+              	Thread.sleep(5000);
+
+            } catch(InterruptedException se){
+
+              	System.err.println("Thread sleep was interrupted for some reason");
+
+            }
+
+            if (reconnecting) {
+
+              	failed++;
+              	t.stop();
+
+            } else
+            	break;
+
         }
+
         addKeyListener(this);
+
     }
 
+    /**
+     * Initiates network connection to server is selected mode
+     * @throws Exception
+     */
     public void startConnect() throws Exception {
-        switch (connectMode) {
+    	switch (connectMode) {
         case PokemonServer.CM_TCP:
             initTCPConnect();
             break;
