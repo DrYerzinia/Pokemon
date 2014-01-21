@@ -4,6 +4,8 @@
  * username password location and transport mode (TCP, UDP) to populate in the
  * Login menu.
  * 
+ * TODO fucking seperate NET CODE, GAME STATE CODE, UI CODE into seperate SINGLETONS
+ * 
  * @author DrYerzinia <dryerzinia@gmail.com>
  */
 
@@ -80,7 +82,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public MapEditor me;
 
-    public static ArrayList<Class> allClasses = new ArrayList<Class>();
     public static ArrayList<Actor> actors = new ArrayList<Actor>();
 
     public static boolean localDataReadingAllowed = true;
@@ -93,6 +94,8 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
     public ArrayList<String> chathist;
 
     private static int connectMode = PokemonServer.CM_TCP;
+
+    private Socket socket_to_server;
 
     private String username = "";
     private String password = "";
@@ -115,7 +118,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     private boolean reconnecting = false;
 
-    public static ObjectOutputStream oos2;
+    public static ObjectOutputStream object_output_stream_to_server;
 
     private GMenu currMenu = null;
 
@@ -189,8 +192,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
     }
 
     public void init() {
-
-        loadAllClasses();
 
         pokeg = this;
 
@@ -627,15 +628,16 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     }
 
-    /* All the outputs to the server class, Synchronized to insure no stream
+    /**
+     * All the outputs to the server class, Synchronized to insure no stream
      * corruption from possible sending of one message interrupting another
      */
     public synchronized void writeItem(Item item) {
 
     	try {
 
-    		oos2.writeObject(new GetItemServerMessage(item));
-            oos2.flush();
+    		object_output_stream_to_server.writeObject(new GetItemServerMessage(item));
+    		object_output_stream_to_server.flush();
 
     	} catch (IOException ioe) {
 
@@ -645,127 +647,193 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     }
 
+    /**
+     * Requests players Pokemon and Items
+     */
     public synchronized void writeLoadMessage() {
-        try {
-            oos2.writeObject(new SMLoad());
-            oos2.flush();
-        } catch (Exception x) {
-            System.err.println("Write Item Failed...");
-            x.printStackTrace();
+
+    	try {
+
+    		object_output_stream_to_server.writeObject(new SMLoad());
+        	object_output_stream_to_server.flush();
+
+    	} catch(IOException ioe) {
+
+    		System.err.println("Write Item Failed: " + ioe.getMessage());
+
         }
     }
 
-    public synchronized void writePokemon(Pokemon p) {
-        try {
-            oos2.writeObject(new GetPokemonServerMessage(p));
-            oos2.flush();
-        } catch (Exception x) {
-            System.err.println("Write Pokemon Failed...");
-            x.printStackTrace();
+    /**
+     * Send your pokemon to server to be updated
+     * TODO this should be removed, all fights occur on the server
+     * so it should always know correct Pokemon status
+     */
+    public synchronized void writePokemon(Pokemon pokemon) {
+
+    	try {
+
+        	object_output_stream_to_server.writeObject(new GetPokemonServerMessage(pokemon));
+        	object_output_stream_to_server.flush();
+
+        } catch(IOException ioe) {
+
+        	System.err.println("Write Pokemon Failed: " + ioe.getMessage());
+
         }
     }
 
+    /**
+     * Tell the server you are loging off
+     */
     public synchronized void writeLogoff() {
-        try {
-            oos2.writeObject(new SMLogOff());
-            oos2.flush();
-        } catch (Exception x) {
-            System.err.println("Write Logoff Failed...");
-            x.printStackTrace();
-        }
+
+    	try {
+
+    		object_output_stream_to_server.writeObject(new SMLogOff());
+        	object_output_stream_to_server.flush();
+
+    	} catch (IOException ioe) {
+
+    		System.err.println("Write Logoff Failed: " + ioe.getMessage());
+
+    	}
     }
 
+    /**
+     * Write a ping to the server so it knows we are still here and
+     * dosen't disconnect us.
+     * TODO why are we reseting the stream here?  Because of possible errors
+     * that can be rectified on regular basis???  in that case it should be in
+     * a Excpetion handler probably.  Keep Eye out for this type of exception.
+     */
     public synchronized void writePing() {
-        try {
-            oos2.writeObject(new PingServerMessage());
-            oos2.flush();
-            oos2.reset();
-        } catch (Exception x) {
-            System.err.println("Write PING Failed...");
-            x.printStackTrace();
-        }
+
+    	try {
+
+    		object_output_stream_to_server.writeObject(new PingServerMessage());
+        	object_output_stream_to_server.flush();
+        	object_output_stream_to_server.reset();
+
+    	} catch (IOException ioe) {
+
+    		System.err.println("Write PING Failed: " + ioe.getMessage());
+
+    	}
     }
 
+    /**
+     * Send a message from the Chat window to the server
+     */
     public synchronized void writeMessage(String msg) {
-        try {
-            oos2.writeObject(new MessageServerMessage(msg));
-            oos2.flush();
-        } catch (Exception x) {
-            System.err.println("Write Message Failed...");
-            x.printStackTrace();
+
+    	try {
+
+    		object_output_stream_to_server.writeObject(new MessageServerMessage(msg));
+    		object_output_stream_to_server.flush();
+
+        } catch (IOException ioe) {
+
+        	System.err.println("Write Message Failed: " + ioe.getMessage());
+
         }
     }
 
-    public synchronized void writeServerMessage(ServerMessage sm) {
+    /**
+     * Generic server message write
+     * TODO this may be completely unused but could also be use to replace
+     * all the other messages and likely move error handling to a more
+     * appropriate place
+     */
+    public synchronized void writeServerMessage(ServerMessage sm) throws IOException {
 
-        try {
-            oos2.writeObject(sm);
-            oos2.flush();
-        } catch (Exception x) {
-            System.err.println("writeServerMessage() failed");
-            x.printStackTrace();
-        }
+        	object_output_stream_to_server.writeObject(sm);
+        	object_output_stream_to_server.flush();
 
     }
 
+    /**
+     * Write the current player to the server
+     * TODO once again server should always know current player status
+     * this may be for position updates however in which case its IMPORTANT
+     * and we need to make sure there is no funny buisness going on and check
+     * that the player is making legal moves server side
+     * TODO WHY RESET!!!
+     */
     public synchronized void writePlayer() {
-        try {
-            oos2.writeObject(new PlayerServerMessage(Char));
-            oos2.flush();
-            oos2.reset();
-        } catch (Exception x) {
-            System.err.println("Write Player Failed...");
-            x.printStackTrace();
+
+    	try {
+
+    		object_output_stream_to_server.writeObject(new PlayerServerMessage(Char));
+        	object_output_stream_to_server.flush();
+        	object_output_stream_to_server.reset();
+
+    	} catch (IOException ioe) {
+
+    		System.err.println("Write Player Failed: " + ioe.getMessage());
+
+    	}
+    }
+
+    /**
+     *  Tell server that you have engaged the actor in some activity
+     *  TODO Juan has suggested that one might engage an important
+     *  quest useful actor in constant conversation to screw other players
+     *  over and we need to address that, also the possibility of actors
+     *  blocking doors!
+     *  TODO WHY RESET!!!
+     */
+    public synchronized void writeActor(Actor actor, int activity) {
+
+    	try {
+
+    		Person person = (Person) actor;
+
+    		/*
+    		 * Inform server that the client has started
+    		 * talking to a Actor
+    		 */
+    		if (activity == Person.A_TALKING_TO)
+            	object_output_stream_to_server.writeObject(
+            		new SendActTalkingToServerMessage(
+            			person.id,
+            			person.x,
+                        person.y,
+                        person.dir,
+                        person.level,
+                        person.onClick.getActive()
+                    )
+            	);
+
+    		/*
+    		 * TODO
+    		 * Why would the client know about a ACTOR moving if the
+    		 * server didn't TELL THEM!!!
+    		 */
+    		else
+            	object_output_stream_to_server.writeObject(
+            		new SendActMovedServerMessage(
+            			person.id,
+            			person.x,
+            			person.y,
+                        person.dir,
+                        person.level
+                    )
+            	);
+
+            object_output_stream_to_server.flush();
+            object_output_stream_to_server.reset();
+
+        } catch (IOException ioe) {
+
+        	System.err.println("Write Actor Failed: " + ioe.getMessage());
+
         }
     }
 
-    // Tell server that you have engaged the actor in some activity
-    public synchronized void writeActor(Actor a, int activity) {
-        try {
-            Person p = (Person) a;
-            if (activity == Person.A_TALKING_TO)
-                oos2.writeObject(new SendActTalkingToServerMessage(p.id, p.x,
-                        p.y, p.dir, p.level, p.onClick.getActive()));
-            else
-                oos2.writeObject(new SendActMovedServerMessage(p.id, p.x, p.y,
-                        p.dir, p.level));
-            oos2.flush();
-            oos2.reset();
-        } catch (Exception x) {
-            System.err.println("Write Actor Failed");
-            x.printStackTrace();
-        }
-    }
-
-    public static synchronized void SendPokemonSwitch(Pokemon p)
-            throws IOException {
-        // oos2.writeInt(PokemonServer.ID_FIGHT_MESSAGE);
-        // oos2.writeInt(Fight.FM_POKEMON_SWITCH);
-        // oos2.writeObject(p);
-        // oos2.flush();
-    }
-
-    public void loadAllClasses() {
-        try {
-            URL url = this.getClass().getClassLoader().getResource(".");
-            String s1 = url.toString();
-            File dir = new File(new URI(s1));
-            FilenameFilter filter = new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.endsWith(".class");
-                }
-            };
-            String[] list = dir.list(filter);
-            for (int i = 0; i < list.length; i++) {
-                String className = list[i].substring(0, list[i].length() - 6);
-                allClasses.add(this.getClass().getClassLoader()
-                        .loadClass(className));
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
-    }
-
+    /**
+     * Stop healing pokemon at pokecenter
+     */
     public void healCancel() {
         healcancel = true;
         healing = false;
@@ -773,25 +841,50 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         currMenu = new GMenu("We hope to see\nyou again!", 0, 6, 10, 3);
     }
 
+    /**
+     * Heal pokemon at pokecenter
+     * TODO Obviously we need to inform the server of this
+     */
     public void heal() {
 
+    	/*
+    	 * Update last poke center
+    	 */
     	Char.lpcx = Char.x;
         Char.lpcy = Char.y;
         Char.lpclevel = Char.level;
 
+        /*
+         * Annoying state bools
+         * TODO REPLACE THIS FUCKING SHIT
+         */
         healcancel = true;
         healing = false;
         healMenuActive = false;
         currMenu = new GMenu(
                 "Ok we'll need\nyour POKeMON.\n  \nThank you!\nYour POKeMON are\nfighting fit!",
                 0, 6, 10, 3);
+        /*
+         * Actualy heal the fucking pokemon
+         */
         healp();
+        /*
+         * Bullshit update to the server that it SHOLDENT TRUST AT ALL!!!
+         * TODO fucking replace this shit
+         */
         for (int i = 0; i < 6; i++) {
             if (Char.poke.belt[i] == null)
                 break;
             Char.poke.belt[i].location = i;
             writePokemon(Char.poke.belt[i]);
         }
+        /*
+         * Why the fuck am I updating items in heal function
+         * this is just fucking stupid server should be informed
+         * when they are used so it has chance to call
+         * BULLSHIT and kick client
+         * TODO ^^^ FIX THAT SHIT
+         */
         Iterator<Item> iti = Char.items.iterator();
         while (iti.hasNext()) {
             Item ite = iti.next();
@@ -801,6 +894,9 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         }
     }
 
+    /**
+     * Heal the pokemon and refresh there move PP
+     */
     public void healp() {
         for (int i = 0; i < 6; i++) {
             if (Char.poke.belt[i] == null)
@@ -814,6 +910,9 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         }
     }
 
+    /**
+     * Listen for messages from server
+     */
     public class listener extends Thread {
 
         ObjectInputStream ois;
@@ -937,6 +1036,15 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     }
 
+    /**
+     * Load the game from a file
+     * 
+     * @param f
+     * @param local
+     * 
+     * TODO we need to remove actor locations so we can get them
+     * from the server and actors don't "JUMP" when you move into a level
+     */
     public void load(File f, boolean local) {
 
         try {
@@ -1002,20 +1110,24 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
     public void initTCPConnect() throws Exception {
 
-        Socket s;
-
         SocketAddress address = null;
         InetSocketAddress inet = null;
 
         java.net.Proxy proxy = null;
         boolean use_proxy = false;
 
+        /*
+         * Default Connection settings
+         */
         String proxyHost = "localhost";
         int proxyPort = 9050;
 
         String host = "5vddatjhjhvybqwo.onion";
         int port = PokemonServer.PORT_NUM; // 53879
 
+        /*
+         * Tokenize location configuration from Login Menu
+         */
         StringTokenizer st = new StringTokenizer(location, "|:");
 
         host = st.nextToken();
@@ -1030,22 +1142,31 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
             proxyPort = Integer.parseInt(st.nextToken());
         }
 
+        /*
+         * Default to no proxy
+         */
+        proxy = Proxy.NO_PROXY;
+
+        /*
+         * Configure server INet address
+         */
         if (use_proxy) {
 
+        	/*
+        	 * Setup Proxy configuration
+        	 */
             address = new InetSocketAddress(proxyHost, proxyPort);
             proxy = new java.net.Proxy(java.net.Proxy.Type.SOCKS, address);
 
             inet = InetSocketAddress.createUnresolved(host, port);
 
-            s = new Socket(proxy);
-
         } else {
 
             inet = new InetSocketAddress(host, port);
 
-            s = new Socket();
-
         }
+
+        socket_to_server = new Socket(proxy);
 
         // DEBUG
         System.out.println("Host: " + host);
@@ -1055,14 +1176,14 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
         System.out.println("use_proxy: " + use_proxy);
         // ENDDEBUG
 
-        s.connect(inet);
+        socket_to_server.connect(inet);
 
-        oos2 = new ObjectOutputStream(s.getOutputStream());
+        object_output_stream_to_server = new ObjectOutputStream(socket_to_server.getOutputStream());
 
-        oos2.writeObject(new SMLogin(username, password));
-        oos2.flush();
+        object_output_stream_to_server.writeObject(new SMLogin(username, password));
+        object_output_stream_to_server.flush();
 
-        ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+        ObjectInputStream ois = new ObjectInputStream(socket_to_server.getInputStream());
 
         new listener(ois).start();
 
@@ -1102,6 +1223,8 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
                     for (int i = 0; i < len; i++)
                         data[i] = (byte) bis.read();
+
+                    bis.close();
 
                     datagram_socket_streamer.addToByteArray(data);
 
@@ -1217,10 +1340,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
         int id = ois.readInt();
         dss.setID(id);
-
-        System.out.println("ID:" + id);
-
-        ObjectOutputStream oos = new ObjectOutputStream(dos);
 
         // oos2.writeInt(PokemonServer.ID_LOGIN); // TODO: FIX TO NEW SIGNALING
         // oos2.writeObject(username);
@@ -1478,7 +1597,6 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
 
         Overlay ol[] = new Overlay[6];
 
-        final PokemonGame pg = this;
         ((PokemonView) (overlay.o = new PokemonView()))
                 .addSubListener(new SubListener() {
                     public void SubEvent(Sub s) {
@@ -2074,8 +2192,7 @@ public class PokemonGame extends Applet implements Runnable, WindowListener,
             }
         } else if (c == KeyEvent.VK_E) { // In Game Map Editor
             if (e.getModifiers() == InputEvent.CTRL_MASK) {
-                EditLevel el = new EditLevel(level, Char.level, mtile);
-                System.out.println("edit level");
+                new EditLevel(level, Char.level, mtile);
             }
         } else if (c == KeyEvent.VK_U) {
             if (e.getModifiers() == InputEvent.CTRL_MASK)

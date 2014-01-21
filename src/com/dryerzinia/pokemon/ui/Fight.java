@@ -248,10 +248,16 @@ public class Fight extends Overlay implements Serializable {
                                 info2.set(OpponentWaitGM);
                                 WaitingForServerMessageReturn = true;
                                 System.out.println("PokemonGame.pokeg.writeServerMessage(new FMTSSelectedAttack(FMTSSelectedAttack.ITEM_MOVE,i));");
-                                PokemonGame.pokeg
+
+                                try {
+                                	PokemonGame.pokeg
                                         .writeServerMessage(new FMTSSelectedAttack(
                                                 FMTSSelectedAttack.ITEM_MOVE,
                                                 i));
+                                } catch(IOException ioe) {
+                                	System.err.println("Failed to write ItemMove to server: " + ioe.getMessage());
+                                	// TODO connection error handling
+                                }
                             }
                         }
                     }
@@ -474,9 +480,13 @@ public class Fight extends Overlay implements Serializable {
                                 WaitingForServerMessageReturn = true;
                                 System.out.println("PokemonGame.pokeg.writeServerMessage(new FMTSSelectedAttack(i, 0));");
 
-                                PokemonGame.pokeg
+                                try {
+                                	PokemonGame.pokeg
                                         .writeServerMessage(new FMTSSelectedAttack(
                                                 i, 0));
+                                } catch(IOException ioe){
+                                	System.err.println("Failed to write attack to server: " + ioe.getMessage());
+                                }
 
                             }
                         }
@@ -714,7 +724,11 @@ public class Fight extends Overlay implements Serializable {
                     if (enemyPlayer != null) {
                         WaitingForServerMessageReturn = true;
                         info.set(OpponentWaitGM);
-                        PokemonGame.pokeg.writeServerMessage(new FMTSGetNextPokemon());
+                        try {
+                        	PokemonGame.pokeg.writeServerMessage(new FMTSGetNextPokemon());
+                        } catch(IOException ioe) {
+                        	System.err.println("Failed to write Get Next Pokemon Message: " + ioe.getMessage());
+                        }
                         System.out.println("PokemonGame.pokeg.writeServerMessage(new FMTSGetNextPokemon());");
 
                     }
@@ -868,11 +882,11 @@ public class Fight extends Overlay implements Serializable {
                 // TODO: Fix switching!
                 //PokemonGame.pokeg.writeFightMessage(FM_ATTACK_SELECTION,
                 //        FM_POKEMON_SWITCHED);
-                try {
+/*                try {
                     PokemonGame.SendPokemonSwitch(out);
                 } catch (Exception x) {
                     x.printStackTrace();
-                }
+                }*/
             }
             firstTurn = enemy;
             waitcompstart = false;

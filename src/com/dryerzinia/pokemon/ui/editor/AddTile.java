@@ -1,3 +1,10 @@
+/**
+ * Add a new Tile to the Master Tile list with the ingame
+ * map editor
+ * TODO Fix this its broke because of load all class 
+ * removal need to find better way to do this
+ */
+
 package com.dryerzinia.pokemon.ui.editor;
 import javax.swing.*;
 
@@ -17,8 +24,6 @@ public class AddTile extends JFrame {
     ArrayList<Tile> mtiles;
     ArrayList<Tile> sector;
 
-    ArrayList<Class> classList;
-
     Class setClass;
 
     Container c;
@@ -35,10 +40,9 @@ public class AddTile extends JFrame {
         this.mtiles = mtiles;
         this.sector = sector;
 
-        classList = readClasses("Tile");
-        setClass = classList.get(0);
+        //setClass = classList.get(0);
 
-        tiles = new JComboBox(classList.toArray());
+        //tiles = new JComboBox(classList.toArray());
         tiles.addItemListener(new AbstractItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 setClass = (Class) e.getItem();
@@ -66,23 +70,6 @@ public class AddTile extends JFrame {
         setSize(320, 250);
         setVisible(true);
 
-    }
-
-    public static ArrayList<Class> readClasses(String ext) {
-        ArrayList<Class> cs = new ArrayList<Class>();
-        try {
-            for (int i = 0; i < PokemonGame.allClasses.size(); i++) {
-                Class c = PokemonGame.allClasses.get(i);
-                System.out.println(c);
-                if (UltimateEdit.Extends(c, ext)) {
-                    System.out.println(c);
-                    cs.add(c);
-                }
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
-        return cs;
     }
 
     public void setLayer(int i) {

@@ -2,6 +2,7 @@ package com.dryerzinia.pokemon.ui;
 import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSSendNextPokemon;
@@ -274,7 +275,11 @@ public class PokemonView extends Overlay {
             currout = selection;
             switchto = selection;
             active = false;
-            PokemonGame.pokeg.writeServerMessage(new FMTSSendNextPokemon(switchto));
+            try {
+            	PokemonGame.pokeg.writeServerMessage(new FMTSSendNextPokemon(switchto));
+            } catch(IOException ioe){
+            	System.err.println("Failed to send Pokemon Switch: " + ioe.getMessage());
+            }
         }
     }
 

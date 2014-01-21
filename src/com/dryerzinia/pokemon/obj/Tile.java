@@ -176,8 +176,8 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
 
         json += ",'id':" + id;
 
-        json += ",'pixleOffsetX':" + pixelOffsetX;
-        json += ",'pixleOffsetY':" + pixelOffsetY;
+        json += ",'pixelOffsetX':" + pixelOffsetX;
+        json += ",'pixelOffsetY':" + pixelOffsetY;
 
         json += ",'changeToLevel':" + changeToLevel;
         json += ",'leaveDirection':" + leaveDirection;

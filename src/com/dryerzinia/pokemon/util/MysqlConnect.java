@@ -15,6 +15,7 @@ import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.obj.Pokemon;
+import com.mysql.jdbc.CommunicationsException;
 
 public class MysqlConnect {
 
@@ -41,13 +42,50 @@ public class MysqlConnect {
 		credentials.put("password", password);
 
 		try {
-			Class.forName ("com.mysql.jdbc.Driver").newInstance(); 
-		} catch(Exception x){
-			x.printStackTrace();
+
+			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+
+		} catch(IllegalAccessException e){
+
+			System.err.println("Cant access com.mysql.jdbc.Driver: " + e.getMessage());
+			throw new SQLException("Not allowed to access MySQL Driver!");
+
+		} catch (InstantiationException e) {
+
+			System.err.println("Cant instantiate com.mysql.jdbc.Driver: " + e.getMessage());
+			throw new SQLException("Could not create MySQL Driver Instance!");
+
+		} catch (ClassNotFoundException e) {
+
+			System.err.println("Class com.mysql.jdbc.Driver not found: " + e.getMessage());
+			throw new SQLException("MySQL Driver not found!");
+
 		}
 
-		conn = DriverManager.getConnection("jdbc:mysql://" + server + ":"
-				+ port + "/" + dbname, credentials);
+		try {
+			conn = DriverManager.getConnection(
+				  "jdbc:mysql://"
+				+ server
+				+ ":"
+				+ port
+				+ "/"
+				+ dbname, credentials);
+		} catch(CommunicationsException ce){
+
+			System.err.println("Could not connect to DB!");
+			throw new SQLException("Could not connect to DB!");
+
+			/*
+			 * TODO this crashes the CLIENT!
+			 * need to do better handling of this error
+			 * Probably should be THROWN all the way to the
+			 * login message where it is handled with
+			 * appropriate response informing client of 
+			 * DB ERROR!
+			 */
+			
+		}
+
 		System.out.println("Connected to the database.");
 		return conn;
 	}
