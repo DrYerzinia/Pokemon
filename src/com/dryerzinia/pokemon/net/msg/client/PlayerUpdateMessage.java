@@ -32,8 +32,8 @@ public class PlayerUpdateMessage extends ClientMessage {
 
         if (isSelf) {
 
-            PokemonGame.pokeg.Char = receivedPlayer;
-            PokemonGame.pokeg.Char.loadImages();
+            Player.self = receivedPlayer;
+            Player.self.loadImages();
 
             PokemonGame.pokeg.writeLoadMessage();
 

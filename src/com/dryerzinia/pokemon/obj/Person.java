@@ -5,6 +5,7 @@ import java.awt.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Person extends Tile implements Actor {
 
@@ -47,10 +48,10 @@ public class Person extends Tile implements Actor {
 
         sprite = new Image[4];
 
-        sprite[0] = PokemonGame.images.getSprite(imgName + "U.png");
-        sprite[1] = PokemonGame.images.getSprite(imgName + "D.png");
-        sprite[2] = PokemonGame.images.getSprite(imgName + "L.png");
-        sprite[3] = PokemonGame.images.getSprite(imgName + "R.png");
+        sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
+        sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
+        sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
+        sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
 
     }
 
@@ -116,7 +117,7 @@ public class Person extends Tile implements Actor {
             py = y;
             onClick.active = true;
             wasTalkingToYou = true;
-            setImage(x - PokemonGame.pokeg.Char.x, y - PokemonGame.pokeg.Char.y);
+            setImage(x - Player.self.x, y - Player.self.y);
             PokemonGame.pokeg.writeActor(this, A_TALKING_TO);
             return onClick;
         } else {

@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Item;
+import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 
 public class CMLoad extends ClientMessage {
@@ -35,14 +36,13 @@ public class CMLoad extends ClientMessage {
         Iterator<Pokemon> pokeIt = allPokemon.iterator();
         while (pokeIt.hasNext()) {
             Pokemon nextPokemon = pokeIt.next();
-            nextPokemon.getBase(PokemonGame.pokeg.basePokemon,
-                    PokemonGame.pokeg.baseMoves);
+            nextPokemon.getBase();
             for (int j = 0; j < 6; j++)
                 if (nextPokemon.idNo == pokeBeltidNo[j])
-                    PokemonGame.pokeg.Char.poke.belt[j] = nextPokemon;
+                    Player.self.poke.belt[j] = nextPokemon;
         }
-        PokemonGame.pokeg.Char.poke.box = allPokemon;
-        PokemonGame.pokeg.Char.items = allItems;
+        Player.self.poke.box = allPokemon;
+        Player.self.items = allItems;
 
         PokemonGame.pokeg.setupMenus();
 

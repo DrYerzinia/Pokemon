@@ -48,7 +48,7 @@ public class TrainerPerson extends Person implements Actor {
         sprite[2] = PokemonGame.pokeg.images.getSprite(imgName + "L.png");
         sprite[3] = PokemonGame.pokeg.images.getSprite(imgName + "R.png");
 
-        Grid g = PokemonGame.pokeg.level.get(PokemonGame.pokeg.Char.level).g;
+        Grid g = PokemonGame.pokeg.level.get(Player.self.level).g;
 
         face = dir;// (int)(Math.random()*3);
 
@@ -89,7 +89,7 @@ public class TrainerPerson extends Person implements Actor {
                 break;
             }
             if (x2 == x + 4 && y2 == y + 4 && !hasBeenFought) {
-                Pokemon poke2[] = PokemonGame.pokeg.Char.poke.belt;
+                Pokemon poke2[] = Player.self.poke.belt;
                 Pokemon poke[] = new Pokemon[6];
                 for (int j = 0; j < 6; j++) {
                     if (poke2[j] == null)

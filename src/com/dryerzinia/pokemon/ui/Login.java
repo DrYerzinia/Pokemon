@@ -2,35 +2,43 @@ package com.dryerzinia.pokemon.ui;
 import java.awt.*;
 import java.awt.event.*;
 
-import com.dryerzinia.pokemon.PokemonGame;
-
 public class Login extends Overlay {
 
-    public String username = "";
-    public String password = "";
-    public String location = "75.70.0.170";
+	/*
+	 * Global login information
+	 */
+    public static String username = "";
+    public static String password = "";
+    public static String location = "";
 
     int selection = 0;
 
     public void draw(Graphics g) {
 
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, PokemonGame.APP_HEIGHT, PokemonGame.APP_WIDTH+PokemonGame.CHAT_HEIGHT);
+        g.fillRect(0, 0, UI.APP_HEIGHT, UI.APP_WIDTH + UI.CHAT_HEIGHT);
+
         g.setColor(Color.WHITE);
+
         g.setFont(new Font("monospaced", 0, 16));
         g.drawString("LOGIN", 50, 20);
+
         g.setFont(new Font("monospaced", 0, 12));
+
         if (selection == 0)
             g.setColor(Color.BLUE);
         g.drawString("Username: " + username, 10, 40);
         g.setColor(Color.WHITE);
+
         if (selection == 1)
             g.setColor(Color.BLUE);
+
         String s = "";
         for (int i = 0; i < password.length(); i++)
             s += "*";
         g.drawString("Password: " + s, 10, 60);
         g.setColor(Color.WHITE);
+
         if (selection == 2)
             g.setColor(Color.BLUE);
 
@@ -84,6 +92,7 @@ public class Login extends Overlay {
             if (selection == 4) {
                 active = false;
                 selection = 0;
+                UI.attemptLogin();
             }
         } else if (c == KeyEvent.VK_BACK_SPACE) {
             try {
@@ -118,6 +127,9 @@ public class Login extends Overlay {
                 }
             }
         }
+
+        UI.redrawLogin();
+    
     }
 
     public void keyReleased(KeyEvent e) {

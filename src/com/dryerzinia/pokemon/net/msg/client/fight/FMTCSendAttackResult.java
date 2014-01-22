@@ -80,7 +80,7 @@ public class FMTCSendAttackResult extends ClientMessage {
             }
             // If its a use item move
             else if (f.toUseU.getName().equals(Fight.UseItem.getName())) {
-                Item it = PokemonGame.pokeg.Char.items.get(f.itemToUse);
+                Item it = Player.self.items.get(f.itemToUse);
                 if (it instanceof Pokeball && !f.isTrainer()) {
                     // if(it.number == 0)
                     // ((ItemMenu)e.getSelectMenu()).items.remove(e.getSelection());

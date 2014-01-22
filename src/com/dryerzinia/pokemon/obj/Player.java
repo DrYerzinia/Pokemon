@@ -5,10 +5,16 @@ import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Player implements Serializable {
 
     static final long serialVersionUID = 3191532376844138757L;
+
+    /*
+     * Global reference of Character for Client
+     */
+    public static Player self;
 
     public int id; // Player MYSQL_ID
     public int x, y; // X, Y location in map level
@@ -156,10 +162,10 @@ public class Player implements Serializable {
     public void loadImages() {
         sprite = new Image[4];
 
-        sprite[0] = PokemonGame.images.getSprite(imgName + "U.png");
-        sprite[1] = PokemonGame.images.getSprite(imgName + "D.png");
-        sprite[2] = PokemonGame.images.getSprite(imgName + "L.png");
-        sprite[3] = PokemonGame.images.getSprite(imgName + "R.png");
+        sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
+        sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
+        sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
+        sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
     }
 
     public boolean equals(Object o) {

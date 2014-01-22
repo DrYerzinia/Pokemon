@@ -51,8 +51,8 @@ public class PokemonBoxMenu extends ScrollMenu {
 
     public void draw(Graphics g) {
 
-        Pokemon poke[] = PokemonGame.pokeg.Char.poke.belt;
-        ArrayList<Pokemon> pokemon = PokemonGame.pokeg.Char.poke.box;
+        Pokemon poke[] = Player.self.poke.belt;
+        ArrayList<Pokemon> pokemon = Player.self.poke.box;
 
         int j = 0;
         for (int i = 0; i < pokemon.size(); i++) {
@@ -131,8 +131,8 @@ public class PokemonBoxMenu extends ScrollMenu {
             return true;
         }
 
-        Pokemon poke[] = PokemonGame.pokeg.Char.poke.belt;
-        ArrayList<Pokemon> pokemon = PokemonGame.pokeg.Char.poke.box;
+        Pokemon poke[] = Player.self.poke.belt;
+        ArrayList<Pokemon> pokemon = Player.self.poke.box;
 
         Pokemon p = null;
 
@@ -168,7 +168,7 @@ public class PokemonBoxMenu extends ScrollMenu {
                     break;
                 }
             }
-            PokemonGame.pokeg.Char.poke.belt = poke;
+            Player.self.poke.belt = poke;
             break;
         case DEPOSIT:
             p.location = 6;
@@ -182,7 +182,7 @@ public class PokemonBoxMenu extends ScrollMenu {
             for (; l < 6; l++) {
                 poke[l] = null;
             }
-            PokemonGame.pokeg.Char.poke.belt = poke;
+            Player.self.poke.belt = poke;
             break;
         case RELEASE:
             break;

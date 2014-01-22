@@ -11,29 +11,23 @@ import java.awt.*;
 
 public class EditLevel extends JFrame {
 
-    public ArrayList<Level> level;
-
     Level l;
 
     Container c;
-
-    ArrayList<Tile> mtiles;
 
     JTextField offsetTF[] = new JTextField[9];
     JTextField levelTF[] = new JTextField[9];
     JTextField xTF, yTF, xoTF, yoTF;
 
-    public EditLevel(ArrayList<Level> level, int n, ArrayList<Tile> mtiles) {
+    public EditLevel() {
 
         super("Edit Level");
 
         c = getContentPane();
         setLayout(new FlowLayout());
 
-        this.level = level;
-        this.mtiles = mtiles;
 
-        l = level.get(n);
+        l = level.get(Player.self.level);
 
         JButton saveB;
 

@@ -20,23 +20,14 @@ public class AddLevel extends JFrame {
 
     JButton add;
 
-    ArrayList<Tile> mtiles;
-    ArrayList<Level> levels;
-
-    Player Char;
-
     Container c;
 
-    public AddLevel(ArrayList<Tile> mtiles, ArrayList<Level> levels, Player Char) {
+    public AddLevel() {
 
         super("Add Level");
 
         c = getContentPane();
         setLayout(new FlowLayout());
-
-        this.mtiles = mtiles;
-        this.levels = levels;
-        this.Char = Char;
 
         wtf = new JTextField("0");
         htf = new JTextField("0");

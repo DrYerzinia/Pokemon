@@ -13,8 +13,6 @@ import java.awt.*;
 
 public class MapEditor extends JFrame implements MouseListener {
 
-    PokemonGame pg;
-
     ArrayList<Tile> sector = null;
 
     Container c;
@@ -33,16 +31,8 @@ public class MapEditor extends JFrame implements MouseListener {
 
     boolean abc = false;
 
-    ArrayList<Pokemon> bs;
-    ArrayList<Move> ms;
-
-    public MapEditor(PokemonGame pg, ArrayList<Pokemon> bss, ArrayList<Move> mss) {
+    public MapEditor() {
         super("In-Game Map Editor!");
-
-        this.bs = bss;
-        this.ms = mss;
-
-        this.pg = pg;
 
         c = getContentPane();
         setLayout(new FlowLayout());
@@ -92,7 +82,7 @@ public class MapEditor extends JFrame implements MouseListener {
         this.rw.addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 Grid g = PokemonGame.pokeg.level
-                        .get(PokemonGame.pokeg.Char.level).g;
+                        .get(Player.self.level).g;
                 for (int x = 0; x < g.getWidth(); x++) {
                     for (int y = 0; y < g.getHeight(); y++) {
                         for (int i = 0; i < g.g[x][y].size(); i++) {
@@ -153,8 +143,8 @@ public class MapEditor extends JFrame implements MouseListener {
     }
 
     public void addTile(int x, int y) {
-        pg.level.get(pg.Char.level).g.g[x + PokemonGame.pokeg.Char.x][y
-                + PokemonGame.pokeg.Char.y].add((Tile) tiles.getSelectedItem());
+        pg.level.get(pg.Char.level).g.g[x + Player.self.x][y
+                + Player.self.y].add((Tile) tiles.getSelectedItem());
     }
 
     public void popup(int i, int x, int y) {
@@ -170,8 +160,8 @@ public class MapEditor extends JFrame implements MouseListener {
     public void loadSector(int x, int y) {
         lastx = x;
         lasty = y;
-        sector = pg.level.get(pg.Char.level).g.g[x + PokemonGame.pokeg.Char.x][y
-                + PokemonGame.pokeg.Char.y];
+        sector = pg.level.get(pg.Char.level).g.g[x + Player.self.x][y
+                + Player.self.y];
         for (int i = 0; i < 6; i++) {
             if (i < sector.size()) {
                 lnames[i].setText(sector.get(i) + "");

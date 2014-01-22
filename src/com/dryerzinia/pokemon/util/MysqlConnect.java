@@ -446,8 +446,7 @@ public class MysqlConnect {
 																// int -
 																// problem?
 				pokemon.Species = results.getString("species");
-				
-	            pokemon.getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+	            pokemon.getBase();
 				
 				fetchAndSetMoves(connection, pokemon);
 

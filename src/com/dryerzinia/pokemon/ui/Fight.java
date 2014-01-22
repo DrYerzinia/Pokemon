@@ -130,8 +130,8 @@ public class Fight extends Overlay implements Serializable {
 
     public void init() {    // TODO: check only pokemon that are not NULL!!!
         for (int i = 0; i < 6; i++) {
-            if (PokemonGame.pokeg.Char.poke.belt[i].currentHP != 0) {
-                out = PokemonGame.pokeg.Char.poke.belt[i];
+            if (Player.self.poke.belt[i].currentHP != 0) {
+                out = Player.self.poke.belt[i];
                 activePokemonC = i;
                 break;
             }
@@ -229,7 +229,7 @@ public class Fight extends Overlay implements Serializable {
 
         fightMenu.submenus[0] = null;
         fightMenu.submenus[1] = null;
-        fightMenu.submenus[2] = new ItemMenu(PokemonGame.pokeg.Char.items, 2,
+        fightMenu.submenus[2] = new ItemMenu(Player.self.items, 2,
                 1, 8, 5, 1);
         fightMenu.submenus[3] = null;
 
@@ -237,8 +237,8 @@ public class Fight extends Overlay implements Serializable {
                 .addMenuListener(new AbstractMenuListener() {
                     public void MenuPressed(MenuEvent e) {
                         int i = e.getSelection();
-                        if (PokemonGame.pokeg.Char.items.size() > i) {
-                            Item it = PokemonGame.pokeg.Char.items.get(i);
+                        if (Player.self.items.size() > i) {
+                            Item it = Player.self.items.get(i);
                             if (e.getButton() == MenuEvent.Z) {
                                 it.number--;
                                 itemToUse = i;
@@ -274,11 +274,11 @@ public class Fight extends Overlay implements Serializable {
     }
 
     public void capture(boolean success) {
-        info.set(new GMenu(PokemonGame.pokeg.charName + " used\n"
+        info.set(new GMenu(Player.selfName + " used\n"
                 + "\nPokeball!", 0, 6, 10, 3));
         if (success) {
             capture = true;
-            addPokemon(PokemonGame.pokeg.Char, enemy);
+            addPokemon(Player.self, enemy);
         } else {
             failcapture = true;
         }
@@ -314,7 +314,7 @@ public class Fight extends Overlay implements Serializable {
     public boolean canRun() {
         if (isTrainer())
             return false;
-        int l1 = PokemonGame.pokeg.Char.poke.belt[activePokemonC].level;
+        int l1 = Player.self.poke.belt[activePokemonC].level;
         int l2 = enemy.level;
         int X = (int) ((out.getSpeed() * 32 / ((enemy.getSpeed() / 4) % 255)) + (30 * runCount));
         int r = (int) (Math.random() * 255.0);
@@ -371,7 +371,7 @@ public class Fight extends Overlay implements Serializable {
             if (activePokemonC == -2) {
                 g.drawImage(playerb, 0, 32, null);
                 for (int i = 0; i < 6; i++) {
-                    if (PokemonGame.pokeg.Char.poke.belt[i] != null)
+                    if (Player.self.poke.belt[i] != null)
                         g.drawImage(pokeballTiny[0], 85 + i * 8, 80, null);
                     else
                         g.drawImage(pokeballTiny[1], 85 + i * 8, 80, null);
@@ -380,23 +380,23 @@ public class Fight extends Overlay implements Serializable {
                 ; // TODO: WTF IS THIS FOR???
             else {
                 g.drawImage(
-                        PokemonGame.pokeg.Char.poke.belt[activePokemonC].sprites[9],
+                        Player.self.poke.belt[activePokemonC].sprites[9],
                         0, 32, null);
                 g.setColor(Color.BLACK);
                 g.setFont(new Font("monospaced", 0, 12));
-                g.drawString(PokemonGame.pokeg.Char.poke.belt[activePokemonC]
+                g.drawString(Player.self.poke.belt[activePokemonC]
                         .getName(), 80, 65);
                 g.setFont(new Font("monospaced", Font.BOLD, 11));
                 g.drawString(
                         ":L"
-                                + PokemonGame.pokeg.Char.poke.belt[activePokemonC].level,
+                                + Player.self.poke.belt[activePokemonC].level,
                         100, 75);
                 g.setFont(new Font("monospaced", Font.BOLD, 11));
                 g.drawString(out.currentHP + "/ " + out.getTotalHP(), 85, 90);
                 g.setFont(new Font("monospaced", Font.BOLD, 8));
                 Fight.drawHPBar(
                         g,
-                        ((double) PokemonGame.pokeg.Char.poke.belt[activePokemonC].currentHP / (double) out
+                        ((double) Player.self.poke.belt[activePokemonC].currentHP / (double) out
                                 .getTotalHP()), 75, 77);
 
             }
@@ -470,7 +470,7 @@ public class Fight extends Overlay implements Serializable {
                         int i = e.getSelection();
                         if (e.getButton() == MenuEvent.Z) {
                             attack = i;
-                            if (PokemonGame.pokeg.Char.poke.belt[activePokemonC].moves[i] != null) {
+                            if (Player.self.poke.belt[activePokemonC].moves[i] != null) {
                                 fightMenuActive = false;
                                 fightMenu2.submenu = null;
                                 toUseU = out.moves[i];
@@ -671,47 +671,47 @@ public class Fight extends Overlay implements Serializable {
             } else {
                 boolean found = false;
                 for (int i = 0; i < 6; i++) {
-                    if (PokemonGame.pokeg.Char.poke.belt[i] == null)
+                    if (Player.self.poke.belt[i] == null)
                         break;
-                    if (PokemonGame.pokeg.Char.poke.belt[i].level == PokemonGame.pokeg.Char.poke.belt[i]
+                    if (Player.self.poke.belt[i].level == Player.self.poke.belt[i]
                             .evolvesAt()) {
                         info.set(new GMenu("What? "
-                                + PokemonGame.pokeg.Char.poke.belt[i].nickName
+                                + Player.self.poke.belt[i].nickName
                                 + "\nis evolving!", 0, 6, 10, 3).nextmenu = new GMenu(
-                                PokemonGame.pokeg.Char.poke.belt[i].nickName
+                                Player.self.poke.belt[i].nickName
                                         + " evolved\ninto "
-                                        + PokemonGame.pokeg.Char.poke.belt[i]
+                                        + Player.self.poke.belt[i]
                                                 .evolvesTo().Species + "!", 0, 6,
                                 10, 3));
-                        Pokemon p = PokemonGame.pokeg.Char.poke.belt[i];
-                        PokemonGame.pokeg.Char.poke.belt[i] = new Pokemon(
+                        Pokemon p = Player.self.poke.belt[i];
+                        Player.self.poke.belt[i] = new Pokemon(
                                 p.evolvesTo());
                         if (!p.nickName.equals(p.getSpecies()))
-                            PokemonGame.pokeg.Char.poke.belt[i].nickName = p.nickName;
+                            Player.self.poke.belt[i].nickName = p.nickName;
                         else
-                            PokemonGame.pokeg.Char.poke.belt[i].nickName = PokemonGame.pokeg.Char.poke.belt[i]
+                            Player.self.poke.belt[i].nickName = Player.self.poke.belt[i]
                                     .getSpecies();
                         System.out.println("nic" + p.nickName + "nam" + p.Species);
-                        PokemonGame.pokeg.Char.poke.belt[i].nickName = p.nickName;
-                        PokemonGame.pokeg.Char.poke.belt[i].speedSE = p.speedSE;
-                        PokemonGame.pokeg.Char.poke.belt[i].attackSE = p.attackSE;
-                        PokemonGame.pokeg.Char.poke.belt[i].defenseSE = p.defenseSE;
-                        PokemonGame.pokeg.Char.poke.belt[i].specialSE = p.specialSE;
-                        PokemonGame.pokeg.Char.poke.belt[i].hpSE = p.hpSE;
-                        PokemonGame.pokeg.Char.poke.belt[i].currentHP = PokemonGame.pokeg.Char.poke.belt[i]
+                        Player.self.poke.belt[i].nickName = p.nickName;
+                        Player.self.poke.belt[i].speedSE = p.speedSE;
+                        Player.self.poke.belt[i].attackSE = p.attackSE;
+                        Player.self.poke.belt[i].defenseSE = p.defenseSE;
+                        Player.self.poke.belt[i].specialSE = p.specialSE;
+                        Player.self.poke.belt[i].hpSE = p.hpSE;
+                        Player.self.poke.belt[i].currentHP = Player.self.poke.belt[i]
                                 .getTotalHP();
-                        PokemonGame.pokeg.Char.poke.belt[i].location = i;
-                        PokemonGame.pokeg.Char.poke.belt[i].EXP = p.EXP;
-                        PokemonGame.pokeg.Char.poke.belt[i].idNo = p.idNo;
-                        PokemonGame.pokeg.Char.poke.belt[i].status = p.status;
-                        PokemonGame.pokeg.Char.poke.belt[i].level = p.level;
-                        PokemonGame.pokeg.Char.poke.belt[i].moves = new Move[4];
+                        Player.self.poke.belt[i].location = i;
+                        Player.self.poke.belt[i].EXP = p.EXP;
+                        Player.self.poke.belt[i].idNo = p.idNo;
+                        Player.self.poke.belt[i].status = p.status;
+                        Player.self.poke.belt[i].level = p.level;
+                        Player.self.poke.belt[i].moves = new Move[4];
                         System.out
-                                .println(PokemonGame.pokeg.Char.poke.belt[i].pokeBase);
+                                .println(Player.self.poke.belt[i].pokeBase);
                         for (int j = 0; j < 4; j++) {
                             if (p.moves[i] == null)
                                 break;
-                            PokemonGame.pokeg.Char.poke.belt[i].moves[i] = new Move(
+                            Player.self.poke.belt[i].moves[i] = new Move(
                                     p.moves[i]);
                         }
 
@@ -737,25 +737,25 @@ public class Fight extends Overlay implements Serializable {
             }
         } else if (golastcenter) {
             golastcenter = false;
-            PokemonGame.pokeg.Char.level = PokemonGame.pokeg.Char.lpclevel;
-            PokemonGame.pokeg.Char.x = PokemonGame.pokeg.Char.lpcx;
-            PokemonGame.pokeg.Char.y = PokemonGame.pokeg.Char.lpcy;
-            PokemonGame.pokeg.Char.dir = 0;
+            Player.self.level = Player.self.lpclevel;
+            Player.self.x = Player.self.lpcx;
+            Player.self.y = Player.self.lpcy;
+            Player.self.dir = 0;
             for (int i = 0; i < 6; i++) {
-                if (PokemonGame.pokeg.Char.poke.belt[i] == null)
+                if (Player.self.poke.belt[i] == null)
                     break;
-                PokemonGame.pokeg.Char.poke.belt[i].currentHP = PokemonGame.pokeg.Char.poke.belt[i]
+                Player.self.poke.belt[i].currentHP = Player.self.poke.belt[i]
                         .getTotalHP();
                 for (int j = 0; j < 4; j++) {
-                    if (PokemonGame.pokeg.Char.poke.belt[i].moves[j] == null)
+                    if (Player.self.poke.belt[i].moves[j] == null)
                         break;
-                    PokemonGame.pokeg.Char.poke.belt[i].moves[j].currentpp = PokemonGame.pokeg.Char.poke.belt[i].moves[j].pp;
+                    Player.self.poke.belt[i].moves[j].currentpp = Player.self.poke.belt[i].moves[j].pp;
                 }
             }
             // sendNowPokemon();
             active = false;
         } else if (blackingout) {
-            GMenu c2men = new GMenu(PokemonGame.pokeg.Char.name
+            GMenu c2men = new GMenu(Player.self.name
                     + " blacked\nout!", 0, 6, 10, 3);
             GMenu cmen = c2men;
             if (!isComputer) {
@@ -768,15 +768,15 @@ public class Fight extends Overlay implements Serializable {
         } else if (pokesw) {
             boolean dead = true;
             for (int i = 0; i < 6; i++) {
-                if (PokemonGame.pokeg.Char.poke.belt[i] == null)
+                if (Player.self.poke.belt[i] == null)
                     break;
-                if (PokemonGame.pokeg.Char.poke.belt[i].currentHP != 0) {
+                if (Player.self.poke.belt[i].currentHP != 0) {
                     dead = false;
                     break;
                 }
             }
             if (dead) {
-                info.set(new GMenu(PokemonGame.pokeg.Char.name
+                info.set(new GMenu(Player.self.name
                         + " is out of\nuseable POKeMON!", 0, 6, 10, 3));
                 blackingout = true;
             } else {
@@ -787,7 +787,7 @@ public class Fight extends Overlay implements Serializable {
             }
         } else if (switching) {
             activePokemonC = ((PokemonView) ol.o).switchto;
-            out = PokemonGame.pokeg.Char.poke.belt[activePokemonC];
+            out = Player.self.poke.belt[activePokemonC];
             out.used = true;
             info.set(new GMenu("Go! " + out.nickName + "!", 0, 6, 10, 3));
             switching = false;
@@ -808,58 +808,58 @@ public class Fight extends Overlay implements Serializable {
             int winxp = enemy.getWinExp(isTrainer());
             int numused = 0;
             for (int i = 0; i < 6; i++) {
-                if (PokemonGame.pokeg.Char.poke.belt[i] == null)
+                if (Player.self.poke.belt[i] == null)
                     break;
-                if (PokemonGame.pokeg.Char.poke.belt[i].used
-                        && PokemonGame.pokeg.Char.poke.belt[i].currentHP != 0)
+                if (Player.self.poke.belt[i].used
+                        && Player.self.poke.belt[i].currentHP != 0)
                     numused++;
             }
             GMenu cmen = null;
             for (int i = 0; i < 6; i++) {
-                if (PokemonGame.pokeg.Char.poke.belt[i] == null)
+                if (Player.self.poke.belt[i] == null)
                     break;
                 System.out.println("Po"
-                        + PokemonGame.pokeg.Char.poke.belt[i].used);
-                if (PokemonGame.pokeg.Char.poke.belt[i].used
-                        && PokemonGame.pokeg.Char.poke.belt[i].currentHP != 0) {
-                    PokemonGame.pokeg.Char.poke.belt[i].addEXP(enemy, numused);
+                        + Player.self.poke.belt[i].used);
+                if (Player.self.poke.belt[i].used
+                        && Player.self.poke.belt[i].currentHP != 0) {
+                    Player.self.poke.belt[i].addEXP(enemy, numused);
                     if (cmen == null) {
-                        info.set(new GMenu(PokemonGame.pokeg.Char.poke.belt[i]
+                        info.set(new GMenu(Player.self.poke.belt[i]
                                 .getName()
                                 + " gained\n"
                                 + (winxp / numused)
                                 + " EXP. Points!", 0, 6, 10, 3));
                         cmen = info;
-                        if (PokemonGame.pokeg.Char.poke.belt[i].gainedLevel) {
+                        if (Player.self.poke.belt[i].gainedLevel) {
                             cmen.nextmenu = new GMenu(
-                                    PokemonGame.pokeg.Char.poke.belt[i].getName()
+                                    Player.self.poke.belt[i].getName()
                                             + " grew\nto level "
-                                            + PokemonGame.pokeg.Char.poke.belt[i].level
+                                            + Player.self.poke.belt[i].level
                                             + "!", 0, 6, 10, 3);
                             cmen.nextmenu.extramenu = new StatDispMenu(
-                                    PokemonGame.pokeg.Char.poke.belt[i]);
+                                    Player.self.poke.belt[i]);
                             cmen = cmen.nextmenu;
-                            PokemonGame.pokeg.Char.poke.belt[i].gainedLevel = false;
+                            Player.self.poke.belt[i].gainedLevel = false;
                         }
                     } else {
                         cmen.nextmenu = new GMenu(
-                                PokemonGame.pokeg.Char.poke.belt[i].getName()
+                                Player.self.poke.belt[i].getName()
                                         + " gained\n" + (winxp / numused)
                                         + " EXP. Points!", 0, 6, 10, 3);
                         cmen = cmen.nextmenu;
-                        if (PokemonGame.pokeg.Char.poke.belt[i].gainedLevel) {
+                        if (Player.self.poke.belt[i].gainedLevel) {
                             cmen.nextmenu = new GMenu(
-                                    PokemonGame.pokeg.Char.poke.belt[i].getName()
+                                    Player.self.poke.belt[i].getName()
                                             + " grew\nto level "
-                                            + PokemonGame.pokeg.Char.poke.belt[i].level
+                                            + Player.self.poke.belt[i].level
                                             + "!", 0, 6, 10, 3);
                             cmen.nextmenu.extramenu = new StatDispMenu(
-                                    PokemonGame.pokeg.Char.poke.belt[i]);
+                                    Player.self.poke.belt[i]);
                             cmen = cmen.nextmenu;
-                            PokemonGame.pokeg.Char.poke.belt[i].gainedLevel = false;
+                            Player.self.poke.belt[i].gainedLevel = false;
                         }
                     }
-                    PokemonGame.pokeg.Char.poke.belt[i].used = false;
+                    Player.self.poke.belt[i].used = false;
                 }
             }
             if (!isComputer) {
@@ -936,11 +936,11 @@ public class Fight extends Overlay implements Serializable {
             if (ol.o instanceof PokemonView) {
                 PokemonView pv = (PokemonView) ol.o;
                 if (pv.switchto != -1
-                        && out != PokemonGame.pokeg.Char.poke.belt[pv.switchto]) {
+                        && out != Player.self.poke.belt[pv.switchto]) {
                     if (out.currentHP == 0) {
                         fightMenuActive = true;
                         activePokemonC = ((PokemonView) ol.o).switchto;
-                        out = PokemonGame.pokeg.Char.poke.belt[activePokemonC];
+                        out = Player.self.poke.belt[activePokemonC];
                         out.used = true;
                         info.set(new GMenu("", 0, 6, 10, 3)); 
                         // info.set(new GMenu("Go! "+out.name+"!", 0, 6, 10,
@@ -965,7 +965,7 @@ public class Fight extends Overlay implements Serializable {
                                 0, 6, 10, 3));
                         switching = true;
                         fightMenuActive = false;
-                        // out = PokemonGame.pokeg.Char.poke.belt[pv.switchto];
+                        // out = Player.self.poke.belt[pv.switchto];
                     }
                 }
             }

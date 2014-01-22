@@ -3,6 +3,7 @@ package com.dryerzinia.pokemon.obj;
 import java.io.*;
 import java.awt.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 import javax.swing.*;
 
@@ -15,6 +16,7 @@ import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 import java.awt.event.*;
 
@@ -22,6 +24,11 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     static final long serialVersionUID = 6487354042212056227L;
 
+    /*
+     * Master list of pokemon with there base stats for game calculations
+     */
+    public static HashMap<String, Pokemon> basePokemon;
+    
     public transient Image sprites[];
 
     public String nickName;
@@ -195,22 +202,31 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
         sprites = new Image[11];
 
-        sprites[0] = PokemonGame.images.getSprite(Species + "U.png");
-        sprites[1] = PokemonGame.images.getSprite(Species + "D.png");
-        sprites[2] = PokemonGame.images.getSprite(Species + "L.png");
-        sprites[3] = PokemonGame.images.getSprite(Species + "R.png");
-        sprites[4] = PokemonGame.images.getSprite(Species + "MU.png");
-        sprites[5] = PokemonGame.images.getSprite(Species + "MD.png");
-        sprites[6] = PokemonGame.images.getSprite(Species + "ML.png");
-        sprites[7] = PokemonGame.images.getSprite(Species + "MR.png");
-        sprites[8] = PokemonGame.images.getSprite(Species + "P.png");
-        sprites[9] = PokemonGame.images.getSprite(Species + "B.png");
-        sprites[10] = PokemonGame.images.getSprite(Species + "F.png");
-        try {
-            sprites[1] = PokemonGame.images.getSprite(pokeBase.smallImageName
-                    + "D.png");
-        } catch (Exception x) {
-        }
+        /*
+         * Load all the images for this pokemon
+         * U: Facing North
+         * D: Facing South
+         * L: Facing West
+         * R: Facing East
+         * MU: Moving North
+         * MD: Moving South
+         * ML: Moving West
+         * MR: Moving East
+         * P: TODO not sure what this is supposed to be
+         * B: Large back of pokemon image
+         * F: Large front of pokemon Image
+         */
+        sprites[0] = ResourceLoader.getSprite(Species + "U.png");
+        sprites[1] = ResourceLoader.getSprite(Species + "D.png");
+        sprites[2] = ResourceLoader.getSprite(Species + "L.png");
+        sprites[3] = ResourceLoader.getSprite(Species + "R.png");
+        sprites[4] = ResourceLoader.getSprite(Species + "MU.png");
+        sprites[5] = ResourceLoader.getSprite(Species + "MD.png");
+        sprites[6] = ResourceLoader.getSprite(Species + "ML.png");
+        sprites[7] = ResourceLoader.getSprite(Species + "MR.png");
+        sprites[8] = ResourceLoader.getSprite(Species + "P.png");
+        sprites[9] = ResourceLoader.getSprite(Species + "B.png");
+        sprites[10] = ResourceLoader.getSprite(Species + "F.png");
 
     }
 
@@ -220,26 +236,13 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     }
 
-    public void getBase(ArrayList<Pokemon> poke, ArrayList<Move> moves) {
-        Iterator<Pokemon> p = poke.iterator();
-        while (p.hasNext()) {
-            Pokemon po = p.next();
-            if (po.Species.equals(Species)) {
-                pokeBase = po.pokeBase;
-                try {
-                    sprites[1] = PokemonGame.images
-                            .getSprite(pokeBase.smallImageName + "D.png");
-                } catch (Exception x) {
-                }
-                break;
-            }
-        }
-        if (this.moves == null)
-            return;
-        for (int i = 0; i < 4; i++) {
-            if (this.moves[i] == null)
-                break;
-            this.moves[i].setBase(moves);
+    public void getBase() {
+
+   		pokeBase = basePokemon.get(Species).getBaseStats();
+
+   		for(Move move : moves) {
+   			if(move == null) break;
+            move.getBase();
         }
     }
 
@@ -369,7 +372,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
             throws ClassNotFoundException, IOException {
 
         ois.defaultReadObject();
-        getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+        getBase();
         loadImg();
 
         // TODO: Validate loaded object
@@ -500,14 +503,8 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 			// TODO fix move references
 			String evolve = (String) json.get("evolvesTo");
 
-			if(evolve != null){
-				for(Pokemon pokemon : PokemonGame.pokeg.basePokemon){
-					if(pokemon.getSpecies().equals(evolve)){
-						evolvesTo = pokemon;
-						break;
-					}
-				}
-			}
+			if(evolve != null)
+				evolvesTo = basePokemon.get(evolve);
 
 		}
 
@@ -686,15 +683,16 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         }
 
         public void save() {
-            try {
-                Pokemon p;
+
+        	try {
+
+        		Pokemon p;
                 if (sub.s == null || !(sub.s instanceof Pokemon))
                     p = new Pokemon();
                 else
                     p = (Pokemon) sub.s;
                 p.Species = SpeciesTF.getText();
-                p.getBase(PokemonGame.pokeg.basePokemon,
-                        PokemonGame.pokeg.baseMoves);
+                p.getBase();
                 if (p.moves == null)
                     p.moves = new Move[4];
                 p.nickName = p.Species;
@@ -714,8 +712,69 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
             } catch (Exception x) {
                 x.printStackTrace();
             }
-            dispose();
+
+        	dispose();
+
         }
+
+    }
+
+    public static void writePokemonBaseStats(){
+
+    	// Write Pokemon Base stats to File
+        File file = new File("PokemonBaseStats.json");
+        StringBuilder json = new StringBuilder("[");
+
+        Iterator<Entry<String, Pokemon>> it = basePokemon.entrySet().iterator();
+        while(it.hasNext()){
+        	Pokemon pokemon = it.next().getValue();
+
+        	json.append(pokemon.toJSON());
+        	json.deleteCharAt(json.length() - 1);	// Strip } from JSON
+        	json.append(",'pokeBase':" + pokemon.getBaseStats().toJSON());	// Add BasePokemon information to the JSON string
+        	json.append("},"); // Close JSON object
+
+        }
+        
+        json.replace(json.length()-1, json.length(), "]"); // Replace last extra , with array closure
+
+        // Attempt to write stats to the file
+        try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+
+        	json_writer.write(json.toString());
+
+        } catch(IOException ioe) {
+
+        	System.err.println("ERROR: Pokemon Base Stats not written to file: " + file.getAbsolutePath());
+
+        	ioe.printStackTrace();
+        	
+        }
+
+    }
+
+    public static void readPokemonBaseStats(){
+    	
+    	try (BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+                PokemonGame.class.getClassLoader().getResourceAsStream("PokemonBaseStats.json")))) {
+    		
+    		String json = json_reader.readLine();
+
+    		basePokemon = new HashMap<String, Pokemon>();
+
+    		/* Base Pokemon loads add themselves to the master list automatically
+    		 * in there fromJSON methods
+    		 */
+    		JSONObject.JSONToArray(json);
+    		
+    	} catch(IOException ioe) {
+
+    		System.err.println("ERROR: Failed to load Pokemon Bast Stats!");
+    		ioe.printStackTrace();
+    		
+    		// TODO Terminate program
+
+    	}
 
     }
 
@@ -765,10 +824,9 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 			// If this object has a pokeBase reference this pokemon must be
 			// a base Pokemon we reference from for stat information so we
 			// add it to basePokemon list in the Global PokemonGame object
-			PokemonGame.pokeg.basePokemon.add(this);
+			basePokemon.put(Species, this);
 
-		} else
-			getBase(PokemonGame.pokeg.basePokemon, PokemonGame.pokeg.baseMoves);
+		} else getBase();
 
 		loadImg();
 

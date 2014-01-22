@@ -43,72 +43,72 @@ public class Level implements Serializable, JSON {
     }
 
     public void draw(Graphics gg) {
-        if (PokemonGame.pokeg.Char != null) {
+        if (Player.self != null) {
             if (midmove && canMove) {
                 int xo = 0;
                 int yo = 0;
-                if (PokemonGame.pokeg.Char.dir == 0)
+                if (Player.self.dir == 0)
                     yo = 8;
-                if (PokemonGame.pokeg.Char.dir == 1)
+                if (Player.self.dir == 1)
                     yo = -8;
-                if (PokemonGame.pokeg.Char.dir == 2)
+                if (Player.self.dir == 2)
                     xo = 8;
-                if (PokemonGame.pokeg.Char.dir == 3)
+                if (Player.self.dir == 3)
                     xo = -8;
-                g.draw(PokemonGame.pokeg.Char.x, PokemonGame.pokeg.Char.y, xo,
+                g.draw(Player.self.x, Player.self.y, xo,
                         yo, gg);
                 if (borderL != null) {
                     if (borderL[0] != null)
-                        borderL[0].g.draw(PokemonGame.pokeg.Char.x
+                        borderL[0].g.draw(Player.self.x
                                 + borderL[0].g.g.length,
-                                PokemonGame.pokeg.Char.y + borderoffset[0], xo,
+                                Player.self.y + borderoffset[0], xo,
                                 yo, gg, false);
                     if (borderL[3] != null)
                         borderL[3].g.draw(
-                                PokemonGame.pokeg.Char.x - g.g.length,
-                                PokemonGame.pokeg.Char.y + borderoffset[3], xo,
+                        		Player.self.x - g.g.length,
+                        		Player.self.y + borderoffset[3], xo,
                                 yo, gg, false);
                     if (borderL[1] != null)
-                        borderL[1].g.draw(PokemonGame.pokeg.Char.x
-                                + borderoffset[1], PokemonGame.pokeg.Char.y
+                        borderL[1].g.draw(Player.self.x
+                                + borderoffset[1], Player.self.y
                                 + borderL[1].g.g[0].length, xo, yo, gg, false);
                     if (borderL[7] != null)
-                        borderL[7].g.draw(PokemonGame.pokeg.Char.x
-                                + borderoffset[7], PokemonGame.pokeg.Char.y
+                        borderL[7].g.draw(Player.self.x
+                                + borderoffset[7], Player.self.y
                                 - g.g[0].length, xo, yo, gg, false);
                 }
             } else {
-                g.draw(PokemonGame.pokeg.Char.x, PokemonGame.pokeg.Char.y, gg);
+                g.draw(Player.self.x, Player.self.y, gg);
                 if (borderL != null) {
                     if (borderL[0] != null)
-                        borderL[0].g.draw(PokemonGame.pokeg.Char.x
+                        borderL[0].g.draw(Player.self.x
                                 + borderL[0].g.g.length,
-                                PokemonGame.pokeg.Char.y + borderoffset[0], gg,
+                                Player.self.y + borderoffset[0], gg,
                                 false);
                     if (borderL[3] != null)
                         borderL[3].g.draw(
-                                PokemonGame.pokeg.Char.x - g.g.length,
-                                PokemonGame.pokeg.Char.y + borderoffset[3], gg,
+                                Player.self.x - g.g.length,
+                                Player.self.y + borderoffset[3], gg,
                                 false);
                     if (borderL[1] != null)
-                        borderL[1].g.draw(PokemonGame.pokeg.Char.x
-                                + borderoffset[1], PokemonGame.pokeg.Char.y
+                        borderL[1].g.draw(Player.self.x
+                                + borderoffset[1], Player.self.y
                                 + borderL[1].g.g[0].length, gg, false);
                     if (borderL[7] != null)
-                        borderL[7].g.draw(PokemonGame.pokeg.Char.x
-                                + borderoffset[7], PokemonGame.pokeg.Char.y
+                        borderL[7].g.draw(Player.self.x
+                                + borderoffset[7], Player.self.y
                                 - g.g[0].length, gg, false);
                 }
             }
             // if(midmove) c[direction+4].draw(4, 4, gg);
             // else c[direction].draw(4, 4, gg);
-            PokemonGame.pokeg.Char.draw(gg);
+            Player.self.draw(gg);
         }
     }
 
     public void act() {
-        if (PokemonGame.pokeg.Char != null)
-            g.act(PokemonGame.pokeg.Char.x, PokemonGame.pokeg.Char.y);
+        if (Player.self != null)
+            g.act(Player.self.x, Player.self.y);
     }
 
     public Pokemon attacked(Player p) {
@@ -119,31 +119,31 @@ public class Level implements Serializable, JSON {
     }
 
     public void moveRight() {
-        canMove = g.canStepOn(PokemonGame.pokeg.Char.x + 1,
-                PokemonGame.pokeg.Char.y);
+        canMove = g.canStepOn(Player.self.x + 1,
+                Player.self.y);
         if (canMove)
-            PokemonGame.pokeg.Char.x++;
+            Player.self.x++;
     }
 
     public void moveLeft() {
-        canMove = g.canStepOn(PokemonGame.pokeg.Char.x - 1,
-                PokemonGame.pokeg.Char.y);
+        canMove = g.canStepOn(Player.self.x - 1,
+                Player.self.y);
         if (canMove)
-            PokemonGame.pokeg.Char.x--;
+            Player.self.x--;
     }
 
     public void moveUp() {
-        canMove = g.canStepOn(PokemonGame.pokeg.Char.x,
-                PokemonGame.pokeg.Char.y - 1);
+        canMove = g.canStepOn(Player.self.x,
+                Player.self.y - 1);
         if (canMove)
-            PokemonGame.pokeg.Char.y--;
+            Player.self.y--;
     }
 
     public void moveDown() {
-        canMove = g.canStepOn(PokemonGame.pokeg.Char.x,
-                PokemonGame.pokeg.Char.y + 1);
+        canMove = g.canStepOn(Player.self.x,
+                Player.self.y + 1);
         if (canMove)
-            PokemonGame.pokeg.Char.y++;
+            Player.self.y++;
     }
 
     private void readObject(ObjectInputStream ois)

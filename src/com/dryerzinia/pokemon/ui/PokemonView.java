@@ -7,11 +7,14 @@ import java.io.IOException;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSSendNextPokemon;
 import com.dryerzinia.pokemon.obj.Move;
+import com.dryerzinia.pokemon.obj.Player;
+import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.editor.Sub;
 import com.dryerzinia.pokemon.ui.editor.SubListener;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.ui.menu.MenuEvent;
 import com.dryerzinia.pokemon.ui.menu.SelectionMenu;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
 
 public class PokemonView extends Overlay {
@@ -43,8 +46,8 @@ public class PokemonView extends Overlay {
 
         choosem = new GMenu("Choose a POKeMON.\n ", 0, 6, 10, 3);
 
-        arrow = PokemonGame.images.getSprite("ArrowRight.png");
-        harrow = PokemonGame.images.getSprite("HoloArrowRight.png");
+        arrow = ResourceLoader.getSprite("ArrowRight.png");
+        harrow = ResourceLoader.getSprite("HoloArrowRight.png");
 
         op = new SelectionMenu("STATS\nSWITCH\nCANCEL", 6, 5, 4, 4, 1);
         op.addMenuListener(new AbstractMenuListener() {
@@ -99,29 +102,31 @@ public class PokemonView extends Overlay {
 
         int stats = this.stats;
 
+        Pokemon[] character_belt = Player.self.poke.belt;
+
         if (stats == -1) {
 
             for (int i = 0; i < 6; i++) {
-                if (PokemonGame.pokeg.Char.poke.belt[i] != null) {
+                if (character_belt[i] != null) {
 
-                    g.drawImage(PokemonGame.pokeg.Char.poke.belt[i].sprites[1],
+                    g.drawImage(character_belt[i].sprites[1],
                             7, i * 16 + 2, null);
                     g.setColor(Color.BLACK);
                     g.setFont(new Font("monospaced", 0, 10));
-                    g.drawString(PokemonGame.pokeg.Char.poke.belt[i].getName(),
+                    g.drawString(character_belt[i].getName(),
                             25, i * 16 + 11);
                     g.drawString(":L"
-                            + PokemonGame.pokeg.Char.poke.belt[i].level, 100,
+                            + character_belt[i].level, 100,
                             i * 16 + 11);
                     g.drawString(
-                            PokemonGame.pokeg.Char.poke.belt[i].currentHP
+                    		character_belt[i].currentHP
                                     + "/"
-                                    + PokemonGame.pokeg.Char.poke.belt[i]
+                                    + character_belt[i]
                                             .getTotalHP(), 100, i * 16 + 20);
 
                     Fight.drawHPBar(
                             g,
-                            ((double) PokemonGame.pokeg.Char.poke.belt[i].currentHP / (double) PokemonGame.pokeg.Char.poke.belt[i]
+                            ((double) character_belt[i].currentHP / (double) character_belt[i]
                                     .getTotalHP()), 29, i * 16 + 15);
 
                     choosem.draw(g);
@@ -138,53 +143,53 @@ public class PokemonView extends Overlay {
 
         } else {
 
-            g.drawImage(PokemonGame.pokeg.Char.poke.belt[stats].sprites[10], 0,
+            g.drawImage(character_belt[stats].sprites[10], 0,
                     0, null);
 
             g.setColor(Color.BLACK);
             g.setFont(new Font("monospaced", Font.BOLD, 10));
             g.drawString("No. "
-                    + PokemonGame.pokeg.Char.poke.belt[stats].pokeBase.no, 5,
+                    + character_belt[stats].pokeBase.no, 5,
                     64);
 
             g.setFont(new Font("monospaced", 0, 12));
-            g.drawString(PokemonGame.pokeg.Char.poke.belt[stats].getName(), 80,
+            g.drawString(character_belt[stats].getName(), 80,
                     15);
 
-            if (statsec == 0) {
+            if(statsec == 0) {
 
                 g.setFont(new Font("monospaced", Font.BOLD, 11));
                 g.drawString(":L"
-                        + (PokemonGame.pokeg.Char.poke.belt[stats].level), 100,
+                        + (character_belt[stats].level), 100,
                         25);
                 g.setFont(new Font("monospaced", Font.BOLD, 11));
                 g.drawString(
-                        PokemonGame.pokeg.Char.poke.belt[stats].currentHP
+                		character_belt[stats].currentHP
                                 + "/ "
-                                + PokemonGame.pokeg.Char.poke.belt[stats]
+                                + character_belt[stats]
                                         .getTotalHP(), 85, 40);
                 g.setFont(new Font("monospaced", 0, 12));
                 g.drawString("STATUS/"
-                        + PokemonGame.pokeg.Char.poke.belt[stats].status, 80,
+                        + character_belt[stats].status, 80,
                         65);
-                if (PokemonGame.pokeg.Char.poke.belt[stats].getType() != null) {
+                if(character_belt[stats].getType() != null) {
                     g.drawString("TYPE1/", 80, 75);
                     g.drawString(
-                            PokemonGame.pokeg.Char.poke.belt[stats].getType(),
+                    		character_belt[stats].getType(),
                             100, 85);
                 }
-                if (PokemonGame.pokeg.Char.poke.belt[stats].getType2() != null) {
+                if (character_belt[stats].getType2() != null) {
                     g.drawString("TYPE2/", 80, 95);
                     g.drawString(
-                            PokemonGame.pokeg.Char.poke.belt[stats].getType2(),
+                    		character_belt[stats].getType2(),
                             100, 105);
                 }
                 g.drawString("IDNo/", 80, 115);
-                g.drawString("" + PokemonGame.pokeg.Char.poke.belt[stats].idNo,
+                g.drawString("" + character_belt[stats].idNo,
                         100, 125);
-                if (PokemonGame.pokeg.Char.poke.belt[stats].nickName != null) {
+                if (character_belt[stats].nickName != null) {
                     g.drawString("OT/", 80, 135);
-                    g.drawString(PokemonGame.pokeg.Char.poke.belt[stats].nickName,
+                    g.drawString(character_belt[stats].nickName,
                             100, 145);
                 }
 
@@ -195,41 +200,41 @@ public class PokemonView extends Overlay {
                 g.setFont(new Font("monospaced", Font.BOLD, 12));
                 g.drawString(
                         ""
-                                + PokemonGame.pokeg.Char.poke.belt[stats]
+                                + character_belt[stats]
                                         .getAttack(), 45, 85);
                 g.drawString(
                         ""
-                                + PokemonGame.pokeg.Char.poke.belt[stats]
+                                + character_belt[stats]
                                         .getDefense(), 45, 105);
                 g.drawString(
-                        "" + PokemonGame.pokeg.Char.poke.belt[stats].getSpeed(),
+                        "" + character_belt[stats].getSpeed(),
                         45, 125);
                 g.drawString(
                         ""
-                                + PokemonGame.pokeg.Char.poke.belt[stats]
+                                + character_belt[stats]
                                         .getSpecial(), 45, 145);
 
                 Fight.drawHPBar(
                         g,
-                        ((double) PokemonGame.pokeg.Char.poke.belt[stats].currentHP / (double) PokemonGame.pokeg.Char.poke.belt[stats]
+                        ((double) character_belt[stats].currentHP / (double) character_belt[stats]
                                 .getTotalHP()), 75, 27);
 
             } else {
 
                 g.drawString("EXP POINTS", 80, 30);
-                g.drawString("" + PokemonGame.pokeg.Char.poke.belt[stats].EXP,
+                g.drawString("" + character_belt[stats].EXP,
                         100, 40);
                 g.setFont(new Font("monospaced", Font.BOLD, 9));
                 g.drawString("LEVEL UP", 80, 50);
                 g.drawString(
-                        PokemonGame.pokeg.Char.poke.belt[stats]
+                		character_belt[stats]
                                 .expToNextLevel()
                                 + " to :L"
-                                + (PokemonGame.pokeg.Char.poke.belt[stats].level + 1),
+                                + (character_belt[stats].level + 1),
                         85, 60);
 
                 for (int i = 0; i < 4; i++) {
-                    Move m = PokemonGame.pokeg.Char.poke.belt[stats].moves[i];
+                    Move m = character_belt[stats].moves[i];
                     if (m == null)
                         break;
 
@@ -263,11 +268,11 @@ public class PokemonView extends Overlay {
     public void battleswitch() {
         if (currout == selection) {
             choosem = new GMenu(
-                    PokemonGame.pokeg.Char.poke.belt[selection].nickName
+                    Player.self.poke.belt[selection].nickName
                             + " is\nalready out!", 0, 6, 10, 3);
             opa = false;
             wait = true;
-        } else if (PokemonGame.pokeg.Char.poke.belt[selection].currentHP == 0) {
+        } else if (Player.self.poke.belt[selection].currentHP == 0) {
             choosem = new GMenu("There's no will\nto fight!", 0, 6, 10, 3);
             opa = false;
             wait = true;
@@ -310,7 +315,7 @@ public class PokemonView extends Overlay {
                 if (opa)
                     op.pressDown();
                 else if (selection < 6
-                        && PokemonGame.pokeg.Char.poke.belt[selection + 1] != null
+                        && Player.self.poke.belt[selection + 1] != null
                         && stats == -1)
                     selection++;
             } else if (c == KeyEvent.VK_X) {
@@ -341,7 +346,7 @@ public class PokemonView extends Overlay {
                             battleswitch();
                         } else {
                             PokemonGame.switchPokemon(
-                                    PokemonGame.pokeg.Char.poke.belt, swSel,
+                            		Player.self.poke.belt, swSel,
                                     selection);
                             sendSubEvent();
                             System.out.println("sew");

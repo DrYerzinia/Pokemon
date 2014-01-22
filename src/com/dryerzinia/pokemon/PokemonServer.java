@@ -32,6 +32,7 @@ import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class PokemonServer {
 
@@ -94,8 +95,8 @@ public class PokemonServer {
         pg.run = false;
         pg.read = false;
 
-        // Dont need to load images for headless server
-        PokemonGame.images.setDoLoad(false);
+        // Don't need to load images for headless server
+        ResourceLoader.setDoLoad(false);
         pg.init();
 
         System.out.println("Game World Instace Created");
@@ -707,12 +708,10 @@ public class PokemonServer {
 
                                 p2id.getPlayer()
                                         .getFirstOut()
-                                        .getBase(PokemonGame.pokeg.basePokemon,
-                                                PokemonGame.pokeg.baseMoves);
+                                        .getBase();
                                 pid.getPlayer()
                                         .getFirstOut()
-                                        .getBase(PokemonGame.pokeg.basePokemon,
-                                                PokemonGame.pokeg.baseMoves);
+                                        .getBase();
 
                                 pid.sendFightStart(p2id.getPlayer());
                                 p2id.sendFightStart(pid.getPlayer());
