@@ -103,13 +103,13 @@ public class Grid implements Serializable, JSON {
     	 */
     	for(int j = 0; j < 11; j++)
     		for(int k = 0; k < 10; k++)
-    			if(j + x_square > 0 && j + x_square < getWidth() && k + y_square > 0 && k + y_square < getHeight())
+    			if(j + x_square >= 0 && j + x_square < getWidth() && k + y_square >= 0 && k + y_square < getHeight())
     				for(int i = 0; i < grid[j + x_square][k + y_square].size(); i++)
     					grid[j + x_square][k + y_square].get(i).draw(j, k, x_off, y_off, graphics);
 
     }
 
-    private boolean canStepOnB(int x, int y) {
+    public boolean canStepOnB(int x, int y) {
         if (getWidth() <= x || getHeight() <= y || x < 0 || y < 0)
             return false;
         for (int i = 0; i < grid[x][y].size(); i++)

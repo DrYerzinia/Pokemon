@@ -59,7 +59,7 @@ public class Level implements Serializable, JSON {
             if (borderL[3] != null)
                 borderL[3].grid.draw(x - grid.grid.length, y + borderoffset[3], graphics);
             if (borderL[1] != null)
-                borderL[1].grid.draw(x + borderoffset[1], y + borderL[1].grid.grid[0].length - 1, graphics);
+                borderL[1].grid.draw(x + borderoffset[1], y + borderL[1].grid.grid[0].length, graphics);
             if (borderL[7] != null)
                 borderL[7].grid.draw(x + borderoffset[7], y - grid.grid[0].length, graphics);
         }

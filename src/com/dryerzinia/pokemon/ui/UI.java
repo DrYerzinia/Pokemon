@@ -148,6 +148,12 @@ public class UI {
 
     public static void draw(View view){
 
+    	/*
+    	 * Clear buffer to black
+    	 */
+    	buffer_graphics.setColor(Color.BLACK);
+    	buffer_graphics.fillRect(0, 0, UI.getWidth(), UI.getTotalHeight());
+
     	view.draw(buffer_graphics);
     	drawBuffer();
 

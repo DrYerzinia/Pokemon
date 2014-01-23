@@ -15,6 +15,13 @@ public class Player implements Serializable {
     static final long serialVersionUID = 3191532376844138757L;
 
     /*
+     * CHARACTER_OFFSET is added because all characters are drawn with
+     * a 1/4 tile offset so they can stand overlapped with walls
+     * and stand on chairs etc
+     */
+    public static final int CHARACTER_OFFSET = 4;
+
+    /*
      * Global reference of Character for Client
      */
     public static Player self;
@@ -241,7 +248,7 @@ public class Player implements Serializable {
     public void draw(Graphics graphics) {
 
         setImage(0, 0);
-        graphics.drawImage(img, 4 * 16, 4 * 16, null);
+        graphics.drawImage(img, 4 * 16, 4 * 16 - CHARACTER_OFFSET, null);
 
     }
 
