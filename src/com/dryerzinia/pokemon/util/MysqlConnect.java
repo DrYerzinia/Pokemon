@@ -139,10 +139,10 @@ public class MysqlConnect {
 				+ "level = ?, Dir = ?, LPCX = ?, LPCY = ?, LPCLEVEL = ?, "
 				+ "Money = ? WHERE UserName = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, player.x);
-			stmt.setInt(2, player.y);
+			stmt.setInt(1, (int) player.x);
+			stmt.setInt(2, (int) player.y);
 			stmt.setInt(3, player.level); // current level player is on
-			stmt.setInt(4, player.dir); // player direction
+			stmt.setInt(4, player.facing); // player direction
 			stmt.setInt(5, player.lpcx); // player's last x position
 			stmt.setInt(6, player.lpcy); // player's last y position
 			stmt.setInt(7, player.lpclevel); // last level player was on
@@ -445,10 +445,9 @@ public class MysqlConnect {
 				pokemon.status = results.getString("status"); // stored in db as
 																// int -
 																// problem?
-				pokemon.Species = results.getString("species");
-	            pokemon.getBase();
-				
+				pokemon.Species = results.getString("species");				
 				fetchAndSetMoves(connection, pokemon);
+	            pokemon.getBase();
 
 				if (pokemon.location < 6)
 					beltPokemon[pokemon.location] = pokemon;
@@ -534,7 +533,7 @@ public class MysqlConnect {
 				player.id = results.getInt("id");
 				player.x = results.getInt("x");
 				player.y = results.getInt("y");
-				player.dir = results.getInt("dir");
+				player.facing = results.getInt("dir");
 				player.level = results.getInt("level");
 				player.name = results.getString("UserName");
 				player.imgName = results.getString("picture");

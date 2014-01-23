@@ -42,10 +42,7 @@ public class KeyboardInputController implements InputController, KeyListener {
 	@Override
 	public byte direction() {
 
-		if(upPressed || downPressed || rightPressed || leftPressed)
-			return onlyPressed;
-
-		return Direction.NONE;
+		return onlyPressed;
 
 	}
 
@@ -67,14 +64,22 @@ public class KeyboardInputController implements InputController, KeyListener {
 	 * Update the onlyPressed variable if this direction is the only
 	 * one currently down
 	 */
-	private void updateOnlyPressed(byte direction){
+	private void updateOnlyPressed(){
 
-		if((upPressed ? 1 : 0) +
-		   (downPressed ? 1 : 0) +
-		   (leftPressed ? 1 : 0) +
-		   (rightPressed ? 1 : 0)
-		   == 1)
-			onlyPressed = direction;
+		if(upPressed && !downPressed && !leftPressed && !rightPressed)
+			onlyPressed = Direction.UP;
+
+		else if(!upPressed && downPressed && !leftPressed && !rightPressed)
+			onlyPressed = Direction.DOWN;
+
+		else if(!upPressed && !downPressed && leftPressed && !rightPressed)
+			onlyPressed = Direction.LEFT;
+
+		else if(!upPressed && !downPressed && !leftPressed && rightPressed)
+			onlyPressed = Direction.RIGHT;
+
+		else
+			onlyPressed = Direction.NONE;
 
 	}
 
@@ -84,28 +89,24 @@ public class KeyboardInputController implements InputController, KeyListener {
         int c = e.getKeyCode();
 
         if(c == KeyEvent.VK_UP){
-            updateOnlyPressed(Direction.UP);
         	upPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.UP));
         }
 
         if(c == KeyEvent.VK_LEFT){
-            updateOnlyPressed(Direction.LEFT);
         	leftPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.LEFT));
         }
 
         if(c == KeyEvent.VK_RIGHT){
-            updateOnlyPressed(Direction.RIGHT);
         	rightPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.RIGHT));
         }
 
         if(c == KeyEvent.VK_DOWN){
-            updateOnlyPressed(Direction.DOWN);
         	downPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.DOWN));
@@ -122,6 +123,8 @@ public class KeyboardInputController implements InputController, KeyListener {
         if(c == KeyEvent.VK_ENTER)
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.START));
+
+        updateOnlyPressed();
 
     }
 
@@ -142,6 +145,7 @@ public class KeyboardInputController implements InputController, KeyListener {
         if(c == KeyEvent.VK_DOWN)
             downPressed = false;
 
+        updateOnlyPressed();
 
     }
 

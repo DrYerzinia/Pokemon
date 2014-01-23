@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.ui;
+package com.dryerzinia.pokemon.views;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -11,10 +11,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
+import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.Client;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.ui.Overlay;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
-public class Login extends Overlay {
+public class Login implements View, KeyListener {
+
+	public static final byte NORMAL = 0;
+	public static final byte ATTEMPT_LOGIN = 1;
+	public static final byte CONNECTION_ERROR = 2;
+	public static final byte RECONNECT = 3;
+
+	public static final byte USERNAME = 0;
+	public static final byte PASSWORD = 1;
+	public static final byte LOCATION = 2;
+	public static final byte LOGIN = 3;
 
 	/*
 	 * Global login information
@@ -23,9 +38,13 @@ public class Login extends Overlay {
     public static String password = "";
     public static String location = "";
 
-    int selection = 0;
+    private byte state;
+    private byte selection;
 
     public Login(){
+
+    	state = NORMAL;
+    	selection = USERNAME;
 
     	String fs = System.getProperty("file.separator");
         File f = new File(System.getProperty("user.home") + fs + ".pokemonData");
@@ -53,66 +72,143 @@ public class Login extends Overlay {
 
     }
 
-    public void draw(Graphics g) {
+    /**
+     * Empty because there are no time based updates
+     * for this view
+     */
+	@Override
+	public void update(int deltaTime) {}
 
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, UI.APP_HEIGHT, UI.APP_WIDTH + UI.CHAT_HEIGHT);
+	/**
+	 * Draws login window depending on current state
+	 */
+	@Override
+    public void draw(Graphics graphics) {
 
-        g.setColor(Color.WHITE);
+		switch(state){
+		case NORMAL:
+			drawNormal(graphics);
+			break;
+		case ATTEMPT_LOGIN:
+			drawAttemptingLogin(graphics);
+			break;
+		case CONNECTION_ERROR:
+			drawConnectionError(graphics);
+			break;
+		case RECONNECT:
+			drawReconnect(graphics);
+			break;
+		}
 
-        g.setFont(new Font("monospaced", 0, 16));
-        g.drawString("LOGIN", 50, 20);
+    }
 
-        g.setFont(new Font("monospaced", 0, 12));
+	/**
+	 * This class is its own KeyListener
+	 */
+	@Override
+	public KeyListener getKeyListener() {
+
+		return this;
+
+	}
+
+	public void drawNormal(Graphics graphics){
+
+		graphics.setColor(Color.BLACK);
+    	graphics.fillRect(0, 0, UI.getWidth(), UI.getTotalHeight());
+
+    	graphics.setColor(Color.WHITE);
+
+    	graphics.setFont(new Font("monospaced", 0, 16));
+    	graphics.drawString("LOGIN", 50, 20);
+
+    	graphics.setFont(new Font("monospaced", 0, 12));
 
         if (selection == 0)
-            g.setColor(Color.BLUE);
-        g.drawString("Username: " + username, 10, 40);
-        g.setColor(Color.WHITE);
+        	graphics.setColor(Color.BLUE);
+
+        graphics.drawString("Username: " + username, 10, 40);
+        graphics.setColor(Color.WHITE);
 
         if (selection == 1)
-            g.setColor(Color.BLUE);
+        	graphics.setColor(Color.BLUE);
 
         String s = "";
         for (int i = 0; i < password.length(); i++)
             s += "*";
-        g.drawString("Password: " + s, 10, 60);
-        g.setColor(Color.WHITE);
+        graphics.drawString("Password: " + s, 10, 60);
+        graphics.setColor(Color.WHITE);
 
         if (selection == 2)
-            g.setColor(Color.BLUE);
+        	graphics.setColor(Color.BLUE);
 
-        g.drawString("Location:", 10, 80);
+        graphics.drawString("Location:", 10, 80);
 
         if (location.length() < 9)
-            g.drawString(location, 80, 80);
+        	graphics.drawString(location, 80, 80);
 
         else {
 
             int start = 9;
 
-            g.drawString(location.substring(0, 9), 80, 80);
+            graphics.drawString(location.substring(0, 9), 80, 80);
 
             int i = 1;
             while (start < location.length()) {
                 int end = start + 20;
                 if (end > location.length())
                     end = location.length();
-                g.drawString(location.substring(start, end), 10, 80 + 20 * i);
+                graphics.drawString(location.substring(start, end), 10, 80 + 20 * i);
                 i++;
                 start += 20;
             }
 
         }
 
-        g.setColor(Color.WHITE);
+        graphics.setColor(Color.WHITE);
         if (selection == 3)
-            g.setColor(Color.BLUE);
-        g.drawString("GO", 75, 140);
+        	graphics.setColor(Color.BLUE);
+        graphics.drawString("GO", 75, 140);
+
+	}
+
+	public void drawReconnect(Graphics graphics){
+
+    	graphics.setColor(Color.BLACK);
+    	graphics.fillRect(0, 0, UI.APP_HEIGHT, UI.APP_WIDTH + UI.CHAT_HEIGHT);
+
+    	graphics.setColor(Color.RED);
+    	graphics.drawString("Lost Connection", 25, 50);
+    	graphics.drawString("Attempting Reconnect...", 10, 90);
+
 
     }
 
-    public void set(Overlay o) {
+    public void drawAttemptingLogin(Graphics graphics){
+    
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, 160, 144);
+
+        graphics.setColor(Color.WHITE);
+        graphics.setFont(new Font("monospaced", 0, 16));
+        graphics.drawString("LOGGING IN...", 20, 50);
+        graphics.drawImage(ResourceLoader.getSprite("PikachuP.png"), 40, 55, null);
+
+
+    }
+
+    public void drawConnectionError(Graphics graphics){
+
+    	graphics.setColor(Color.BLACK);
+    	graphics.fillRect(0, 0, 160, 144);
+    	graphics.setColor(Color.WHITE);
+    	graphics.setFont(new Font("monospaced", 0, 16));
+    	graphics.drawString("CONNECTION ERROR", 1, 50);
+    	graphics.drawImage(ResourceLoader.getSprite("PikachuSad.png"), 50, 35, null);
+    	graphics.drawString("Press Any Key To", 1, 100);
+    	graphics.drawString("Restart", 50, 120);
+
+
     }
 
     public static void writeSettingsData(File f) {
@@ -158,35 +254,58 @@ public class Login extends Overlay {
                 + fs + "defaultSettings");
     }
 
+	@Override
     public void keyPressed(KeyEvent e) {
         int c = e.getKeyCode();
+
+        if(state == ATTEMPT_LOGIN || state == RECONNECT) return;
+
+        if(state == CONNECTION_ERROR){
+        	if(c == KeyEvent.VK_ENTER) state = NORMAL;
+        	return;
+        }
+
         if (c == KeyEvent.VK_UP) {
             selection--;
             if (selection == -1)
-                selection = 3;
-        } else if (c == KeyEvent.VK_LEFT) {
-        } else if (c == KeyEvent.VK_RIGHT) {
+                selection = LOCATION;
         } else if (c == KeyEvent.VK_DOWN) {
             selection++;
             if (selection == 4)
                 selection = 0;
         } else if (c == KeyEvent.VK_ENTER) {
             selection++;
-            if (selection == 4) {
-                active = false;
-                selection = 0;
-                Client.attemptLogin();
+            if (selection >= LOGIN) {
+
+            	selection = NORMAL;
+
+            	writeSettingsData(Login.getSettingsFile());
+
+            	state = ATTEMPT_LOGIN;
+
+            	// CONNECT
+            	try {
+
+            		Client.startConnect();
+            		PokemonGame.switchToGame();
+
+            	} catch(IOException ioe){
+
+            		System.err.println("Connection Failed: " + ioe.getMessage());
+            		state = CONNECTION_ERROR;
+            	}
+
             }
         } else if (c == KeyEvent.VK_BACK_SPACE) {
             try {
                 switch (selection) {
-                case 0:
+                case USERNAME:
                     username = username.substring(0, username.length() - 1);
                     break;
-                case 1:
+                case PASSWORD:
                     password = password.substring(0, password.length() - 1);
                     break;
-                case 2:
+                case LOCATION:
                     location = location.substring(0, location.length() - 1);
                     break;
                 }
@@ -209,14 +328,14 @@ public class Login extends Overlay {
                 }
             }
         }
-
-        UI.redrawLogin();
     
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 

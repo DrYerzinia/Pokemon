@@ -7,9 +7,11 @@ import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.ui.Fight;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 
 public class FMTCSendAttackResult extends ClientMessage {
@@ -46,7 +48,7 @@ public class FMTCSendAttackResult extends ClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        Fight f = (Fight) PokemonGame.pokeg.overlay.o;
+        Fight f = (Fight) UI.overlay.o;
 
         f.WaitingForServerMessageReturn = false;
 

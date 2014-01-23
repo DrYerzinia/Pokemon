@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.util.JSONArray;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.ui.Overlay;
 import com.dryerzinia.pokemon.ui.OverlayO;
 
@@ -36,16 +37,16 @@ public class SelectionMenu extends GMenu {
 
         frameing = new Image[8];
 
-        frameing[0] = PokemonGame.images.getSprite("CornerMenuTL.png");
-        frameing[1] = PokemonGame.images.getSprite("CornerMenuTR.png");
-        frameing[2] = PokemonGame.images.getSprite("CornerMenuBL.png");
-        frameing[3] = PokemonGame.images.getSprite("CornerMenuBR.png");
-        frameing[4] = PokemonGame.images.getSprite("TopEdgeMenu.png");
-        frameing[5] = PokemonGame.images.getSprite("RightEdgeMenu.png");
-        frameing[6] = PokemonGame.images.getSprite("BottomEdgeMenu.png");
-        frameing[7] = PokemonGame.images.getSprite("LeftEdgeMenu.png");
+        frameing[0] = ResourceLoader.getSprite("CornerMenuTL.png");
+        frameing[1] = ResourceLoader.getSprite("CornerMenuTR.png");
+        frameing[2] = ResourceLoader.getSprite("CornerMenuBL.png");
+        frameing[3] = ResourceLoader.getSprite("CornerMenuBR.png");
+        frameing[4] = ResourceLoader.getSprite("TopEdgeMenu.png");
+        frameing[5] = ResourceLoader.getSprite("RightEdgeMenu.png");
+        frameing[6] = ResourceLoader.getSprite("BottomEdgeMenu.png");
+        frameing[7] = ResourceLoader.getSprite("LeftEdgeMenu.png");
 
-        arrow = PokemonGame.images.getSprite("ArrowRight.png");
+        arrow = ResourceLoader.getSprite("ArrowRight.png");
 
         initst();
     }

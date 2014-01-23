@@ -28,6 +28,7 @@ import com.dryerzinia.pokemon.net.msg.client.act.SendActTalkingToClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.fight.SendFightClientMessage;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.Fight;
@@ -48,8 +49,6 @@ public class PokemonServer {
     public static PokemonServer pokes;
 
     ServerSocket ssock;
-
-    PokemonGame pg;
 
     public static ArrayList<PlayerInstanceData> players = new ArrayList<PlayerInstanceData>();
 
@@ -90,14 +89,11 @@ public class PokemonServer {
         // Probably do some other thing for this singleton
         pokes = this;
 
-        // Game Instance Data
-        pg = new PokemonGame();
-        pg.run = false;
-        pg.read = false;
-
         // Don't need to load images for headless server
         ResourceLoader.setDoLoad(false);
-        pg.init();
+
+        // Game Instance Data
+        GameState.init();
 
         System.out.println("Game World Instace Created");
 
@@ -174,7 +170,7 @@ public class PokemonServer {
      */
     public class ActTask extends TimerTask {
         public void run() {
-        	for(Actor actor: PokemonGame.actors) {
+        	for(Actor actor: GameState.actors) {
         		// TODO remove archaic position reference from this class
         		if(actor.act(-256, -256)) {
         			sendPlayerActorUpdate((Person) actor);

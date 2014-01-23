@@ -4,7 +4,9 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Pokemon;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class PokemonBoxMenu extends ScrollMenu {
 
@@ -30,17 +32,17 @@ public class PokemonBoxMenu extends ScrollMenu {
 
         frameing = new Image[8];
 
-        frameing[0] = PokemonGame.pokeg.images.getSprite("CornerMenuTL.png");
-        frameing[1] = PokemonGame.pokeg.images.getSprite("CornerMenuTR.png");
-        frameing[2] = PokemonGame.pokeg.images.getSprite("CornerMenuBL.png");
-        frameing[3] = PokemonGame.pokeg.images.getSprite("CornerMenuBR.png");
-        frameing[4] = PokemonGame.pokeg.images.getSprite("TopEdgeMenu.png");
-        frameing[5] = PokemonGame.pokeg.images.getSprite("RightEdgeMenu.png");
-        frameing[6] = PokemonGame.pokeg.images.getSprite("BottomEdgeMenu.png");
-        frameing[7] = PokemonGame.pokeg.images.getSprite("LeftEdgeMenu.png");
+        frameing[0] = ResourceLoader.getSprite("CornerMenuTL.png");
+        frameing[1] = ResourceLoader.getSprite("CornerMenuTR.png");
+        frameing[2] = ResourceLoader.getSprite("CornerMenuBL.png");
+        frameing[3] = ResourceLoader.getSprite("CornerMenuBR.png");
+        frameing[4] = ResourceLoader.getSprite("TopEdgeMenu.png");
+        frameing[5] = ResourceLoader.getSprite("RightEdgeMenu.png");
+        frameing[6] = ResourceLoader.getSprite("BottomEdgeMenu.png");
+        frameing[7] = ResourceLoader.getSprite("LeftEdgeMenu.png");
 
-        arrow = PokemonGame.pokeg.images.getSprite("ArrowRight.png");
-        arrowd = PokemonGame.pokeg.images.getSprite("ArrowDown.png");
+        arrow = ResourceLoader.getSprite("ArrowRight.png");
+        arrowd = ResourceLoader.getSprite("ArrowDown.png");
 
         widthM = 1;
 

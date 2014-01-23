@@ -3,9 +3,11 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
 
 public class ItemMenu extends ScrollMenu {
@@ -31,17 +33,17 @@ public class ItemMenu extends ScrollMenu {
 
         frameing = new Image[8];
 
-        frameing[0] = PokemonGame.images.getSprite("CornerMenuTL.png");
-        frameing[1] = PokemonGame.images.getSprite("CornerMenuTR.png");
-        frameing[2] = PokemonGame.images.getSprite("CornerMenuBL.png");
-        frameing[3] = PokemonGame.images.getSprite("CornerMenuBR.png");
-        frameing[4] = PokemonGame.images.getSprite("TopEdgeMenu.png");
-        frameing[5] = PokemonGame.images.getSprite("RightEdgeMenu.png");
-        frameing[6] = PokemonGame.images.getSprite("BottomEdgeMenu.png");
-        frameing[7] = PokemonGame.images.getSprite("LeftEdgeMenu.png");
+        frameing[0] = ResourceLoader.getSprite("CornerMenuTL.png");
+        frameing[1] = ResourceLoader.getSprite("CornerMenuTR.png");
+        frameing[2] = ResourceLoader.getSprite("CornerMenuBL.png");
+        frameing[3] = ResourceLoader.getSprite("CornerMenuBR.png");
+        frameing[4] = ResourceLoader.getSprite("TopEdgeMenu.png");
+        frameing[5] = ResourceLoader.getSprite("RightEdgeMenu.png");
+        frameing[6] = ResourceLoader.getSprite("BottomEdgeMenu.png");
+        frameing[7] = ResourceLoader.getSprite("LeftEdgeMenu.png");
 
-        arrow = PokemonGame.images.getSprite("ArrowRight.png");
-        arrowd = PokemonGame.images.getSprite("ArrowDown.png");
+        arrow = ResourceLoader.getSprite("ArrowRight.png");
+        arrowd = ResourceLoader.getSprite("ArrowDown.png");
 
         this.items = items;
 
@@ -96,7 +98,7 @@ public class ItemMenu extends ScrollMenu {
         if (it.name.toLowerCase().equals(
                 items.get(selection).name.toLowerCase())) {
             it.number += itemCountMenu.count;
-            PokemonGame.pokeg.writeItem(it);
+            Client.writeItem(it);
             return true;
         }
         return false;
@@ -112,7 +114,7 @@ public class ItemMenu extends ScrollMenu {
         }
         i2.set(i);
         i2.number = itemCountMenu.count;
-        PokemonGame.pokeg.writeItem(i2);
+        Client.writeItem(i2);
         p.items.add(i2);
     }
 

@@ -3,7 +3,10 @@ import javax.swing.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Grid;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Move;
+import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.Tile;
 
@@ -44,12 +47,12 @@ public class MapEditor extends JFrame implements MouseListener {
                 delete();
             }
         });
-        final ArrayList<Tile> mtile = pg.mtile;
+        final ArrayList<Tile> mtile = GameState.mtile;
         JMenuItem edt = rc.add("Edit");
         edt.addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (sector.get(lastClick).getClass().getName().indexOf("Tile") != -1)
-                    new EditTile(mtile, sector, lastClick, bs, ms);
+                    new EditTile(mtile, sector, lastClick);
                 else
                     new UltimateEdit(mtile.get(sector.get(lastClick).id));
             }
@@ -66,7 +69,7 @@ public class MapEditor extends JFrame implements MouseListener {
                 new AddTile(mtile, sector);
             }
         });
-        tiles = new JComboBox(pg.mtile.toArray());
+        tiles = new JComboBox(GameState.mtile.toArray());
         tiles.addItemListener(new AbstractItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 setTile((Tile) e.getItem());
@@ -81,14 +84,14 @@ public class MapEditor extends JFrame implements MouseListener {
         this.rw = new JButton("Remove Level White");
         this.rw.addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                Grid g = PokemonGame.pokeg.level
-                        .get(ClientState.player.level).g;
+                Grid g = GameState.level
+                        .get(ClientState.player.level).grid;
                 for (int x = 0; x < g.getWidth(); x++) {
                     for (int y = 0; y < g.getHeight(); y++) {
-                        for (int i = 0; i < g.g[x][y].size(); i++) {
-                            if (g.g[x][y].get(i).toString()
+                        for (int i = 0; i < g.grid[x][y].size(); i++) {
+                            if (g.grid[x][y].get(i).toString()
                                     .equals("WhiteTile.png")) {
-                                g.g[x][y].remove(i);
+                                g.grid[x][y].remove(i);
                                 i--;
                             }
                         }
@@ -117,7 +120,7 @@ public class MapEditor extends JFrame implements MouseListener {
 
         c.add(this.add);
         c.add(tiles);
-        pico = new ImageIcon(pg.mtile.get(0).getImage());
+        pico = new ImageIcon(GameState.mtile.get(0).getImage());
         preview = new JLabel(pico);
         c.add(preview);
         c.add(addbc);
@@ -126,8 +129,9 @@ public class MapEditor extends JFrame implements MouseListener {
         final MapEditor met = this;
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                PokemonGame.pokeg.removeMouseListener(met);
-                PokemonGame.pokeg.me = null;
+            	// TODO add map editor mouse listener to the game window
+            	//UI.removeMouseListener(met);
+                //PokemonGame.pokeg.me = null;
                 dispose();
             }
         });
@@ -143,8 +147,8 @@ public class MapEditor extends JFrame implements MouseListener {
     }
 
     public void addTile(int x, int y) {
-        pg.level.get(pg.Char.level).g.g[x + ClientState.player.x][y
-                + ClientState.player.y].add((Tile) tiles.getSelectedItem());
+        GameState.level.get(ClientState.player.level).grid.grid[x + (int)ClientState.player.x][y
+                + (int)ClientState.player.y].add((Tile) tiles.getSelectedItem());
     }
 
     public void popup(int i, int x, int y) {
@@ -160,8 +164,8 @@ public class MapEditor extends JFrame implements MouseListener {
     public void loadSector(int x, int y) {
         lastx = x;
         lasty = y;
-        sector = pg.level.get(pg.Char.level).g.g[x + ClientState.player.x][y
-                + ClientState.player.y];
+        sector = GameState.level.get(Player.self.level).grid.grid[x + (int)ClientState.player.x][y
+                + (int)ClientState.player.y];
         for (int i = 0; i < 6; i++) {
             if (i < sector.size()) {
                 lnames[i].setText(sector.get(i) + "");

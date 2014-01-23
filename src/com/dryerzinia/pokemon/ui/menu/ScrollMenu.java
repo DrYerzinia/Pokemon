@@ -3,6 +3,8 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class ScrollMenu extends SelectionMenu {
 
@@ -24,17 +26,17 @@ public class ScrollMenu extends SelectionMenu {
 
         frameing = new Image[8];
 
-        frameing[0] = PokemonGame.images.getSprite("CornerMenuTL.png");
-        frameing[1] = PokemonGame.images.getSprite("CornerMenuTR.png");
-        frameing[2] = PokemonGame.images.getSprite("CornerMenuBL.png");
-        frameing[3] = PokemonGame.images.getSprite("CornerMenuBR.png");
-        frameing[4] = PokemonGame.images.getSprite("TopEdgeMenu.png");
-        frameing[5] = PokemonGame.images.getSprite("RightEdgeMenu.png");
-        frameing[6] = PokemonGame.images.getSprite("BottomEdgeMenu.png");
-        frameing[7] = PokemonGame.images.getSprite("LeftEdgeMenu.png");
+        frameing[0] = ResourceLoader.getSprite("CornerMenuTL.png");
+        frameing[1] = ResourceLoader.getSprite("CornerMenuTR.png");
+        frameing[2] = ResourceLoader.getSprite("CornerMenuBL.png");
+        frameing[3] = ResourceLoader.getSprite("CornerMenuBR.png");
+        frameing[4] = ResourceLoader.getSprite("TopEdgeMenu.png");
+        frameing[5] = ResourceLoader.getSprite("RightEdgeMenu.png");
+        frameing[6] = ResourceLoader.getSprite("BottomEdgeMenu.png");
+        frameing[7] = ResourceLoader.getSprite("LeftEdgeMenu.png");
 
-        arrow = PokemonGame.images.getSprite("ArrowRight.png");
-        arrowd = PokemonGame.images.getSprite("ArrowDown.png");
+        arrow = ResourceLoader.getSprite("ArrowRight.png");
+        arrowd = ResourceLoader.getSprite("ArrowDown.png");
 
         widthM = wm;
 
@@ -96,7 +98,7 @@ public class ScrollMenu extends SelectionMenu {
     public boolean push() {
 
         if (pg != null && overlays[selection] != null) {
-            pg.overlay.o = overlays[selection];
+            UI.overlay.o = overlays[selection];
         } else if (selection + 1 == currentToken.length)
             return true;
         else

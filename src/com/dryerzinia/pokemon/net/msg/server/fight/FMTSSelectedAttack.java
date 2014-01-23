@@ -113,9 +113,7 @@ public class FMTSSelectedAttack extends ServerMessage {
                 // Next change the pokemon aux holds the switch too
                 // TODO: validate aux, boot if invalid cause that should be
                 // impossible and cheating
-                f.currentPlayer.poke.belt[aux].getBase(
-                        PokemonGame.pokeg.basePokemon,
-                        PokemonGame.pokeg.baseMoves); // Setup base for stats
+                f.currentPlayer.poke.belt[aux].getBase(); // Setup base for stats
                 f.setOutPokemon(f.currentPlayer.poke.belt[aux]); // Set the out
                                                                  // pokemon to
                                                                  // the switched
@@ -314,9 +312,7 @@ public class FMTSSelectedAttack extends ServerMessage {
                     + "'s Pokemon: ");
             for (int i = 0; i < 6; i++) {
                 if (notChallengerPlayer.getPlayer().poke.belt[i] != null) {
-                    notChallengerPlayer.getPlayer().poke.belt[i].getBase(
-                            PokemonGame.pokeg.basePokemon,
-                            PokemonGame.pokeg.baseMoves);
+                    notChallengerPlayer.getPlayer().poke.belt[i].getBase();
                     System.out
                             .println(notChallengerPlayer.getPlayer().poke.belt[i]
                                     + " HP: "

@@ -41,12 +41,9 @@ public class EditTile extends JFrame {
     ArrayList<Move> ms;
 
     public EditTile(ArrayList<Tile> mtiles, ArrayList<Tile> sector,
-            int editnum, ArrayList<Pokemon> bss, ArrayList<Move> mss) {
+            int editnum) {
 
         super("Edit Tile");
-
-        this.bs = bss;
-        this.ms = mss;
 
         c = getContentPane();
         setLayout(new FlowLayout());

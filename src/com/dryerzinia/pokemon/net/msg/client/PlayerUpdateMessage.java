@@ -7,6 +7,8 @@ import java.io.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class PlayerUpdateMessage extends ClientMessage {
@@ -35,12 +37,12 @@ public class PlayerUpdateMessage extends ClientMessage {
             ClientState.player = receivedPlayer;
             ClientState.player.loadImages();
 
-            PokemonGame.pokeg.writeLoadMessage();
+            Client.writeLoadMessage();
 
         } else {
 
             boolean found = false;
-            Iterator<Player> i = PokemonGame.pokeg.players.iterator();
+            Iterator<Player> i = ClientState.players.iterator();
             while (i.hasNext()) {
                 Player foundPlayer = i.next();
                 if (receivedPlayer.id == foundPlayer.id) {
@@ -55,7 +57,7 @@ public class PlayerUpdateMessage extends ClientMessage {
             }
             if (!found) {
                 receivedPlayer.loadImages();
-                PokemonGame.pokeg.players.add(receivedPlayer);
+                ClientState.players.add(receivedPlayer);
             }
 
         }

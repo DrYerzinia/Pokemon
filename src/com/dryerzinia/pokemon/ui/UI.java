@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,6 +29,8 @@ import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.ui.editor.MapEditor;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.views.Login;
+import com.dryerzinia.pokemon.views.View;
 
 @SuppressWarnings("serial")
 public class UI {
@@ -47,6 +50,8 @@ public class UI {
     private static Graphics chat_buffer_graphics;
 
     public static OverlayO overlay = new OverlayO();
+
+    public static float animationTimeStep = 250;
 
     /*
      * Chat var's
@@ -122,10 +127,10 @@ public class UI {
     	/*
     	 * Create Double Buffering for drawing the game
     	 */
-    	buffer_image = ui_applet.createImage(320, 388);
+    	buffer_image = new BufferedImage(320, 388, BufferedImage.TYPE_INT_ARGB);//ui_applet.createImage(320, 388);
         buffer_graphics = buffer_image.getGraphics();
 
-        chat_buffer_image = ui_applet.createImage(320, 200);
+        chat_buffer_image = new BufferedImage(320, 388, BufferedImage.TYPE_INT_ARGB);//ui_applet.createImage(320, 200);
         chat_buffer_graphics = chat_buffer_image.getGraphics();
 
         /*
@@ -141,51 +146,22 @@ public class UI {
 
     }
 
-    public static void drawReconnect(){
+    public static void draw(View view){
 
-    	buffer_graphics.setColor(Color.BLACK);
-    	buffer_graphics.fillRect(0, 0, APP_HEIGHT, APP_WIDTH + CHAT_HEIGHT);
-
-    	buffer_graphics.setColor(Color.RED);
-    	buffer_graphics.drawString("Lost Connection", 25, 50);
-    	buffer_graphics.drawString("Attempting Reconnect...", 10, 90);
-
-        drawBuffer();
-
-    }
-
-    public static void redrawLogin(){
-
-        overlay.o.draw(buffer_graphics);
-
-        drawBuffer();
-    }
-
-    public static void drawAttemptingLogin(){
-    
-        buffer_graphics.setColor(Color.BLACK);
-        buffer_graphics.fillRect(0, 0, 160, 144);
-        buffer_graphics.setColor(Color.WHITE);
-        buffer_graphics.setFont(new Font("monospaced", 0, 16));
-        buffer_graphics.drawString("LOGGING IN...", 20, 50);
-        buffer_graphics.drawImage(ResourceLoader.getSprite("PikachuP.png"), 40, 55, null);
-
-        drawBuffer();
-
-    }
-
-    public static void drawConnectionError(){
-
-    	buffer_graphics.setColor(Color.BLACK);
-    	buffer_graphics.fillRect(0, 0, 160, 144);
-    	buffer_graphics.setColor(Color.WHITE);
-    	buffer_graphics.setFont(new Font("monospaced", 0, 16));
-    	buffer_graphics.drawString("CONNECTION ERROR", 1, 50);
-    	buffer_graphics.drawImage(ResourceLoader.getSprite("PikachuSad.png"), 50, 35, null);
-    	buffer_graphics.drawString("Press Any Key To", 1, 100);
-    	buffer_graphics.drawString("Restart", 50, 120);
-
+    	view.draw(buffer_graphics);
     	drawBuffer();
+
+    }
+
+    public static int getWidth(){
+
+    	return APP_WIDTH * scale;
+
+    }
+
+    public static int getTotalHeight(){
+
+    	return APP_HEIGHT * scale + CHAT_HEIGHT * scale;
 
     }
 
@@ -228,6 +204,12 @@ public class UI {
 
     }
 
+    public static synchronized void addChatMessage(String message){
+
+    	chat_history.add(message);
+
+    }
+
     public static void addToContainer(Container contentPane){
 
     	contentPane.add(ui_applet);
@@ -258,10 +240,10 @@ public class UI {
 
     }
 
-    public static void initloginScreen() {
+    public static void removeKeyListener(KeyListener keyListener){
 
-        Login l = new Login();
-        overlay.o = l;
+    	ui_applet.removeKeyListener(keyListener);
+
     }
 	
 }

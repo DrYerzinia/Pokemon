@@ -4,6 +4,9 @@ import java.awt.*;
 import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Grid;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -22,10 +25,11 @@ public class Player implements Serializable {
      * Drives animation
      */
     public float x, y;
-    private boolean sliding;
-    private int animationElapsed;
+    private transient boolean sliding;
+    private transient boolean stepSide;
+    private transient int animationElapsed;
 
-    public int dir; // facing direction
+    public int facing; // facing direction
     public int level; // current level player is in
     
     public int lpcx, lpcy; // player level position x and y ??? WTF IS THIS ???
@@ -52,6 +56,10 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
+        sliding = false;
+        stepSide = false;
+        animationElapsed = 0;
+
     }
 
     public Player(int id, int x, int y, int dir, int level, String name) {
@@ -61,7 +69,7 @@ public class Player implements Serializable {
         this.x = x;
         this.y = y;
 
-        this.dir = dir;
+        this.facing = dir;
 
         this.level = level;
 
@@ -69,6 +77,10 @@ public class Player implements Serializable {
 
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
+
+        sliding = false;
+        stepSide = false;
+        animationElapsed = 0;
 
     }
 
@@ -80,7 +92,7 @@ public class Player implements Serializable {
         this.x = x;
         this.y = y;
 
-        this.dir = dir;
+        this.facing = dir;
 
         this.level = level;
 
@@ -90,15 +102,201 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
+        sliding = false;
+        stepSide = false;
+        animationElapsed = 0;
+
     }
 
+    private void animationMove(int deltaTime){
+
+    	/*
+    	 * Before we can move we have to make sure the tile can be stepped on
+    	 * We still are incrementing the animation timer which lets us animate
+    	 * the characters sprite so we can do the wall bump
+    	 */
+    	boolean canStep = false;
+    	Grid grid = ClientState.getPlayerLevel().grid;
+
+    	if(facing == Direction.UP)
+    		canStep = grid.canStepOn((int)Math.ceil(x), (int)Math.ceil(y-1));
+
+    	if(facing == Direction.DOWN)
+    		canStep = grid.canStepOn((int)Math.floor(x), (int)Math.floor(y+1));
+
+    	if(facing == Direction.LEFT)
+    		canStep = grid.canStepOn((int)Math.ceil(x-1), (int)Math.ceil(y));
+
+    	if(facing == Direction.RIGHT)
+    		canStep = grid.canStepOn((int)Math.floor(x+1), (int)Math.floor(y));
+
+
+    	if(canStep){
+    		/*
+    		 * If we are facing the direction
+	    	 */
+	    	if(facing == Direction.UP)
+	    		y -= deltaTime/UI.animationTimeStep;
+	
+	    	if(facing == Direction.DOWN)
+	    		y += deltaTime/UI.animationTimeStep;
+	
+	    	if(facing == Direction.LEFT)
+	    		x -= deltaTime/UI.animationTimeStep;
+	
+	    	if(facing == Direction.RIGHT)
+	    		x += deltaTime/UI.animationTimeStep;
+    	}
+
+    }
+
+    private void continueAnimation(byte direction, int deltaTime){
+
+		animationElapsed += deltaTime;
+
+    	/*
+    	 * If we exceed time step
+    	 */
+    	if(animationElapsed > UI.animationTimeStep){
+    
+    		/*
+    		 * change step side for alternating gait
+    		 */
+    		stepSide = !stepSide;
+    		
+    		/*
+    		 * we have to get even with the square
+    		 */
+   			animationMove((int)(deltaTime-(animationElapsed-UI.animationTimeStep)));
+    		x = Math.round(x);
+    		y = Math.round(y);
+
+    		if(direction == Direction.NONE){
+
+    			/*
+    			 * If we have no where to go we end the animation
+    			 */
+    			animationElapsed = 0;
+
+    		} else {
+    			/*
+    			 * But if we do have a direction to go we move the animation overflow time
+    			 * over to the next animation and change directions in case we turned and move
+    			 * that way
+    			 */
+    			animationElapsed -= UI.animationTimeStep;
+    			facing = direction;
+    			animationMove(animationElapsed);
+
+    		}
+
+    	} else {
+    		/*
+    		 * Otherwise we just move like normal
+    		 */
+    		animationMove(deltaTime);
+    	}
+
+    }
+    
     /**
      * Drives the animation of the player
      * 
      * @param direction The direction that the player wants the character to go
-     * @param deltaTime Amount of time in ms that have elapsed scince last update
+     * @param deltaTime Amount of time in ms that have elapsed since last update
      */
-    public void update(int direction, int deltaTime) {
+    public void update(byte direction, int deltaTime) {
+
+    	/*
+    	 * If there is an animation going we finish it
+    	 */
+    	if(animationElapsed != 0){
+    		continueAnimation(direction, deltaTime);
+    		return;
+    	}
+
+    	/*
+    	 * Otherwise we either turn or start a new animation
+    	 */
+    	if(direction != Direction.NONE){
+        	/*
+        	 * If we change directions we just return
+        	 */
+    		if(direction != facing){
+    			facing = direction;
+    			return;
+    		}
+
+    		/*
+    		 * If we are same direction as before we start a movement animation
+    		 * increment animation timer by deltaTime
+    		 * move by deltaTime over time step
+    		 */
+    		continueAnimation(direction, deltaTime);
+
+    	}
+
+    }
+
+    public void draw(Graphics graphics) {
+
+        setImage(0, 0);
+        graphics.drawImage(img, 4 * 16, 4 * 16, null);
+
+    }
+
+    public void draw(int x, int y, Graphics graphics) {
+
+    	setImage(0, 0);
+        graphics.drawImage(img, (int) ((this.x - x + 4) * 16), (int)((this.y - y + 4) * 16), null);
+
+    }
+
+    protected void setImage(int x, int y) {
+
+    	/*
+    	 * For animation of the character pokemon does 2 images for the
+    	 * animations but up down animations have the sprite mirrored during
+    	 * alternating steps always starting with the right side of him moving
+    	 */
+
+    	/*
+    	 * If animation is in first 1/4 or last 1/4 we use normal image
+    	 */
+    	if(animationElapsed < UI.animationTimeStep*(1.0/4.0)
+    	 || animationElapsed > UI.animationTimeStep*(3.0/4.0))
+    		img = sprite[facing];
+
+    	/*
+    	 * If its in the middle 1/2 we use the moving animation
+    	 */
+    	else {
+
+    		if((facing == Direction.UP || facing == Direction.DOWN) && stepSide)
+    			img = sprite[facing+8];
+    		else
+    			img = sprite[facing+4];
+
+    	}
+
+    }
+
+    public void loadImages() {
+        sprite = new Image[10];
+
+        sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
+        sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
+        sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
+        sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
+
+        sprite[4] = ResourceLoader.getSprite(imgName + "U1.png");
+        sprite[5] = ResourceLoader.getSprite(imgName + "D1.png");
+        sprite[6] = ResourceLoader.getSprite(imgName + "L1.png");
+        sprite[7] = ResourceLoader.getSprite(imgName + "R1.png");
+
+        sprite[8] = ResourceLoader.getSprite(imgName + "U2.png");
+        sprite[9] = ResourceLoader.getSprite(imgName + "D2.png");
+
     }
 
     public int getID() {
@@ -124,7 +322,7 @@ public class Player implements Serializable {
         this.x = p.x;
         this.y = p.y;
 
-        this.dir = p.dir;
+        this.facing = p.facing;
 
         this.level = p.level;
 
@@ -152,39 +350,8 @@ public class Player implements Serializable {
         this.poke = poke;
     }
 
-    public void draw(Graphics g) {
-
-        setImage(0, 0);
-        g.drawImage(img, 4 * 16, 4 * 16, null);
-
-    }
-
-    public void draw(int x, int y, Graphics g) {
-        setImage(0, 0);
-        g.drawImage(img, (this.x - x + 4) * 16, (this.y - y + 4) * 16, null);
-    }
-
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
-        setImage(0, 0);
-        g.drawImage(img, (this.x - x + 4) * 16 + xo,
-                (this.y - y + 4) * 16 + yo, null);
-    }
-
-    protected void setImage(int x, int y) {
-        img = sprite[dir];
-    }
-
     public String toString() {
         return name;
-    }
-
-    public void loadImages() {
-        sprite = new Image[4];
-
-        sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
-        sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
-        sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
-        sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
     }
 
     public boolean equals(Object o) {
@@ -201,6 +368,10 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
+        sliding = false;
+        stepSide = false;
+        animationElapsed = 0;
+        
         // TODO: Validate loaded object
     }
 

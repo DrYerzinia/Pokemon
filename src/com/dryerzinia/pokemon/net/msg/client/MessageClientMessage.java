@@ -6,6 +6,8 @@ MessageClientMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.ui.UI;
 
 public class MessageClientMessage extends ClientMessage {
 
@@ -24,7 +26,7 @@ public class MessageClientMessage extends ClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        PokemonGame.pokeg.chathist.add(message);
+        UI.addChatMessage(message);
 
     }
 

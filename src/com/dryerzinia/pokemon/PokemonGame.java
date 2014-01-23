@@ -18,39 +18,47 @@ import javax.swing.*;
 
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.views.GameView;
+import com.dryerzinia.pokemon.views.Login;
+import com.dryerzinia.pokemon.views.View;
 
 public class PokemonGame {
 
-    private static Timer game_loop_timer;
+    private static GameLoop gameLoop;
+
+    private static View activeView;
 
     public static void init() {
-
-        Pokemon.readPokemonBaseStats();
 
         GameState.init();
         ClientState.init();
 
         UI.init();
+        //UI.addKeyListener(ClientState.getKeyboard());
 
-        UI.addKeyListener(ClientState.getKeyboard());
-
-        // start login window
-
-    }
-    
-    public static void stopGameLoop(){
-
-    	game_loop_timer.cancel();
-    	game_loop_timer.purge();
+        activeView = new Login();
+        UI.addKeyListener(activeView.getKeyListener());
 
     }
 
-    public static void startGameLoop(){
+    /**
+     * Start the tame
+     */
+    public static void start(){
 
-    	game_loop_timer = new Timer();
-        game_loop_timer.schedule(new GameLoop(), 0, 150);    	
+    	gameLoop = new GameLoop();
+    	gameLoop.init();
+
+    }
+
+    public static void switchToGame(){
+
+    	UI.removeKeyListener(activeView.getKeyListener());
+    	activeView = new GameView();
+    	UI.addKeyListener(activeView.getKeyListener());
 
     }
 
@@ -64,12 +72,15 @@ public class PokemonGame {
 
     public static final class GameLoop extends TimerTask {
 
-    	private static final int loopDelay = 50;
+    	private static final int loopDelay = 25;
 
     	private Timer self;
 
     	private long lastUpdateTime;
- 
+
+    	public GameLoop(){
+    	}
+
     	/**
     	 * Initialize the game loop
     	 * or reset it if it was already running
@@ -85,7 +96,7 @@ public class PokemonGame {
     		 * Set update time so it doesn't seem like we blasted a long ass
     		 * time into the future on the first iteration
     		 */
-    		updateTime();
+    		lastUpdateTime = System.currentTimeMillis();    
 
     		/*
     		 * Create the timer and start the game loop
@@ -111,43 +122,20 @@ public class PokemonGame {
     	}
 
     	/**
-    	 * Set the last update time to the current update time
-    	 */
-    	private void updateTime(){
-
-    		lastUpdateTime = System.currentTimeMillis();    		
-
-    	}
-
-    	/**
     	 * One iteration of the game loop
     	 */
     	public void run() {
 
-    		int deltaTime = (int)(System.currentTimeMillis() - lastUpdateTime);
-
     		/*
-    		 * Update any objects that would have changed
-    		 * The player
-    		 * Other players they might have received position updates and need
-    		 * to work there way across the map
+    		 * Calculate update interval
     		 */
-    		ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
+    		long currentTime = System.currentTimeMillis();
+    		int deltaTime = (int)(currentTime - lastUpdateTime);
+    		lastUpdateTime = currentTime;
+    		
+    		activeView.update(deltaTime);
 
-    		/*
-    		 * Process menu related input if no animations are running
-    		 */
-
-    		/*
-    		 * Render all the objects on the map
-    		 * Render the player, he is not references in the map
-    		 * Render the chat window
-    		 */
-
-    		/*
-    		 * Now is the last time we updated
-    		 */
-    		updateTime();
+    		UI.draw(activeView);
 
     	}
 /*
@@ -459,6 +447,8 @@ public class PokemonGame {
 
         frame.setSize(UI.APP_WIDTH * UI.scale + 10, UI.APP_HEIGHT * UI.scale + UI.CHAT_HEIGHT + 30);
         frame.setVisible(true);
+
+        PokemonGame.start();
 
     }
 

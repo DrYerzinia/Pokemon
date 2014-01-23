@@ -3,6 +3,8 @@ import javax.swing.*;
 
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Tile;
 
 import java.awt.event.*;
@@ -27,12 +29,12 @@ public class EditLevel extends JFrame {
         setLayout(new FlowLayout());
 
 
-        l = level.get(ClientState.player.level);
+        l = GameState.level.get(ClientState.player.level);
 
         JButton saveB;
 
-        xTF = new JTextField("" + l.g.g.length, 5);
-        yTF = new JTextField("" + l.g.g[0].length, 5);
+        xTF = new JTextField("" + l.grid.grid.length, 5);
+        yTF = new JTextField("" + l.grid.grid[0].length, 5);
         xoTF = new JTextField("0", 5);
         yoTF = new JTextField("0", 5);
 
@@ -70,32 +72,32 @@ public class EditLevel extends JFrame {
             System.out.println("off" + offset + "lve" + level);
             if (level != -1) {
                 l.borders[i] = level;
-                l.borderL[i] = this.level.get(level);
+                l.borderL[i] = GameState.level.get(level);
                 l.borderoffset[i] = offset;
                 int x = Integer.parseInt(xTF.getText());
                 int y = Integer.parseInt(yTF.getText());
                 int xo = Integer.parseInt(xoTF.getText());
                 int yo = Integer.parseInt(yoTF.getText());
-                if (x != l.g.g.length || y != l.g.g[0].length) {
+                if (x != l.grid.grid.length || y != l.grid.grid[0].length) {
                     Grid g = new Grid(x, y);
-                    Grid g2 = l.g;
-                    for (int x2 = 0; x2 < g2.g.length; x2++) {
-                        for (int y2 = 0; y2 < g2.g[0].length; y2++) {
-                            g.g[x2 + xo][y2 + yo] = new ArrayList<Tile>();
-                            for (int i2 = 0; i2 < g2.g[x2][y2].size(); i2++) {
-                                g.g[x2 + xo][y2 + yo].add(g2.g[x2][y2].get(i2));
+                    Grid g2 = l.grid;
+                    for (int x2 = 0; x2 < g2.grid.length; x2++) {
+                        for (int y2 = 0; y2 < g2.grid[0].length; y2++) {
+                            g.grid[x2 + xo][y2 + yo] = new ArrayList<Tile>();
+                            for (int i2 = 0; i2 < g2.grid[x2][y2].size(); i2++) {
+                                g.grid[x2 + xo][y2 + yo].add(g2.grid[x2][y2].get(i2));
                             }
                         }
                     }
-                    for (int x2 = 0; x2 < g.g.length; x2++) {
-                        for (int y2 = 0; y2 < g.g[0].length; y2++) {
-                            if (g.g[x2][y2] == null) {
-                                g.g[x2][y2] = new ArrayList<Tile>();
-                                g.g[x2][y2].add(mtiles.get(29));
+                    for (int x2 = 0; x2 < g.grid.length; x2++) {
+                        for (int y2 = 0; y2 < g.grid[0].length; y2++) {
+                            if (g.grid[x2][y2] == null) {
+                                g.grid[x2][y2] = new ArrayList<Tile>();
+                                g.grid[x2][y2].add(GameState.mtile.get(29));
                             }
                         }
                     }
-                    l.g = g;
+                    l.grid = g;
                     g.l = l;
                 }
             }

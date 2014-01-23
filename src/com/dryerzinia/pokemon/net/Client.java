@@ -32,8 +32,8 @@ import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.ui.Login;
 import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.views.Login;
 
 public final class Client {
 
@@ -88,6 +88,26 @@ public final class Client {
         }
     }
 
+    /**
+     * Start a pinger task that runs every 15 seconds to maintain an active
+     * connection with the server so we are not kicked
+     */
+    public static void startPinger(){
+
+    	if(pinger == null)
+    		pinger = new Timer();
+
+    	else {
+
+    		pinger.cancel();
+    		pinger.purge();
+
+    	}
+
+    	pinger.schedule(new PingerTask(), 0, 15000);
+
+    }
+
     public static final class PingerTask extends TimerTask {
         public void run() {
 
@@ -97,37 +117,7 @@ public final class Client {
         }
     }
 
-    public static final class DoLogin extends TimerTask {
-    	public void run(){
-            try {
-
-            	UI.drawAttemptingLogin();
-
-                Client.startConnect();
-            	
-            } catch (Exception x) {
-
-            	x.printStackTrace();
-                System.out.println("Connection Error!");
-
-                UI.drawConnectionError();
-
-                UI.overlay.o.active = true;
-
-            }
-    	}
-	}
-
-    public static void attemptLogin(){
-
-    	Login.writeSettingsData(Login.getSettingsFile());
-    	ClientState.player.name = Login.username;
-
-    	// initConnection
-
-    }
-
-    public static void initTCPConnect() throws Exception {
+    public static void initTCPConnect() throws IOException {
 
         SocketAddress address = null;
         InetSocketAddress inet = null;
@@ -295,7 +285,7 @@ public final class Client {
      * Initiates network connection to server is selected mode
      * @throws Exception
      */
-    public static void startConnect() throws Exception {
+    public static void startConnect() throws IOException {
     	switch (connectMode) {
         case PokemonServer.CM_TCP:
             initTCPConnect();
@@ -306,7 +296,7 @@ public final class Client {
         }
     }
 
-    public static void initDatagramConnect() throws Exception {
+    public static void initDatagramConnect() throws IOException {
 
         DatagramSocket ds = new DatagramSocket();
         InetAddress loc = InetAddress.getByName(Login.location);

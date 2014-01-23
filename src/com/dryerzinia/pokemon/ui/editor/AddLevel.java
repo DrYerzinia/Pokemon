@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Tile;
 
@@ -77,15 +78,15 @@ public class AddLevel extends JFrame {
         Grid g = new Grid(w, h);
         for (int x = 0; x < w; x++)
             for (int y = 0; y < h; y++)
-                g.add(x, y, mtiles.get(29));
+                g.add(x, y, GameState.mtile.get(29));
 
         Level level = new Level(g);
-        level.id = levels.size();
+        level.id = GameState.level.size();
         g.l = level;
 
         System.out.println("lvlid" + level.id);
 
-        levels.add(level);
+        GameState.level.add(level);
 
     }
 

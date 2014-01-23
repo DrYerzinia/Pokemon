@@ -238,7 +238,15 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     public void getBase() {
 
-   		pokeBase = basePokemon.get(Species).getBaseStats();
+    	/*
+    	 * Check if pokemon Species is valid if it is get the base stats for
+    	 * it and references them in the pokemon object
+    	 */
+    	Pokemon pokemon = basePokemon.get(Species);
+    	if(pokemon != null)
+    		pokeBase = pokemon.getBaseStats();
+    	 else
+     		System.err.println("Pokemon " + Species + " not found!");
 
    		for(Move move : moves) {
    			if(move == null) break;

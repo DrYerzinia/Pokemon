@@ -24,6 +24,9 @@ public class GameState {
 
     public static void init(){
 
+    	Move.init_base_moves();
+        Pokemon.readPokemonBaseStats();
+
     	load("save.json");
 
         for(Tile tile : mtile)
@@ -33,10 +36,10 @@ public class GameState {
     }
 
     public static void initTileSecondary(Grid g) {
-        for (int x = 0; x < g.g.length; x++) {
-            for (int y = 0; y < g.g[0].length; y++) {
-                for (int j = 0; j < g.g[x][y].size(); j++) {
-                    g.g[x][y].get(j).initializeSecondaryReferences(g);
+        for (int x = 0; x < g.grid.length; x++) {
+            for (int y = 0; y < g.grid[0].length; y++) {
+                for (int j = 0; j < g.grid[x][y].size(); j++) {
+                    g.grid[x][y].get(j).initializeSecondaryReferences(g);
                 }
             }
         }
@@ -100,12 +103,12 @@ public class GameState {
 
         for (int i = 0; i < level.size(); i++) {
 
-            for (int x = 0; x < level.get(i).g.g.length; x++) {
-                for (int y = 0; y < level.get(i).g.g[0].length; y++) {
-                    for (int j = 0; j < level.get(i).g.g[x][y].size(); j++) {
-                        int id = level.get(i).g.g[x][y].get(j).id;
+            for (int x = 0; x < level.get(i).grid.grid.length; x++) {
+                for (int y = 0; y < level.get(i).grid.grid[0].length; y++) {
+                    for (int j = 0; j < level.get(i).grid.grid[x][y].size(); j++) {
+                        int id = level.get(i).grid.grid[x][y].get(j).id;
                         Tile t = mtile.get(id);
-                        level.get(i).g.g[x][y].set(j, t);
+                        level.get(i).grid.grid[x][y].set(j, t);
                         if (UltimateEdit.Extends(t, "Person")) {
                             Person p = (Person) t;
                             p.x = x;
@@ -116,7 +119,7 @@ public class GameState {
                 }
             }
             level.get(i).initLevelReferences(level);
-            initTileSecondary(level.get(i).g);
+            initTileSecondary(level.get(i).grid);
 
         }
 

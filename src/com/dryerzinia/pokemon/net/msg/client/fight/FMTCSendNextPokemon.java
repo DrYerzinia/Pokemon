@@ -5,6 +5,7 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 
 public class FMTCSendNextPokemon extends ClientMessage {
@@ -23,7 +24,7 @@ public class FMTCSendNextPokemon extends ClientMessage {
         System.out.println("Recived FMTCSendNextPokemon");
         // END
 
-        Fight f = (Fight) PokemonGame.pokeg.overlay.o;
+        Fight f = (Fight) UI.overlay.o;
 
         f.WaitingForServerMessageReturn = false;
 

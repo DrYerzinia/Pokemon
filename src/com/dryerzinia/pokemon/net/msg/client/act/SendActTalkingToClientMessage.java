@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 
 public class SendActTalkingToClientMessage extends SendActClientMessage {
@@ -31,7 +32,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        Iterator<Actor> act = PokemonGame.pokeg.actors.iterator();
+        Iterator<Actor> act = GameState.actors.iterator();
         while (act.hasNext()) {
             Actor a = act.next();
             Person p2 = (Person) a;

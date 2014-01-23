@@ -7,6 +7,7 @@ import java.util.*;
 import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.GetPlayerServerMessage;
 
 public class LoginSuccessMessage extends ClientMessage {
@@ -18,11 +19,9 @@ public class LoginSuccessMessage extends ClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        PokemonGame.pokeg.writeServerMessage(new GetPlayerServerMessage());
+        Client.writeServerMessage(new GetPlayerServerMessage());
 
-        PokemonGame.pokeg.pinger = new Timer();
-        PokemonGame.pokeg.pinger.scheduleAtFixedRate(
-                PokemonGame.pokeg.new PingerTask(), 0, 15000);
+        Client.startPinger();
 
         System.out.println("Logged IN!!!");
 

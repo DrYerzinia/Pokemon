@@ -10,6 +10,7 @@ import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ReferenceInit;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
 
@@ -122,19 +123,12 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         return onClick;
     }
 
-    public void draw(int x, int y, Graphics g) {
-        g.drawImage(img, x * 16 + pixelOffsetX, y * 16 + pixelOffsetY, null);
-    }
-
     public void draw(int x, int y, int xo, int yo, Graphics g) {
-        g.drawImage(img, x * 16 + pixelOffsetX + xo,
-                y * 16 + pixelOffsetY + yo, null);
+        g.drawImage(img, x * 16 + pixelOffsetX - xo, y * 16 + pixelOffsetY - yo, null);
     }
 
     public void loadImage() {
-        if (PokemonGame.images == null)
-            return;
-        img = PokemonGame.images.getSprite(imgName);
+        img = ResourceLoader.getSprite(imgName);
     }
 
     public Image getImage() {

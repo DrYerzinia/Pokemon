@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Tile;
 
@@ -27,12 +28,12 @@ public class SendActMovedClientMessage extends SendActClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        Iterator<Actor> act = PokemonGame.pokeg.actors.iterator();
+        Iterator<Actor> act = GameState.actors.iterator();
         while (act.hasNext()) {
             Actor a = act.next();
             Person p2 = (Person) a;
             if (p2.id == id) {
-                PokemonGame.pokeg.level.get(p2.level).g.move(x, y, p2.x, p2.y,
+                GameState.level.get(p2.level).grid.move(x, y, p2.x, p2.y,
                         (Tile) p2);
                 p2.x = x;
                 p2.y = y;

@@ -8,9 +8,9 @@ import javax.swing.*;
 import com.dryerzinia.pokemon.PokemonGame;
 
 public class FullScreen {
-
+//TODO FIX FULLSCREEN CLAS
     public FullScreen() {
-
+/*
         Applet pg = new PokemonGame();
         JFrame win = new JFrame("Pokemon");
         win.getContentPane().add(pg);
@@ -42,7 +42,7 @@ public class FullScreen {
             gd.setFullScreenWindow(null);
 
         }
-
+*/
     }
 
     public static void main(String args[]) {

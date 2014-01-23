@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
@@ -15,7 +16,7 @@ public class Level implements Serializable, JSON {
 
     static final long serialVersionUID = -5293673761061322573L;
 
-    public Grid g;
+    public Grid grid;
     // public Player c; // Character Tile
 
     // int x, y;
@@ -36,120 +37,50 @@ public class Level implements Serializable, JSON {
         // this.direction = d;
         // this.x = x;
         // this.y = y;
-        this.g = g;
+        this.grid = g;
         // this.c = c;
         for (int i = 0; i < 9; i++)
             borders[i] = -1;
     }
 
-    public void draw(Graphics gg) {
-        if (ClientState.player != null) {
-            if (midmove && canMove) {
-                int xo = 0;
-                int yo = 0;
-                if (ClientState.player.dir == 0)
-                    yo = 8;
-                if (ClientState.player.dir == 1)
-                    yo = -8;
-                if (ClientState.player.dir == 2)
-                    xo = 8;
-                if (ClientState.player.dir == 3)
-                    xo = -8;
-                g.draw(ClientState.player.x, ClientState.player.y, xo,
-                        yo, gg);
-                if (borderL != null) {
-                    if (borderL[0] != null)
-                        borderL[0].g.draw(ClientState.player.x
-                                + borderL[0].g.g.length,
-                                ClientState.player.y + borderoffset[0], xo,
-                                yo, gg, false);
-                    if (borderL[3] != null)
-                        borderL[3].g.draw(
-                        		ClientState.player.x - g.g.length,
-                        		ClientState.player.y + borderoffset[3], xo,
-                                yo, gg, false);
-                    if (borderL[1] != null)
-                        borderL[1].g.draw(ClientState.player.x
-                                + borderoffset[1], ClientState.player.y
-                                + borderL[1].g.g[0].length, xo, yo, gg, false);
-                    if (borderL[7] != null)
-                        borderL[7].g.draw(ClientState.player.x
-                                + borderoffset[7], ClientState.player.y
-                                - g.g[0].length, xo, yo, gg, false);
-                }
-            } else {
-                g.draw(ClientState.player.x, ClientState.player.y, gg);
-                if (borderL != null) {
-                    if (borderL[0] != null)
-                        borderL[0].g.draw(ClientState.player.x
-                                + borderL[0].g.g.length,
-                                ClientState.player.y + borderoffset[0], gg,
-                                false);
-                    if (borderL[3] != null)
-                        borderL[3].g.draw(
-                                ClientState.player.x - g.g.length,
-                                ClientState.player.y + borderoffset[3], gg,
-                                false);
-                    if (borderL[1] != null)
-                        borderL[1].g.draw(ClientState.player.x
-                                + borderoffset[1], ClientState.player.y
-                                + borderL[1].g.g[0].length, gg, false);
-                    if (borderL[7] != null)
-                        borderL[7].g.draw(ClientState.player.x
-                                + borderoffset[7], ClientState.player.y
-                                - g.g[0].length, gg, false);
-                }
-            }
-            // if(midmove) c[direction+4].draw(4, 4, gg);
-            // else c[direction].draw(4, 4, gg);
-            ClientState.player.draw(gg);
+    /**
+     * Draws the level based on the players x y coordinates
+     * @param graphics Graphics object to draw the level onto
+     * @param x Players x coordinate
+     * @param y Players y coordinate
+     */
+    public void draw(Graphics graphics, float x, float y) {
+
+        grid.draw(x, y, graphics);
+
+        if (borderL != null) {
+            if (borderL[0] != null)
+                borderL[0].grid.draw(x + borderL[0].grid.grid.length, y + borderoffset[0], graphics);
+            if (borderL[3] != null)
+                borderL[3].grid.draw(x - grid.grid.length, y + borderoffset[3], graphics);
+            if (borderL[1] != null)
+                borderL[1].grid.draw(x + borderoffset[1], y + borderL[1].grid.grid[0].length - 1, graphics);
+            if (borderL[7] != null)
+                borderL[7].grid.draw(x + borderoffset[7], y - grid.grid[0].length, graphics);
         }
+
     }
 
-    public void act() {
-        if (ClientState.player != null)
-            g.act(ClientState.player.x, ClientState.player.y);
-    }
+    public Pokemon attacked(Player player) {
 
-    public Pokemon attacked(Player p) {
-        RandomFight rf = g.getRF(p.x, p.y);
-        if (rf != null)
+    	RandomFight rf = grid.getRF((int) player.x, (int) player.y);
+
+    	if (rf != null)
             return rf.getAttack();
-        return null;
-    }
 
-    public void moveRight() {
-        canMove = g.canStepOn(ClientState.player.x + 1,
-                ClientState.player.y);
-        if (canMove)
-            ClientState.player.x++;
-    }
+    	return null;
 
-    public void moveLeft() {
-        canMove = g.canStepOn(ClientState.player.x - 1,
-                ClientState.player.y);
-        if (canMove)
-            ClientState.player.x--;
-    }
-
-    public void moveUp() {
-        canMove = g.canStepOn(ClientState.player.x,
-                ClientState.player.y - 1);
-        if (canMove)
-            ClientState.player.y--;
-    }
-
-    public void moveDown() {
-        canMove = g.canStepOn(ClientState.player.x,
-                ClientState.player.y + 1);
-        if (canMove)
-            ClientState.player.y++;
     }
 
     private void readObject(ObjectInputStream ois)
             throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        g.initLevelReference(this);
+        grid.initLevelReference(this);
         // TODO: Validate loaded object
     }
 
@@ -161,7 +92,7 @@ public class Level implements Serializable, JSON {
 
     	String json = "{'class':'" + this.getClass().getName() + "'";
     	
-    	json += ",'g':" + JSONObject.objectToJSON(g);
+    	json += ",'g':" + JSONObject.objectToJSON(grid);
 
         json += ",'borders':" + JSONArray.intArrayToJSON(borders);
         json += ",'borderoffset':" + JSONArray.intArrayToJSON(borderoffset);
@@ -175,7 +106,7 @@ public class Level implements Serializable, JSON {
 
     public void fromJSON(HashMap<String, Object> json){
 
-    	g.initLevelReference(this);
+    	grid.initLevelReference(this);
 
     }
     

@@ -3,6 +3,7 @@ package com.dryerzinia.pokemon.obj;
 import java.util.ArrayList;
 
 import com.dryerzinia.pokemon.input.KeyboardInputController;
+import com.dryerzinia.pokemon.map.Level;
 
 public class ClientState {
 
@@ -11,13 +12,31 @@ public class ClientState {
 
     private static KeyboardInputController keyboard;
 
+    private static boolean loaded;
+
     public static void init(){
+
+    	loaded = false;
 
 		players = new ArrayList<Player>();
 
 		keyboard = new KeyboardInputController();
 
 	}
+
+    public static boolean isLoaded(){
+    	return loaded;
+    }
+
+    public static void setLoaded(){
+    	loaded = true;
+    }
+
+    public static Level getPlayerLevel(){
+
+    	return GameState.level.get(player.level);
+
+    }
 
     public static KeyboardInputController getKeyboard(){
 

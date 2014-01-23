@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSGetNextPokemon;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSSelectedAttack;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
@@ -16,6 +18,7 @@ import com.dryerzinia.pokemon.ui.menu.ItemMenu;
 import com.dryerzinia.pokemon.ui.menu.MenuEvent;
 import com.dryerzinia.pokemon.ui.menu.SelectionMenu;
 import com.dryerzinia.pokemon.ui.menu.StatDispMenu;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
 
 public class Fight extends Overlay implements Serializable {
@@ -141,11 +144,11 @@ public class Fight extends Overlay implements Serializable {
         belt = new Image[2];
         pokeballTiny = new Image[2];
 
-        playerb = PokemonGame.images.getSprite("MeBack.png");
-        belt[0] = PokemonGame.images.getSprite("PokeballBarL.png");
-        belt[1] = PokemonGame.images.getSprite("PokeballBarR.png");
-        pokeballTiny[0] = PokemonGame.images.getSprite("PokeballFull.png");
-        pokeballTiny[1] = PokemonGame.images.getSprite("PokeballEmpty.png");
+        playerb = ResourceLoader.getSprite("MeBack.png");
+        belt[0] = ResourceLoader.getSprite("PokeballBarL.png");
+        belt[1] = ResourceLoader.getSprite("PokeballBarR.png");
+        pokeballTiny[0] = ResourceLoader.getSprite("PokeballFull.png");
+        pokeballTiny[1] = ResourceLoader.getSprite("PokeballEmpty.png");
 
         setMainMenu();
         final GMenu info2 = info;
@@ -250,8 +253,7 @@ public class Fight extends Overlay implements Serializable {
                                 System.out.println("PokemonGame.pokeg.writeServerMessage(new FMTSSelectedAttack(FMTSSelectedAttack.ITEM_MOVE,i));");
 
                                 try {
-                                	PokemonGame.pokeg
-                                        .writeServerMessage(new FMTSSelectedAttack(
+                                	Client.writeServerMessage(new FMTSSelectedAttack(
                                                 FMTSSelectedAttack.ITEM_MOVE,
                                                 i));
                                 } catch(IOException ioe) {
@@ -274,7 +276,7 @@ public class Fight extends Overlay implements Serializable {
     }
 
     public void capture(boolean success) {
-        info.set(new GMenu(ClientState.playerName + " used\n"
+        info.set(new GMenu(ClientState.player.getName() + " used\n"
                 + "\nPokeball!", 0, 6, 10, 3));
         if (success) {
             capture = true;
@@ -481,8 +483,7 @@ public class Fight extends Overlay implements Serializable {
                                 System.out.println("PokemonGame.pokeg.writeServerMessage(new FMTSSelectedAttack(i, 0));");
 
                                 try {
-                                	PokemonGame.pokeg
-                                        .writeServerMessage(new FMTSSelectedAttack(
+                                	Client.writeServerMessage(new FMTSSelectedAttack(
                                                 i, 0));
                                 } catch(IOException ioe){
                                 	System.err.println("Failed to write attack to server: " + ioe.getMessage());
@@ -725,7 +726,7 @@ public class Fight extends Overlay implements Serializable {
                         WaitingForServerMessageReturn = true;
                         info.set(OpponentWaitGM);
                         try {
-                        	PokemonGame.pokeg.writeServerMessage(new FMTSGetNextPokemon());
+                        	Client.writeServerMessage(new FMTSGetNextPokemon());
                         } catch(IOException ioe) {
                         	System.err.println("Failed to write Get Next Pokemon Message: " + ioe.getMessage());
                         }
@@ -740,7 +741,7 @@ public class Fight extends Overlay implements Serializable {
             ClientState.player.level = ClientState.player.lpclevel;
             ClientState.player.x = ClientState.player.lpcx;
             ClientState.player.y = ClientState.player.lpcy;
-            ClientState.player.dir = 0;
+            ClientState.player.facing = 0;
             for (int i = 0; i < 6; i++) {
                 if (ClientState.player.poke.belt[i] == null)
                     break;

@@ -9,6 +9,7 @@ import java.util.*;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.net.msg.client.fight.SendFightClientMessage;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
@@ -72,12 +73,11 @@ public class PlayerServerMessage extends ServerMessage {
             }
         }
 
-        Pokemon pRandom = PokemonGame.pokeg.level.get(thisPlayer.level)
+        Pokemon pRandom = GameState.level.get(thisPlayer.level)
                 .attacked(thisPlayer);
         if (pRandom != null) {
             Pokemon p2Random = new Pokemon(pRandom);
-            p2Random.getBase(PokemonGame.pokeg.basePokemon,
-                    PokemonGame.pokeg.baseMoves);
+            p2Random.getBase();
             p2Random.currentHP = p2Random.getTotalHP();
 
             Fight f = new Fight();
@@ -92,8 +92,7 @@ public class PlayerServerMessage extends ServerMessage {
             for (i = 0; i < 6; i++) {
                 if (f.currentPlayer.poke.belt[i].currentHP != 0) {
                     f.out = f.currentPlayer.poke.belt[i];
-                    f.out.getBase(PokemonGame.pokeg.basePokemon,
-                            PokemonGame.pokeg.baseMoves);
+                    f.out.getBase();
                     f.activePokemonC = i;
                     break;
                 }

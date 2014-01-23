@@ -9,6 +9,7 @@ import java.util.*;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 
 public class SendActTalkingToServerMessage extends SendActServerMessage {
@@ -39,7 +40,7 @@ public class SendActTalkingToServerMessage extends SendActServerMessage {
             PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
             IOException {
 
-        Iterator<Actor> act = PokemonGame.actors.iterator();
+        Iterator<Actor> act = GameState.actors.iterator();
         while (act.hasNext()) {
             Actor a = act.next();
             Person p5 = (Person) a;

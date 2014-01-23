@@ -69,6 +69,8 @@ public class Move implements Serializable, DeepCopy, JSON {
 
     public static void init_base_moves(){
 
+    	baseMoves = new HashMap<String, Move>();
+
     	// * - An accuracy check is performed for this attack. Thus,
         // Brightpowder, if held by the opponent, can decrease this attack's
         // accuracy by 7.8%.
@@ -395,9 +397,13 @@ public class Move implements Serializable, DeepCopy, JSON {
     public void getBase() {
 
     	Move move = baseMoves.get(name);
-    	dmg = move.dmg;
-    	accuracy = move.accuracy;
-    	effect = move.effect;
+ 
+    	if(move != null){
+    		dmg = move.dmg;
+    		accuracy = move.accuracy;
+    		effect = move.effect;
+    	} else
+    		System.err.println("Move " + name + " not found!");
 
     }
 

@@ -9,6 +9,7 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.MysqlConnect.PokemonContainer;
 
@@ -55,9 +56,9 @@ public class SendFightClientMessage extends ClientMessage {
 
         }
 
-        PokemonGame.pokeg.overlay.o = receivedFight;
+        UI.overlay.o = receivedFight;
         receivedFight.init();
-        PokemonGame.pokeg.overlay.o.active = true;
+        UI.overlay.o.active = true;
 
     }
 

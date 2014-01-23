@@ -6,8 +6,10 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.ui.Fight;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class TrainerPerson extends Person implements Actor {
 
@@ -43,12 +45,12 @@ public class TrainerPerson extends Person implements Actor {
 
         sprite = new Image[4];
 
-        sprite[0] = PokemonGame.pokeg.images.getSprite(imgName + "U.png");
-        sprite[1] = PokemonGame.pokeg.images.getSprite(imgName + "D.png");
-        sprite[2] = PokemonGame.pokeg.images.getSprite(imgName + "L.png");
-        sprite[3] = PokemonGame.pokeg.images.getSprite(imgName + "R.png");
+        sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
+        sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
+        sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
+        sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
 
-        Grid g = PokemonGame.pokeg.level.get(ClientState.player.level).g;
+        Grid g = GameState.level.get(ClientState.player.level).grid;
 
         face = dir;// (int)(Math.random()*3);
 
@@ -70,7 +72,7 @@ public class TrainerPerson extends Person implements Actor {
     }
 
     public boolean act(int x, int y) {
-        Level l = PokemonGame.pokeg.level.get(level);
+        Level l = GameState.level.get(level);
         for (int i = 0; i < viewDist; i++) {
             int x2 = x;
             int y2 = y;
@@ -102,8 +104,8 @@ public class TrainerPerson extends Person implements Actor {
                         null, poke);
                 pl.poke = pc;
                 f.enemyPlayer = pl;
-                PokemonGame.pokeg.overlay.o = f;
-                PokemonGame.pokeg.overlay.o.active = true;
+                UI.overlay.o = f;
+                UI.overlay.o.active = true;
                 hasBeenFought = true;
             }
         }

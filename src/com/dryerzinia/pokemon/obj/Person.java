@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.awt.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -57,7 +58,7 @@ public class Person extends Tile implements Actor {
 
     public void draw(int x, int y, Graphics g) {
         setImage(x, y);
-        super.draw(x, y, g);
+        super.draw(x, y, 0, 0, g);
     }
 
     public void draw(int x, int y, int xo, int yo, Graphics g) {
@@ -77,7 +78,7 @@ public class Person extends Tile implements Actor {
                 if (wasTalking && wasTalkingToYou) {
                     dir = directionBeforeTalk;
                     wasTalkingToYou = false;
-                    PokemonGame.pokeg.writeActor(this, A_TALKING_TO);
+                    Client.writeActor(this, A_TALKING_TO);
                 }
                 img = sprite[dir];
                 directionBeforeTalk = dir;
@@ -117,8 +118,8 @@ public class Person extends Tile implements Actor {
             py = y;
             onClick.active = true;
             wasTalkingToYou = true;
-            setImage(x - ClientState.player.x, y - ClientState.player.y);
-            PokemonGame.pokeg.writeActor(this, A_TALKING_TO);
+            setImage(x - (int)ClientState.player.x, y - (int)ClientState.player.y);
+            Client.writeActor(this, A_TALKING_TO);
             return onClick;
         } else {
             return ALREADY_ACTIVE_MENU;

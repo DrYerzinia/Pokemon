@@ -85,9 +85,9 @@ public final class ResourceLoader {
             if(in_a_jar)
                 url = new URL("jar:" + path_to_jar + "!/" + image_file_path);
         	else
-        		url = ResourceLoader.class.getResource(image_file_path);
+        		url = ResourceLoader.class.getClassLoader().getResource(image_file_path);
 
-            return Toolkit.getDefaultToolkit().getImage(url);
+           	return Toolkit.getDefaultToolkit().getImage(url);
 
         } catch (MalformedURLException e) {
 

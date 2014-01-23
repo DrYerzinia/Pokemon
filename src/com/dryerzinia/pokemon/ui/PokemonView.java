@@ -5,7 +5,9 @@ import java.awt.event.*;
 import java.io.IOException;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSSendNextPokemon;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
@@ -281,7 +283,7 @@ public class PokemonView extends Overlay {
             switchto = selection;
             active = false;
             try {
-            	PokemonGame.pokeg.writeServerMessage(new FMTSSendNextPokemon(switchto));
+            	Client.writeServerMessage(new FMTSSendNextPokemon(switchto));
             } catch(IOException ioe){
             	System.err.println("Failed to send Pokemon Switch: " + ioe.getMessage());
             }

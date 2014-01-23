@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
@@ -44,7 +45,8 @@ public class CMLoad extends ClientMessage {
         ClientState.player.poke.box = allPokemon;
         ClientState.player.items = allItems;
 
-        PokemonGame.pokeg.setupMenus();
+        // TODO PokemonGame.pokeg.setupMenus();
+        ClientState.setLoaded();
 
     }
 

@@ -5,11 +5,13 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class GMenu implements Serializable, DeepCopy, JSON {
 
@@ -40,16 +42,16 @@ public class GMenu implements Serializable, DeepCopy, JSON {
     public void init() {
         frameing = new Image[8];
 
-        frameing[0] = PokemonGame.images.getSprite("CornerMenuTL.png");
-        frameing[1] = PokemonGame.images.getSprite("CornerMenuTR.png");
-        frameing[2] = PokemonGame.images.getSprite("CornerMenuBL.png");
-        frameing[3] = PokemonGame.images.getSprite("CornerMenuBR.png");
-        frameing[4] = PokemonGame.images.getSprite("TopEdgeMenu.png");
-        frameing[5] = PokemonGame.images.getSprite("RightEdgeMenu.png");
-        frameing[6] = PokemonGame.images.getSprite("BottomEdgeMenu.png");
-        frameing[7] = PokemonGame.images.getSprite("LeftEdgeMenu.png");
+        frameing[0] = ResourceLoader.getSprite("CornerMenuTL.png");
+        frameing[1] = ResourceLoader.getSprite("CornerMenuTR.png");
+        frameing[2] = ResourceLoader.getSprite("CornerMenuBL.png");
+        frameing[3] = ResourceLoader.getSprite("CornerMenuBR.png");
+        frameing[4] = ResourceLoader.getSprite("TopEdgeMenu.png");
+        frameing[5] = ResourceLoader.getSprite("RightEdgeMenu.png");
+        frameing[6] = ResourceLoader.getSprite("BottomEdgeMenu.png");
+        frameing[7] = ResourceLoader.getSprite("LeftEdgeMenu.png");
 
-        arrow = PokemonGame.pokeg.images.getSprite("ArrowDown.png");
+        arrow = ResourceLoader.getSprite("ArrowDown.png");
 
         initst();
 

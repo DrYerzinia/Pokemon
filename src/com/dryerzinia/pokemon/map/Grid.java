@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.obj.Tile;
@@ -16,38 +17,38 @@ public class Grid implements Serializable, JSON {
 
     public transient Level l;
 
-    public transient ArrayList<Tile> g[][];
+    public transient ArrayList<Tile> grid[][];
 
     public Grid() {
     }
 
     public Grid(int x, int y) {
-        g = new ArrayList[x][y];
+        grid = new ArrayList[x][y];
     }
 
     public void add(int x, int y, Tile t) {
-        if (g.length < x || g[0].length < y)
+        if (grid.length < x || grid[0].length < y)
             throw new ArrayIndexOutOfBoundsException("Not in grid.");
-        if (g[x][y] == null) {
-            g[x][y] = new ArrayList<Tile>();
-            g[x][y].add(t);
+        if (grid[x][y] == null) {
+            grid[x][y] = new ArrayList<Tile>();
+            grid[x][y].add(t);
         } else {
-            g[x][y].add(t);
+            grid[x][y].add(t);
         }
     }
 
     public Object get(int x, int y, int i) {
-        if (g[x][y] == null)
+        if (grid[x][y] == null)
             return null;
-        if (g[x][y].size() >= i)
+        if (grid[x][y].size() >= i)
             return null;
-        return g[x][y].get(i);
+        return grid[x][y].get(i);
     }
 
     public boolean move(int nx, int ny, int x, int y, Tile t) {
-        for (int i = 0; i < g[x][y].size(); i++) {
-            if (g[x][y].get(i) == t) {
-                g[nx][ny].add(g[x][y].remove(i));
+        for (int i = 0; i < grid[x][y].size(); i++) {
+            if (grid[x][y].get(i) == t) {
+                grid[nx][ny].add(grid[x][y].remove(i));
                 return true;
             }
         }
@@ -57,129 +58,61 @@ public class Grid implements Serializable, JSON {
     public RandomFight getRF(int x, int y) {
         x += 4;
         y += 4;
-        if (g.length <= x || g[0].length <= y || x < 0 || y < 0)
+        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return null;
-        for (int i = 0; i < g[x][y].size(); i++)
-            if (g[x][y].get(i).rf != null)
-                return g[x][y].get(i).rf;
+        for (int i = 0; i < grid[x][y].size(); i++)
+            if (grid[x][y].get(i).rf != null)
+                return grid[x][y].get(i).rf;
         return null;
 
     }
 
     public Object remove(int x, int y, int i) {
-        if (g[x][y] == null)
+        if (grid[x][y] == null)
             return null;
-        if (g[x][y].size() >= i)
+        if (grid[x][y].size() >= i)
             return null;
-        return g[x][y].remove(i);
+        return grid[x][y].remove(i);
     }
 
-    public void draw(int x, int y, Graphics gg) {
-        for (int j = 0; j < 10; j++) {
-            for (int k = 0; k < 9; k++) {
-                if (g.length <= j + x || g[0].length <= k + y || j + x < 0
-                        || k + y < 0) {
-                    gg.setColor(Color.BLACK);
-                    gg.fillRect(j * 16, k * 16, j * 16 + 16, k * 16 + 16);
-                } else if (g[j + x][k + y] == null) {
-                    gg.setColor(Color.BLACK);
-                    gg.fillRect(j * 16, k * 16, j * 16 + 16, k * 16 + 16);
-                } else {
-                    for (int i = 0; i < g[j + x][k + y].size(); i++) {
-                        g[j + x][k + y].get(i).draw(j, k, gg);
-                    }
-                }
-            }
-        }
-    }
+    /**
+     * Draw all visible parts of the grid to the screen based on the
+     * players coordinates
+     * 
+     * @param x Player x coordinate
+     * @param y Player y coordinate
+     * @param graphics Graphics object to draw the grid to
+     */
+    public void draw(float x, float y, Graphics graphics) {
 
-    public void draw(int x, int y, Graphics gg, boolean black) {
-        for (int j = 0; j < 10; j++) {
-            for (int k = 0; k < 9; k++) {
-                if (g.length <= j + x || g[0].length <= k + y || j + x < 0
-                        || k + y < 0) {
-                    if (black) {
-                        gg.setColor(Color.BLACK);
-                        gg.fillRect(j * 16, k * 16, j * 16 + 16, k * 16 + 16);
-                    }
-                } else if (g[j + x][k + y] == null) {
-                    if (black) {
-                        gg.setColor(Color.BLACK);
-                        gg.fillRect(j * 16, k * 16, j * 16 + 16, k * 16 + 16);
-                    }
-                } else {
-                    for (int i = 0; i < g[j + x][k + y].size(); i++) {
-                        g[j + x][k + y].get(i).draw(j, k, gg);
-                    }
-                }
-            }
-        }
-    }
+    	/*
+    	 * Floor the player coordinates to get which tiles to draw
+    	 */
+    	int x_square = (int) x;
+    	int y_square = (int) y;
 
-    public void act(int x, int y) {
-        // for(int j = 0; j < 10; j++){
-        // for(int k = 0; k < 9; k++){
-        // if(g.length <= j+x || g[0].length <= k+y || j+x < 0 || k+y < 0){
+    	/*
+    	 * Pixel shift due to characters position float
+    	 */
+    	int x_off = (int) ((x - ((int)x))*16);
+    	int y_off = (int) ((y - ((int)y))*16);
 
-        // } else if(g[j+x][k+y] == null){
-        // } else {
-        // for(int i = 0; i < g[j+x][k+y].size(); i++){
-        // g[j+x][k+y].get(i).act(j, k);
-        // }
-        // }
-        // }
-        // }
-    }
+    	/*
+    	 * Draw 10x10 swath of tiles for the game
+    	 */
+    	for(int j = 0; j < 11; j++)
+    		for(int k = 0; k < 10; k++)
+    			if(j + x_square > 0 && j + x_square < grid.length && k + y_square > 0 && k + y_square < grid[0].length)
+    				for(int i = 0; i < grid[j + x_square][k + y_square].size(); i++)
+    					grid[j + x_square][k + y_square].get(i).draw(j, k, x_off, y_off, graphics);
 
-    public void draw(int x, int y, int xo, int yo, Graphics gg) {
-        for (int j = -1; j < 11; j++) {
-            for (int k = -1; k < 10; k++) {
-                if (g.length <= j + x || g[0].length <= k + y || j + x < 0
-                        || k + y < 0) {
-                    gg.setColor(Color.BLACK);
-                    gg.fillRect(j * 16 + xo, k * 16 + yo, j * 16 + 16 + xo, k
-                            * 16 + 16 + yo);
-                } else if (g[j + x][k + y] == null) {
-                    gg.setColor(Color.BLACK);
-                    gg.fillRect(j * 16 + xo, k * 16 + yo, j * 16 + 16 + xo, k
-                            * 16 + 16 + yo);
-                } else {
-                    for (int i = 0; i < g[j + x][k + y].size(); i++) {
-                        g[j + x][k + y].get(i).draw(j, k, xo, yo, gg);
-                    }
-                }
-            }
-        }
-    }
-
-    public void draw(int x, int y, int xo, int yo, Graphics gg, boolean black) {
-        for (int j = -1; j < 11; j++) {
-            for (int k = -1; k < 10; k++) {
-                if (g.length <= j + x || g[0].length <= k + y || j + x < 0
-                        || k + y < 0) {
-                    if (black) {
-                        gg.setColor(Color.BLACK);
-                        gg.fillRect(j * 16 + xo, k * 16 + yo, j * 16 + 16 + xo,
-                                k * 16 + 16 + yo);
-                    }
-                } else if (g[j + x][k + y] == null) {
-                    gg.setColor(Color.BLACK);
-                    gg.fillRect(j * 16 + xo, k * 16 + yo, j * 16 + 16 + xo, k
-                            * 16 + 16 + yo);
-                } else {
-                    for (int i = 0; i < g[j + x][k + y].size(); i++) {
-                        g[j + x][k + y].get(i).draw(j, k, xo, yo, gg);
-                    }
-                }
-            }
-        }
     }
 
     public boolean canStepOnB(int x, int y) {
-        if (g.length <= x || g[0].length <= y || x < 0 || y < 0)
+        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return false;
-        for (int i = 0; i < g[x][y].size(); i++)
-            if (!g[x][y].get(i).canBeSteppedOn)
+        for (int i = 0; i < grid[x][y].size(); i++)
+            if (!grid[x][y].get(i).canBeSteppedOn)
                 return false;
         return true;
     }
@@ -193,11 +126,11 @@ public class Grid implements Serializable, JSON {
     public GMenu hasMenu(int x, int y) {
         x += 4;
         y += 4;
-        if (g.length <= x || g[0].length <= y || x < 0 || y < 0)
+        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return null;
-        for (int i = 0; i < g[x][y].size(); i++)
-            if (g[x][y].get(i).onClick != null)
-                return g[x][y].get(i).getMenu(x, y);
+        for (int i = 0; i < grid[x][y].size(); i++)
+            if (grid[x][y].get(i).onClick != null)
+                return grid[x][y].get(i).getMenu(x, y);
         return null;
     }
 
@@ -209,22 +142,22 @@ public class Grid implements Serializable, JSON {
 
         if (x < 0 && l.borderL != null && l.borderL[0] != null) {
             r[0] = l.borders[0];
-            r[1] = l.borderL[0].g.getWidth() - 5;
-            r[2] = ClientState.player.y + l.borderoffset[0];
+            r[1] = l.borderL[0].grid.getWidth() - 5;
+            r[2] = (int) ClientState.player.y + l.borderoffset[0];
             r[3] = 2;
             r[4] = -1;
-            if (!l.borderL[0].g.canStepOn(r[1], r[2]))
+            if (!l.borderL[0].grid.canStepOn(r[1], r[2]))
                 return new int[5];
             System.out.println("Should Change lvl:" + l.borders[1]);
             return r;
-        } else if (x >= l.g.getWidth() && l.borderL != null
+        } else if (x >= l.grid.getWidth() && l.borderL != null
                 && l.borderL[3] != null) {
             r[0] = l.borders[3];
             r[1] = -5;
-            r[2] = ClientState.player.y + l.borderoffset[3];
+            r[2] = (int) ClientState.player.y + l.borderoffset[3];
             r[3] = 3;
             r[4] = -1;
-            if (!l.borderL[3].g.canStepOn(r[1] + 1, r[2]))
+            if (!l.borderL[3].grid.canStepOn(r[1] + 1, r[2]))
                 return new int[5];
             System.out.println("Should Change lvl:" + l.borders[1]);
             return r;
@@ -232,35 +165,35 @@ public class Grid implements Serializable, JSON {
         // top border level change, need to set variables based on transition...
         else if (y < 0 && l.borderL != null && l.borderL[1] != null) {
             r[0] = l.borders[1];
-            r[1] = ClientState.player.x + l.borderoffset[1];
-            r[2] = l.borderL[1].g.getHeight() - 5;
+            r[1] = (int) ClientState.player.x + l.borderoffset[1];
+            r[2] = l.borderL[1].grid.getHeight() - 5;
             r[3] = 0;
             r[4] = -1;
-            if (!l.borderL[1].g.canStepOn(r[1], r[2]))
+            if (!l.borderL[1].grid.canStepOn(r[1], r[2]))
                 return new int[5];
             System.out.println("Should Change lvl:" + l.borders[1]);
             return r;
-        } else if (y >= l.g.getHeight() && l.borderL != null
+        } else if (y >= l.grid.getHeight() && l.borderL != null
                 && l.borderL[7] != null) {
             r[0] = l.borders[7];
-            r[1] = ClientState.player.x + l.borderoffset[7];
+            r[1] = (int) ClientState.player.x + l.borderoffset[7];
             r[2] = -5;
             r[3] = 1;
             r[4] = -1;
-            if (!l.borderL[7].g.canStepOn(r[1], r[2] + 1))
+            if (!l.borderL[7].grid.canStepOn(r[1], r[2] + 1))
                 return new int[5];
             System.out.println("Should Change lvl:" + l.borders[1]);
             return r;
         }
-        if (g.length <= x || g[0].length <= y || x < 0 || y < 0)
+        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return r;
-        for (int i = 0; i < g[x][y].size(); i++)
-            if (g[x][y].get(i).changeToLevel != -1) {
-                r[0] = g[x][y].get(i).changeToLevel;
-                r[1] = g[x][y].get(i).xnew;
-                r[2] = g[x][y].get(i).ynew;
-                r[3] = g[x][y].get(i).leaveDirection;
-                r[4] = g[x][y].get(i).exitDir;
+        for (int i = 0; i < grid[x][y].size(); i++)
+            if (grid[x][y].get(i).changeToLevel != -1) {
+                r[0] = grid[x][y].get(i).changeToLevel;
+                r[1] = grid[x][y].get(i).xnew;
+                r[2] = grid[x][y].get(i).ynew;
+                r[3] = grid[x][y].get(i).leaveDirection;
+                r[4] = grid[x][y].get(i).exitDir;
                 System.out.println("Should Change");
                 return r;
             }
@@ -268,11 +201,11 @@ public class Grid implements Serializable, JSON {
     }
 
     public int getHeight() {
-        return g[0].length;
+        return grid[0].length;
     }
 
     public int getWidth() {
-        return g.length;
+        return grid.length;
     }
 
     // !!!IMPORTANT
@@ -285,13 +218,13 @@ public class Grid implements Serializable, JSON {
 
         int x = ois.readInt();
         int y = ois.readInt();
-        g = new ArrayList[x][y];
-        for (x = 0; x < g.length; x++) {
-            for (y = 0; y < g[0].length; y++) {
+        grid = new ArrayList[x][y];
+        for (x = 0; x < grid.length; x++) {
+            for (y = 0; y < grid[0].length; y++) {
                 int l = ois.readInt();
-                g[x][y] = new ArrayList<Tile>();
+                grid[x][y] = new ArrayList<Tile>();
                 for (int j = 0; j < l; j++) {
-                    g[x][y].add(new Tile(ois.readInt()));
+                    grid[x][y].add(new Tile(ois.readInt()));
                 }
             }
         }
@@ -302,13 +235,13 @@ public class Grid implements Serializable, JSON {
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
 
-        oos.writeInt(g.length);
-        oos.writeInt(g[0].length);
-        for (int x = 0; x < g.length; x++) {
-            for (int y = 0; y < g[0].length; y++) {
-                oos.writeInt(g[x][y].size());
-                for (int j = 0; j < g[x][y].size(); j++) {
-                    oos.writeInt(g[x][y].get(j).id);
+        oos.writeInt(grid.length);
+        oos.writeInt(grid[0].length);
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[0].length; y++) {
+                oos.writeInt(grid[x][y].size());
+                for (int j = 0; j < grid[x][y].size(); j++) {
+                    oos.writeInt(grid[x][y].get(j).id);
                 }
             }
         }
@@ -325,19 +258,19 @@ public class Grid implements Serializable, JSON {
 		String json = "{'class':'" + this.getClass().getName() + "'";
 		
 		json += ",'g':[";
-        for (int x = 0; x < g.length; x++) {
+        for (int x = 0; x < grid.length; x++) {
     		json += "[";
-        	for (int y = 0; y < g[0].length; y++) {
+        	for (int y = 0; y < grid[0].length; y++) {
         		json += "[";
-                for (int j = 0; j < g[x][y].size(); j++) {
-                    json += g[x][y].get(j).id;
-            		if(j != g[x][y].size()-1) json+= ",";
+                for (int j = 0; j < grid[x][y].size(); j++) {
+                    json += grid[x][y].get(j).id;
+            		if(j != grid[x][y].size()-1) json+= ",";
                 }
         		json += "]";
-        		if(y != g[0].length-1) json+= ",";
+        		if(y != grid[0].length-1) json+= ",";
             }
         	json += "]";
-    		if(x != g.length-1) json+= ",";
+    		if(x != grid.length-1) json+= ",";
         }
         json += "]";	
 
@@ -350,9 +283,9 @@ public class Grid implements Serializable, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
-		Object[] g_map_0 = (Object[]) json.get("g");
+		Object[] g_map_0 = (Object[]) json.get("grid");
 		
-		g = new ArrayList[g_map_0.length][((Object[])g_map_0[0]).length];
+		grid = new ArrayList[g_map_0.length][((Object[])g_map_0[0]).length];
 
 		for(int x = 0; x < g_map_0.length; x++){
 			
@@ -360,10 +293,10 @@ public class Grid implements Serializable, JSON {
 			for(int y = 0; y < g_map_1.length; y++){
 
 				Object[] g_map_2 = (Object[]) g_map_1[y];
-				g[x][y] = new ArrayList<Tile>();
+				grid[x][y] = new ArrayList<Tile>();
 
 				for(int z = 0; z < g_map_2.length; z++){
-					g[x][y].add(
+					grid[x][y].add(
 						new Tile(
 							((Float)g_map_2[z]).intValue()
 						)
