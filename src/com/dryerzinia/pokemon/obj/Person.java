@@ -117,7 +117,7 @@ public class Person extends Tile implements Actor {
             py = y;
             onClick.active = true;
             wasTalkingToYou = true;
-            setImage(x - Player.self.x, y - Player.self.y);
+            setImage(x - ClientState.player.x, y - ClientState.player.y);
             PokemonGame.pokeg.writeActor(this, A_TALKING_TO);
             return onClick;
         } else {

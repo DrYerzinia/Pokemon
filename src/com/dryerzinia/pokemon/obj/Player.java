@@ -17,13 +17,23 @@ public class Player implements Serializable {
     public static Player self;
 
     public int id; // Player MYSQL_ID
-    public int x, y; // X, Y location in map level
+
+    /*
+     * Drives animation
+     */
+    public float x, y;
+    private boolean sliding;
+    private int animationElapsed;
+
     public int dir; // facing direction
     public int level; // current level player is in
+    
     public int lpcx, lpcy; // player level position x and y ??? WTF IS THIS ???
                            // why not just above XY
     public int lpclevel; // player current level ??? ^^^ ??? level transition?
+
     public int money; // players amount of money
+
     public String name; // Player ID/Handle/UserName
 
     public String imgName; // Character Sprite Base Name
@@ -80,6 +90,15 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
+    }
+
+    /**
+     * Drives the animation of the player
+     * 
+     * @param direction The direction that the player wants the character to go
+     * @param deltaTime Amount of time in ms that have elapsed scince last update
+     */
+    public void update(int direction, int deltaTime) {
     }
 
     public int getID() {

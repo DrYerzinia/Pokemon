@@ -208,7 +208,7 @@ public class GMenu implements Serializable, DeepCopy, JSON {
             currentToken[h * 16 / 24 - 1] = currentToken[h * 16 / 24 - 1]
                     .substring(0, k)
                     + currentToken[h * 16 / 24 - 1].substring(l + 2);
-            ArrayList<Item> its = Player.self.items;
+            ArrayList<Item> its = ClientState.player.items;
             Iterator<Item> itit = its.iterator();
             boolean found = false;
             while (itit.hasNext()) {

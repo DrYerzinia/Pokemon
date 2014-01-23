@@ -102,7 +102,7 @@ public class PokemonView extends Overlay {
 
         int stats = this.stats;
 
-        Pokemon[] character_belt = Player.self.poke.belt;
+        Pokemon[] character_belt = ClientState.player.poke.belt;
 
         if (stats == -1) {
 
@@ -268,11 +268,11 @@ public class PokemonView extends Overlay {
     public void battleswitch() {
         if (currout == selection) {
             choosem = new GMenu(
-                    Player.self.poke.belt[selection].nickName
+                    ClientState.player.poke.belt[selection].nickName
                             + " is\nalready out!", 0, 6, 10, 3);
             opa = false;
             wait = true;
-        } else if (Player.self.poke.belt[selection].currentHP == 0) {
+        } else if (ClientState.player.poke.belt[selection].currentHP == 0) {
             choosem = new GMenu("There's no will\nto fight!", 0, 6, 10, 3);
             opa = false;
             wait = true;
@@ -315,7 +315,7 @@ public class PokemonView extends Overlay {
                 if (opa)
                     op.pressDown();
                 else if (selection < 6
-                        && Player.self.poke.belt[selection + 1] != null
+                        && ClientState.player.poke.belt[selection + 1] != null
                         && stats == -1)
                     selection++;
             } else if (c == KeyEvent.VK_X) {
@@ -346,7 +346,7 @@ public class PokemonView extends Overlay {
                             battleswitch();
                         } else {
                             PokemonGame.switchPokemon(
-                            		Player.self.poke.belt, swSel,
+                            		ClientState.player.poke.belt, swSel,
                                     selection);
                             sendSubEvent();
                             System.out.println("sew");

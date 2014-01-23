@@ -11,86 +11,17 @@
 
 package com.dryerzinia.pokemon;
 
-import java.io.*;
-import java.awt.*;
-import java.net.*;
 import java.util.*;
 import java.util.Timer;
 
 import javax.swing.*;
 
-import com.dryerzinia.pokemon.map.Grid;
-import com.dryerzinia.pokemon.map.Level;
-import com.dryerzinia.pokemon.net.ByteInputStream;
-import com.dryerzinia.pokemon.net.DatagramInputStream;
-import com.dryerzinia.pokemon.net.DatagramOutputStream;
-import com.dryerzinia.pokemon.net.DatagramSocketStreamer;
-import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
-import com.dryerzinia.pokemon.net.msg.server.GetItemServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.GetPokemonServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.MessageServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.PingServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.PlayerServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.SMLoad;
-import com.dryerzinia.pokemon.net.msg.server.SMLogOff;
-import com.dryerzinia.pokemon.net.msg.server.SMLogin;
-import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.act.SendActMovedServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
-import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Item;
-import com.dryerzinia.pokemon.obj.Move;
-import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.obj.Tile;
-import com.dryerzinia.pokemon.ui.Login;
-import com.dryerzinia.pokemon.ui.Overlay;
-import com.dryerzinia.pokemon.ui.OverlayO;
-import com.dryerzinia.pokemon.ui.PokemonView;
 import com.dryerzinia.pokemon.ui.UI;
-import com.dryerzinia.pokemon.ui.editor.AddLevel;
-import com.dryerzinia.pokemon.ui.editor.EditLevel;
-import com.dryerzinia.pokemon.ui.editor.MapEditor;
-import com.dryerzinia.pokemon.ui.editor.Sub;
-import com.dryerzinia.pokemon.ui.editor.SubListener;
-import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
-import com.dryerzinia.pokemon.ui.menu.GMenu;
-import com.dryerzinia.pokemon.ui.menu.ItemMenu;
-import com.dryerzinia.pokemon.ui.menu.MenuEvent;
-import com.dryerzinia.pokemon.ui.menu.MoneyMenu;
-import com.dryerzinia.pokemon.ui.menu.SelectionMenu;
-import com.dryerzinia.pokemon.util.JSONArray;
-import com.dryerzinia.pokemon.util.JSONObject;
-import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
-
-import java.awt.event.*;
-import java.applet.*;
 
 public class PokemonGame {
-
-    public boolean delay = true;
-
-    private boolean wait = false;
-
-    private int z = 0;
-    private int x = 0;
-
-    private boolean modif = false;
-
-    private boolean jmoved = false;
-    private boolean lvlchn = false;
-
-    private int changeLevel = -1;
-    private int clx = -1;
-    private int cly = -1;
-
-    private int nextLevel[] = null;
-
-    public int numberOfLevels = 7;
 
     private static Timer game_loop_timer;
 
@@ -100,6 +31,12 @@ public class PokemonGame {
 
         GameState.init();
         ClientState.init();
+
+        UI.init();
+
+        UI.addKeyListener(ClientState.getKeyboard());
+
+        // start login window
 
     }
     
@@ -127,35 +64,116 @@ public class PokemonGame {
 
     public static final class GameLoop extends TimerTask {
 
+    	private static final int loopDelay = 50;
+
+    	private Timer self;
+
+    	private long lastUpdateTime;
+ 
+    	/**
+    	 * Initialize the game loop
+    	 * or reset it if it was already running
+    	 */
+    	public void init(){
+
+    		/*
+    		 * Make sure we don't run this twice!
+    		 */
+  			stop();
+
+    		/*
+    		 * Set update time so it doesn't seem like we blasted a long ass
+    		 * time into the future on the first iteration
+    		 */
+    		updateTime();
+
+    		/*
+    		 * Create the timer and start the game loop
+    		 */
+    		self = new Timer();
+    		self.schedule(this, 0, loopDelay);
+
+    	}
+
+    	/**
+    	 * Stop the game loop if it is running
+    	 */
+    	public void stop(){
+ 
+    		if(self != null){
+
+    			self.cancel();
+    			self.purge();
+    			self = null;
+
+    		}
+
+    	}
+
+    	/**
+    	 * Set the last update time to the current update time
+    	 */
+    	private void updateTime(){
+
+    		lastUpdateTime = System.currentTimeMillis();    		
+
+    	}
+
+    	/**
+    	 * One iteration of the game loop
+    	 */
     	public void run() {
 
-                Graphics g = getGraphics();
+    		int deltaTime = (int)(System.currentTimeMillis() - lastUpdateTime);
+
+    		/*
+    		 * Update any objects that would have changed
+    		 * The player
+    		 * Other players they might have received position updates and need
+    		 * to work there way across the map
+    		 */
+    		ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
+
+    		/*
+    		 * Process menu related input if no animations are running
+    		 */
+
+    		/*
+    		 * Render all the objects on the map
+    		 * Render the player, he is not references in the map
+    		 * Render the chat window
+    		 */
+
+    		/*
+    		 * Now is the last time we updated
+    		 */
+    		updateTime();
+
+    	}
+/*
+    	Graphics g = getGraphics();
 
                 if (overlay.o.active) {
 
+                	// Draw code
                     overlay.o.draw(bg);
 
                 } else {
 
-                    if (Player.self != null && level.get(Player.self.level).midmove) {
+                	// mid-move code
+                    if (ClientState.player != null && level.get(ClientState.player.level).midmove) {
 
-                        if (Player.self.dir == 0) {
-                            level.get(Player.self.level).moveUp();
-                        } else if(Player.self.dir == 1) {
-                            level.get(Player.self.level).moveDown();
-                        } else if(Player.self.dir == 2) {
-                            level.get(Player.self.level).moveLeft();
-                        } else if(Player.self.dir == 3) {
-                            level.get(Player.self.level).moveRight();
+                        if (ClientState.player.dir == 0) {
+                            level.get(ClientState.player.level).moveUp();
+                        } else if(ClientState.player.dir == 1) {
+                            level.get(ClientState.player.level).moveDown();
+                        } else if(ClientState.player.dir == 2) {
+                            level.get(ClientState.player.level).moveLeft();
+                        } else if(ClientState.player.dir == 3) {
+                            level.get(ClientState.player.level).moveRight();
                         }
 
-                        try {
-                            writePlayer();
-                        } catch (Exception x) {
-                            // TODO: MAKE SURE THIS IS FULL PROOF
-                            if (!reconnecting)
-                                (new ReconnectThread()).start();
-                        }
+                        Client.writePlayer();
 
                         level.get(Char.level).midmove = false;
                         modif = true;
@@ -169,6 +187,7 @@ public class PokemonGame {
                         }
                     }
 
+                    // if we dident do the last thing
                     if (!modif && currMenu == null && !startMenuActive) {
                         if (up) {
                             if (!level.get(Char.level).midmove) {
@@ -224,7 +243,7 @@ public class PokemonGame {
                             }
                         }
                     }
-
+                    // so if we are mid moving are we mid moving to a new level???
                     if (Char != null && level.get(Char.level).midmove) {
                         if (changeLevel != -1) {
                             level.get(Char.level).canMove = level.get(changeLevel).g
@@ -258,6 +277,9 @@ public class PokemonGame {
                         // if(level.get(Char.level).canMove) lvlchn = false;
                     }
 
+                    //select code
+                    // heal
+                    // 
                     if (z > 0 && !startMenuActive) {
                         z = 0;
                         boolean cont = true;
@@ -348,6 +370,7 @@ public class PokemonGame {
                         }
                     }
 
+                    // Draw level, other players, self, menus, jump bolders
                     if (Char != null) {
                         level.get(Char.level).act();
                         level.get(Char.level).draw(bg);
@@ -375,6 +398,7 @@ public class PokemonGame {
                             }
                         }
 
+                        // draw menus
                         if (currMenu != null)
                             currMenu.draw(bg);
                         if (healMenu != null && healMenuActive)
@@ -382,6 +406,7 @@ public class PokemonGame {
                         if (startMenuActive)
                             startMenu.draw(bg);
 
+                        // jump boulders
                         modif = false;
 
                         if (level.get(Char.level).midmove) {
@@ -406,28 +431,13 @@ public class PokemonGame {
                     }
                 }
 
+                //shopping menu draw 
                 if (moneyMenu != null && moneyMenuActive) {
                     moneyMenu.draw(bg);
                     shoppingMainMenu.draw(bg);
                 }
 
-                cbg.setColor(Color.BLACK);
-                cbg.fillRect(0, 0, 320, 100);
-                cbg.setColor(Color.WHITE);
-                cbg.drawString(chattemp, 10, 12);
-
-                int j = 0;
-                for (int i = chathist.size() - 1; i > chathist.size() - 7; i--) {
-                    if (i < 0)
-                        break;
-                    String s = chathist.get(i);
-                    if (s.indexOf("whisper") == s.indexOf(" ") + 1)
-                        cbg.setColor(Color.BLUE);
-                    else
-                        cbg.setColor(Color.WHITE);
-                    cbg.drawString(s, 10, 27 + 15 * j);
-                    j++;
-                }
+                UI.drawChat();
 
                 g.drawImage(bi, 0, 0, 320, 288, 0, 0, 160, 144, null);
                 g.drawImage(cbi, 0, 288, null);
@@ -435,61 +445,21 @@ public class PokemonGame {
                 g.dispose();
 
             }
+            */
     }
 
-    public void changeLevel() {
-        changeLevel = nextLevel[0];
-        clx = nextLevel[1];
-        cly = nextLevel[2];
-        if (nextLevel[3] != -1)
-            Player.self.dir = nextLevel[3];
-        jmoved = false;
-        lvlchn = true;
-        nextLevel = null;
-        System.out.println("PokemonGame::ChangeLevel() called");
-    }
-
-    public void checkLevelChange() {
-        int l[];
-        l = level.get(Char.level).g.changeLevel(Char.x, Char.y);
-        if (l[0] != -1 && l[4] != -1) {
-            nextLevel = l;
-        } else {
-            if (Char.dir == 0)
-                l = level.get(Char.level).g.changeLevel(Char.x, Char.y - 1);
-            else if (Char.dir == 1)
-                l = level.get(Char.level).g.changeLevel(Char.x, Char.y + 1);
-            else if (Char.dir == 2)
-                l = level.get(Char.level).g.changeLevel(Char.x - 1, Char.y);
-            else if (Char.dir == 3)
-                l = level.get(Char.level).g.changeLevel(Char.x + 1, Char.y);
-            if (l[0] != -1 && l[4] == -1) {
-                changeLevel = l[0];
-                clx = l[1];
-                cly = l[2];
-                System.out.println("changeLevel: " + changeLevel);
-                System.out.println("clx: " + clx);
-                System.out.println("cly: " + cly);
-                if (l[3] != -1)
-                    Char.dir = l[3];
-                jmoved = false;
-                lvlchn = true;
-            }
-        }
-        // System.out.println("PokemonGame::checkLevelChange() called");
-    }
     public static void main(String[] args) {
 
-        Applet pg = new PokemonGame();
+        PokemonGame.init();
 
         JFrame frame = new JFrame("Pokemon");
-        frame.getContentPane().add(pg);
-        frame.addWindowListener((WindowListener) pg);
-        frame.setSize(UI.APP_WIDTH * UI.scale + 10, UI.APP_HEIGHT * UI.scale + UI.CHAT_HEIGHT
-                + 30);
+
+        UI.addToContainer(frame.getContentPane());
+        UI.addAsWindowListener(frame);
+
+        frame.setSize(UI.APP_WIDTH * UI.scale + 10, UI.APP_HEIGHT * UI.scale + UI.CHAT_HEIGHT + 30);
         frame.setVisible(true);
 
-        pg.init();
     }
 
 }

@@ -1,6 +1,18 @@
 package com.dryerzinia.pokemon.ui;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
+
+import com.dryerzinia.pokemon.net.Client;
+import com.dryerzinia.pokemon.util.JSONObject;
 
 public class Login extends Overlay {
 
@@ -12,6 +24,34 @@ public class Login extends Overlay {
     public static String location = "";
 
     int selection = 0;
+
+    public Login(){
+
+    	String fs = System.getProperty("file.separator");
+        File f = new File(System.getProperty("user.home") + fs + ".pokemonData");
+
+        if(!f.exists())
+        	f.mkdir();
+
+        f = getSettingsFile();
+        
+        if(!f.exists()) {
+
+        	try {
+
+        		f.createNewFile();
+        		writeSettingsData(f);
+
+        	} catch(IOException ioe){
+
+        		System.err.println("Coulden't create settings file: " + ioe.getMessage());
+
+        	}
+
+        } else
+        	readSettingsData(f);
+
+    }
 
     public void draw(Graphics g) {
 
@@ -75,6 +115,49 @@ public class Login extends Overlay {
     public void set(Overlay o) {
     }
 
+    public static void writeSettingsData(File f) {
+
+    	try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)))) {
+
+        	json_writer.write("{'username':'" + Login.username + "','password':'" + Login.password + "','location':'" + Login.location + "'}");
+        	json_writer.flush();
+        	json_writer.close();
+
+    	} catch (IOException ioe) {
+
+    		System.out.println("Error: Failed to write settings data!");
+
+    	}
+    }
+
+    public static void readSettingsData(File f) {
+
+    	try (BufferedReader json_reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
+        	
+        	String json = json_reader.readLine();
+
+        	@SuppressWarnings("unchecked")
+			HashMap<String, Object> json_obj = (HashMap<String, Object>) JSONObject.JSONToObject(json);
+
+        	Login.username = (String) json_obj.get("username");
+            Login.password = (String) json_obj.get("password");
+            Login.location = (String) json_obj.get("location");
+
+        } catch (IOException ioe) {
+
+        	System.out.println("Failed to read settings data.");
+
+        }
+    }
+
+    public static File getSettingsFile() {
+
+    	String fs = System.getProperty("file.separator");
+
+    	return new File(System.getProperty("user.home") + fs + ".pokemonData"
+                + fs + "defaultSettings");
+    }
+
     public void keyPressed(KeyEvent e) {
         int c = e.getKeyCode();
         if (c == KeyEvent.VK_UP) {
@@ -92,7 +175,7 @@ public class Login extends Overlay {
             if (selection == 4) {
                 active = false;
                 selection = 0;
-                UI.attemptLogin();
+                Client.attemptLogin();
             }
         } else if (c == KeyEvent.VK_BACK_SPACE) {
             try {
@@ -110,7 +193,6 @@ public class Login extends Overlay {
             } catch (Exception x) {
             }
         } else {
-            // char d = e.getKeyChar();
             if (65535 != (int) e.getKeyChar() && 10 != (int) e.getKeyChar()
                     && !e.isActionKey()) {
                 char d = e.getKeyChar();

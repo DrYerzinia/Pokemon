@@ -27,7 +27,7 @@ public class EditLevel extends JFrame {
         setLayout(new FlowLayout());
 
 
-        l = level.get(Player.self.level);
+        l = level.get(ClientState.player.level);
 
         JButton saveB;
 

@@ -28,11 +28,12 @@ import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActMovedServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Login;
+import com.dryerzinia.pokemon.ui.UI;
 
 public final class Client {
 
@@ -94,6 +95,36 @@ public final class Client {
             System.out.println("Pinged Server");
 
         }
+    }
+
+    public static final class DoLogin extends TimerTask {
+    	public void run(){
+            try {
+
+            	UI.drawAttemptingLogin();
+
+                Client.startConnect();
+            	
+            } catch (Exception x) {
+
+            	x.printStackTrace();
+                System.out.println("Connection Error!");
+
+                UI.drawConnectionError();
+
+                UI.overlay.o.active = true;
+
+            }
+    	}
+	}
+
+    public static void attemptLogin(){
+
+    	Login.writeSettingsData(Login.getSettingsFile());
+    	ClientState.player.name = Login.username;
+
+    	// initConnection
+
     }
 
     public static void initTCPConnect() throws Exception {
@@ -429,7 +460,7 @@ public final class Client {
      * Write the current player to the server
      * TODO once again server should always know current player status
      * this may be for position updates however in which case its IMPORTANT
-     * and we need to make sure there is no funny buisness going on and check
+     * and we need to make sure there is no funny business going on and check
      * that the player is making legal moves server side
      * TODO WHY RESET!!!
      */
@@ -437,7 +468,7 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new PlayerServerMessage(Player.self));
+    		object_output_stream_to_server.writeObject(new PlayerServerMessage(ClientState.player));
         	object_output_stream_to_server.flush();
         	object_output_stream_to_server.reset();
 

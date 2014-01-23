@@ -210,7 +210,7 @@ public class Grid implements Serializable, JSON {
         if (x < 0 && l.borderL != null && l.borderL[0] != null) {
             r[0] = l.borders[0];
             r[1] = l.borderL[0].g.getWidth() - 5;
-            r[2] = Player.self.y + l.borderoffset[0];
+            r[2] = ClientState.player.y + l.borderoffset[0];
             r[3] = 2;
             r[4] = -1;
             if (!l.borderL[0].g.canStepOn(r[1], r[2]))
@@ -221,7 +221,7 @@ public class Grid implements Serializable, JSON {
                 && l.borderL[3] != null) {
             r[0] = l.borders[3];
             r[1] = -5;
-            r[2] = Player.self.y + l.borderoffset[3];
+            r[2] = ClientState.player.y + l.borderoffset[3];
             r[3] = 3;
             r[4] = -1;
             if (!l.borderL[3].g.canStepOn(r[1] + 1, r[2]))
@@ -232,7 +232,7 @@ public class Grid implements Serializable, JSON {
         // top border level change, need to set variables based on transition...
         else if (y < 0 && l.borderL != null && l.borderL[1] != null) {
             r[0] = l.borders[1];
-            r[1] = Player.self.x + l.borderoffset[1];
+            r[1] = ClientState.player.x + l.borderoffset[1];
             r[2] = l.borderL[1].g.getHeight() - 5;
             r[3] = 0;
             r[4] = -1;
@@ -243,7 +243,7 @@ public class Grid implements Serializable, JSON {
         } else if (y >= l.g.getHeight() && l.borderL != null
                 && l.borderL[7] != null) {
             r[0] = l.borders[7];
-            r[1] = Player.self.x + l.borderoffset[7];
+            r[1] = ClientState.player.x + l.borderoffset[7];
             r[2] = -5;
             r[3] = 1;
             r[4] = -1;

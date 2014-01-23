@@ -82,7 +82,7 @@ public class MapEditor extends JFrame implements MouseListener {
         this.rw.addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 Grid g = PokemonGame.pokeg.level
-                        .get(Player.self.level).g;
+                        .get(ClientState.player.level).g;
                 for (int x = 0; x < g.getWidth(); x++) {
                     for (int y = 0; y < g.getHeight(); y++) {
                         for (int i = 0; i < g.g[x][y].size(); i++) {
@@ -143,8 +143,8 @@ public class MapEditor extends JFrame implements MouseListener {
     }
 
     public void addTile(int x, int y) {
-        pg.level.get(pg.Char.level).g.g[x + Player.self.x][y
-                + Player.self.y].add((Tile) tiles.getSelectedItem());
+        pg.level.get(pg.Char.level).g.g[x + ClientState.player.x][y
+                + ClientState.player.y].add((Tile) tiles.getSelectedItem());
     }
 
     public void popup(int i, int x, int y) {
@@ -160,8 +160,8 @@ public class MapEditor extends JFrame implements MouseListener {
     public void loadSector(int x, int y) {
         lastx = x;
         lasty = y;
-        sector = pg.level.get(pg.Char.level).g.g[x + Player.self.x][y
-                + Player.self.y];
+        sector = pg.level.get(pg.Char.level).g.g[x + ClientState.player.x][y
+                + ClientState.player.y];
         for (int i = 0; i < 6; i++) {
             if (i < sector.size()) {
                 lnames[i].setText(sector.get(i) + "");

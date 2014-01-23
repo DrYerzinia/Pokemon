@@ -43,72 +43,72 @@ public class Level implements Serializable, JSON {
     }
 
     public void draw(Graphics gg) {
-        if (Player.self != null) {
+        if (ClientState.player != null) {
             if (midmove && canMove) {
                 int xo = 0;
                 int yo = 0;
-                if (Player.self.dir == 0)
+                if (ClientState.player.dir == 0)
                     yo = 8;
-                if (Player.self.dir == 1)
+                if (ClientState.player.dir == 1)
                     yo = -8;
-                if (Player.self.dir == 2)
+                if (ClientState.player.dir == 2)
                     xo = 8;
-                if (Player.self.dir == 3)
+                if (ClientState.player.dir == 3)
                     xo = -8;
-                g.draw(Player.self.x, Player.self.y, xo,
+                g.draw(ClientState.player.x, ClientState.player.y, xo,
                         yo, gg);
                 if (borderL != null) {
                     if (borderL[0] != null)
-                        borderL[0].g.draw(Player.self.x
+                        borderL[0].g.draw(ClientState.player.x
                                 + borderL[0].g.g.length,
-                                Player.self.y + borderoffset[0], xo,
+                                ClientState.player.y + borderoffset[0], xo,
                                 yo, gg, false);
                     if (borderL[3] != null)
                         borderL[3].g.draw(
-                        		Player.self.x - g.g.length,
-                        		Player.self.y + borderoffset[3], xo,
+                        		ClientState.player.x - g.g.length,
+                        		ClientState.player.y + borderoffset[3], xo,
                                 yo, gg, false);
                     if (borderL[1] != null)
-                        borderL[1].g.draw(Player.self.x
-                                + borderoffset[1], Player.self.y
+                        borderL[1].g.draw(ClientState.player.x
+                                + borderoffset[1], ClientState.player.y
                                 + borderL[1].g.g[0].length, xo, yo, gg, false);
                     if (borderL[7] != null)
-                        borderL[7].g.draw(Player.self.x
-                                + borderoffset[7], Player.self.y
+                        borderL[7].g.draw(ClientState.player.x
+                                + borderoffset[7], ClientState.player.y
                                 - g.g[0].length, xo, yo, gg, false);
                 }
             } else {
-                g.draw(Player.self.x, Player.self.y, gg);
+                g.draw(ClientState.player.x, ClientState.player.y, gg);
                 if (borderL != null) {
                     if (borderL[0] != null)
-                        borderL[0].g.draw(Player.self.x
+                        borderL[0].g.draw(ClientState.player.x
                                 + borderL[0].g.g.length,
-                                Player.self.y + borderoffset[0], gg,
+                                ClientState.player.y + borderoffset[0], gg,
                                 false);
                     if (borderL[3] != null)
                         borderL[3].g.draw(
-                                Player.self.x - g.g.length,
-                                Player.self.y + borderoffset[3], gg,
+                                ClientState.player.x - g.g.length,
+                                ClientState.player.y + borderoffset[3], gg,
                                 false);
                     if (borderL[1] != null)
-                        borderL[1].g.draw(Player.self.x
-                                + borderoffset[1], Player.self.y
+                        borderL[1].g.draw(ClientState.player.x
+                                + borderoffset[1], ClientState.player.y
                                 + borderL[1].g.g[0].length, gg, false);
                     if (borderL[7] != null)
-                        borderL[7].g.draw(Player.self.x
-                                + borderoffset[7], Player.self.y
+                        borderL[7].g.draw(ClientState.player.x
+                                + borderoffset[7], ClientState.player.y
                                 - g.g[0].length, gg, false);
                 }
             }
             // if(midmove) c[direction+4].draw(4, 4, gg);
             // else c[direction].draw(4, 4, gg);
-            Player.self.draw(gg);
+            ClientState.player.draw(gg);
         }
     }
 
     public void act() {
-        if (Player.self != null)
-            g.act(Player.self.x, Player.self.y);
+        if (ClientState.player != null)
+            g.act(ClientState.player.x, ClientState.player.y);
     }
 
     public Pokemon attacked(Player p) {
@@ -119,31 +119,31 @@ public class Level implements Serializable, JSON {
     }
 
     public void moveRight() {
-        canMove = g.canStepOn(Player.self.x + 1,
-                Player.self.y);
+        canMove = g.canStepOn(ClientState.player.x + 1,
+                ClientState.player.y);
         if (canMove)
-            Player.self.x++;
+            ClientState.player.x++;
     }
 
     public void moveLeft() {
-        canMove = g.canStepOn(Player.self.x - 1,
-                Player.self.y);
+        canMove = g.canStepOn(ClientState.player.x - 1,
+                ClientState.player.y);
         if (canMove)
-            Player.self.x--;
+            ClientState.player.x--;
     }
 
     public void moveUp() {
-        canMove = g.canStepOn(Player.self.x,
-                Player.self.y - 1);
+        canMove = g.canStepOn(ClientState.player.x,
+                ClientState.player.y - 1);
         if (canMove)
-            Player.self.y--;
+            ClientState.player.y--;
     }
 
     public void moveDown() {
-        canMove = g.canStepOn(Player.self.x,
-                Player.self.y + 1);
+        canMove = g.canStepOn(ClientState.player.x,
+                ClientState.player.y + 1);
         if (canMove)
-            Player.self.y++;
+            ClientState.player.y++;
     }
 
     private void readObject(ObjectInputStream ois)

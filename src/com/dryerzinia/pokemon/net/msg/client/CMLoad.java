@@ -39,10 +39,10 @@ public class CMLoad extends ClientMessage {
             nextPokemon.getBase();
             for (int j = 0; j < 6; j++)
                 if (nextPokemon.idNo == pokeBeltidNo[j])
-                    Player.self.poke.belt[j] = nextPokemon;
+                    ClientState.player.poke.belt[j] = nextPokemon;
         }
-        Player.self.poke.box = allPokemon;
-        Player.self.items = allItems;
+        ClientState.player.poke.box = allPokemon;
+        ClientState.player.items = allItems;
 
         PokemonGame.pokeg.setupMenus();
 
