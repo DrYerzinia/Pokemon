@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.LevelChange;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.obj.Tile;
@@ -102,14 +103,14 @@ public class Grid implements Serializable, JSON {
     	 */
     	for(int j = 0; j < 11; j++)
     		for(int k = 0; k < 10; k++)
-    			if(j + x_square > 0 && j + x_square < grid.length && k + y_square > 0 && k + y_square < grid[0].length)
+    			if(j + x_square > 0 && j + x_square < getWidth() && k + y_square > 0 && k + y_square < getHeight())
     				for(int i = 0; i < grid[j + x_square][k + y_square].size(); i++)
     					grid[j + x_square][k + y_square].get(i).draw(j, k, x_off, y_off, graphics);
 
     }
 
-    public boolean canStepOnB(int x, int y) {
-        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
+    private boolean canStepOnB(int x, int y) {
+        if (getWidth() <= x || getHeight() <= y || x < 0 || y < 0)
             return false;
         for (int i = 0; i < grid[x][y].size(); i++)
             if (!grid[x][y].get(i).canBeSteppedOn)
@@ -134,70 +135,38 @@ public class Grid implements Serializable, JSON {
         return null;
     }
 
-    public int[] changeLevel(int x, int y) {
-        x += 4;
-        y += 4;
-        int r[] = new int[5];
-        r[0] = -1;
+    public LevelChange changeLevel(int x, int y) {
 
-        if (x < 0 && l.borderL != null && l.borderL[0] != null) {
-            r[0] = l.borders[0];
-            r[1] = l.borderL[0].grid.getWidth() - 5;
-            r[2] = (int) ClientState.player.y + l.borderoffset[0];
-            r[3] = 2;
-            r[4] = -1;
-            if (!l.borderL[0].grid.canStepOn(r[1], r[2]))
-                return new int[5];
-            System.out.println("Should Change lvl:" + l.borders[1]);
-            return r;
-        } else if (x >= l.grid.getWidth() && l.borderL != null
-                && l.borderL[3] != null) {
-            r[0] = l.borders[3];
-            r[1] = -5;
-            r[2] = (int) ClientState.player.y + l.borderoffset[3];
-            r[3] = 3;
-            r[4] = -1;
-            if (!l.borderL[3].grid.canStepOn(r[1] + 1, r[2]))
-                return new int[5];
-            System.out.println("Should Change lvl:" + l.borders[1]);
-            return r;
-        }
+    	x += 4;
+        y += 4;
+
+        if(x < 0 && l.borderL != null && l.borderL[0] != null){
+        	if(l.borderL[0].grid.canStepOn(l.borderL[0].grid.getWidth() - 5, (int) ClientState.player.y + l.borderoffset[0]))
+                return new LevelChange(l.borderL[0].grid.getWidth() - 5, (int) ClientState.player.y + l.borderoffset[0], l.borders[0], 2, -1);;
+
+        } else if(x >= l.grid.getWidth() && l.borderL != null && l.borderL[3] != null){
+        	if(l.borderL[3].grid.canStepOn(-5 + 1, (int) ClientState.player.y + l.borderoffset[3]))
+        		return new LevelChange(5, (int) ClientState.player.y + l.borderoffset[3], l.borders[3], 3, -1);
+
         // top border level change, need to set variables based on transition...
-        else if (y < 0 && l.borderL != null && l.borderL[1] != null) {
-            r[0] = l.borders[1];
-            r[1] = (int) ClientState.player.x + l.borderoffset[1];
-            r[2] = l.borderL[1].grid.getHeight() - 5;
-            r[3] = 0;
-            r[4] = -1;
-            if (!l.borderL[1].grid.canStepOn(r[1], r[2]))
-                return new int[5];
-            System.out.println("Should Change lvl:" + l.borders[1]);
-            return r;
-        } else if (y >= l.grid.getHeight() && l.borderL != null
-                && l.borderL[7] != null) {
-            r[0] = l.borders[7];
-            r[1] = (int) ClientState.player.x + l.borderoffset[7];
-            r[2] = -5;
-            r[3] = 1;
-            r[4] = -1;
-            if (!l.borderL[7].grid.canStepOn(r[1], r[2] + 1))
-                return new int[5];
-            System.out.println("Should Change lvl:" + l.borders[1]);
-            return r;
+        } else if(y < 0 && l.borderL != null && l.borderL[1] != null){
+            if(l.borderL[1].grid.canStepOn((int) ClientState.player.x + l.borderoffset[1], l.borderL[1].grid.getHeight() - 5))
+            	return new LevelChange((int) ClientState.player.x + l.borderoffset[1], l.borderL[1].grid.getHeight() - 5, l.borders[1], 0, -1);
+
+        } else if(y >= l.grid.getHeight() && l.borderL != null && l.borderL[7] != null) {
+            if(l.borderL[7].grid.canStepOn((int) ClientState.player.x + l.borderoffset[7], -5 + 1))
+            	return new LevelChange((int) ClientState.player.x + l.borderoffset[7], -5, l.borders[7], 1, -1);
+
         }
-        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
-            return r;
-        for (int i = 0; i < grid[x][y].size(); i++)
-            if (grid[x][y].get(i).changeToLevel != -1) {
-                r[0] = grid[x][y].get(i).changeToLevel;
-                r[1] = grid[x][y].get(i).xnew;
-                r[2] = grid[x][y].get(i).ynew;
-                r[3] = grid[x][y].get(i).leaveDirection;
-                r[4] = grid[x][y].get(i).exitDir;
-                System.out.println("Should Change");
-                return r;
-            }
-        return r;
+
+        if(getWidth() <= x || getHeight() <= y || x < 0 || y < 0)
+            return null;
+
+        for(int i = 0; i < grid[x][y].size(); i++)
+            if(grid[x][y].get(i).changeToLevel != -1)
+            	return new LevelChange(grid[x][y].get(i).xnew, grid[x][y].get(i).ynew, grid[x][y].get(i).changeToLevel, grid[x][y].get(i).leaveDirection, grid[x][y].get(i).exitDir);
+
+        return null;
     }
 
     public int getHeight() {
