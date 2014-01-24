@@ -29,6 +29,8 @@ public class GameState {
 
     	load("save.json");
 
+    	actors = new ArrayList<Actor>();
+
         for(Tile tile : mtile)
             if (tile instanceof Actor)
                 actors.add((Actor)tile);

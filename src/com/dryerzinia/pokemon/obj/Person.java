@@ -1,9 +1,9 @@
 package com.dryerzinia.pokemon.obj;
+
 import java.io.*;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.awt.*;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.ResourceLoader;
@@ -25,15 +25,29 @@ public class Person extends Tile implements Actor {
     public int x, y;
     public int level;
 
+    /*
+     * Animation variables
+     * animationElapsedTime keeps track of how far into the animation we are
+     * stepSide keeps track of which foot we are stepping with (left or right)
+     */
+    protected transient int animationElapsedTime;
+    protected transient boolean stepSide;
+
     protected transient int directionBeforeTalk;
     protected transient boolean wasTalking = false;
     protected transient boolean wasTalkingToYou = false;
 
+    protected transient LinkedList<Position> movements;
+
     public Person() {
+
+    	init();
+
     }
 
     public Person(String imgName, boolean cbso, GMenu onClick, int dir) {
-        this.imgName = imgName;
+
+    	this.imgName = imgName;
         this.dir = dir;
         pixelOffsetX = 0;
         pixelOffsetY = 0;
@@ -43,8 +57,19 @@ public class Person extends Tile implements Actor {
         onClick.container = this;
 
         loadImage();
+        init();
+
     }
 
+    public void init(){
+
+    	animationElapsedTime = 0;
+    	stepSide = false;
+
+    	movements = new LinkedList<Position>();
+
+    }
+    
     public void loadImage() {
 
         sprite = new Image[4];
@@ -56,19 +81,24 @@ public class Person extends Tile implements Actor {
 
     }
 
-    public void draw(int x, int y, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, 0, 0, g);
-    }
-
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, xo, yo, g);
-    }
-
     public void deactivate() {
         px = -1;
         py = -1;
+    }
+
+    public GMenu getMenu(int x, int y) {
+        if (!onClick.active) {
+            px = x;
+            py = y;
+            onClick.active = true;
+            wasTalkingToYou = true;
+            setImage(x - (int)ClientState.player.x, y - (int)ClientState.player.y);
+            Client.writeActor(this, A_TALKING_TO);
+            return onClick;
+        } else {
+            return ALREADY_ACTIVE_MENU;
+        }
+
     }
 
     protected void setImage(int x, int y) {
@@ -112,23 +142,56 @@ public class Person extends Tile implements Actor {
         }
     }
 
-    public GMenu getMenu(int x, int y) {
-        if (!onClick.active) {
-            px = x;
-            py = y;
-            onClick.active = true;
-            wasTalkingToYou = true;
-            setImage(x - (int)ClientState.player.x, y - (int)ClientState.player.y);
-            Client.writeActor(this, A_TALKING_TO);
-            return onClick;
-        } else {
-            return ALREADY_ACTIVE_MENU;
-        }
+    public void draw(int x, int y, Graphics g) {
+
+    	setImage(x, y);
+        super.draw(x, y, 0, Player.CHARACTER_OFFSET, g);
 
     }
 
-    public boolean act(int x, int y) {
+    public void draw(int x, int y, int xo, int yo, Graphics g) {
+
+    	setImage(x, y);
+        super.draw(x, y, xo, yo + Player.CHARACTER_OFFSET, g);
+
+    }
+
+    /*
+     * Updates animation variables
+     */
+    @Override
+    public void update(int deltaTime){
+
+    	/*
+    	 * If we are doing an animation we continue it
+    	 */
+    	if(animationElapsedTime > 0){
+
+    		//
+
+
+    	}
+
+    	/*
+    	 * If there are movements we need to animate we start there animations
+    	 */
+    	else if(!movements.isEmpty()){
+
+    		//
+
+    	}
+
+    }
+
+    @Override
+    public boolean act() {
         return false;
+    }
+
+    public void addMovment(Position position){
+
+    	movements.add(position);
+
     }
 
     public void writePersonID(ObjectOutputStream out) throws IOException {
@@ -140,6 +203,17 @@ public class Person extends Tile implements Actor {
         out.writeInt(y);
         out.writeInt(dir);
         out.writeInt(level);
+
+    }
+
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+
+    	ois.defaultReadObject();
+
+        loadImage();
+        init();
+
+        // TODO: Validate loaded object
     }
 
     public Object deepCopy() {

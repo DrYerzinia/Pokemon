@@ -3,7 +3,9 @@ package com.dryerzinia.pokemon.views;
 import java.awt.Graphics;
 import java.awt.event.KeyListener;
 
+import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
 
 public class GameView implements View {
 
@@ -13,15 +15,20 @@ public class GameView implements View {
 
 	/**
 	 * Update any objects that would have changed
-	 * The player
+	 * the player
 	 * Other players they might have received position updates and need
 	 * to work there way across the map
 	 */
 	@Override
 	public void update(int deltaTime) {
 
-		if(ClientState.isLoaded())
-			ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
+		if(!ClientState.isLoaded()) return;
+
+		ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
+
+		for(Actor actor : GameState.actors)
+			actor.update(deltaTime);
+	
 
 		/*
 		 * Process menu related input if no animations are running
@@ -37,10 +44,10 @@ public class GameView implements View {
 	@Override
 	public void draw(Graphics graphics) {
 
-		if(ClientState.isLoaded()){
-			ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);;
-			ClientState.player.draw(graphics);
-		}
+		if(!ClientState.isLoaded()) return;
+
+		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);;
+		ClientState.player.draw(graphics);
 
 	}
 

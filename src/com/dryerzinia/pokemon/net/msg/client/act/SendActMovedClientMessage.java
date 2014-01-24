@@ -10,34 +10,34 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.obj.Tile;
 
 public class SendActMovedClientMessage extends SendActClientMessage {
 
     // static final long serialVersionUID = 6177261564125944892L;
 
-    public SendActMovedClientMessage(int id_i, int x_i, int y_i, int dir_i,
-            int level_i) {
+    public SendActMovedClientMessage(int id, int x, int y, int dir, int level) {
 
-        id = id_i;
-        x = x_i;
-        y = y_i;
-        dir = dir_i;
-        level = level_i;
+        this.id = id;
+        position = new Position(x, y, level, dir);
+
     }
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        Iterator<Actor> act = GameState.actors.iterator();
-        while (act.hasNext()) {
-            Actor a = act.next();
-            Person p2 = (Person) a;
-            if (p2.id == id) {
-                GameState.level.get(p2.level).grid.move(x, y, p2.x, p2.y,
-                        (Tile) p2);
-                p2.x = x;
-                p2.y = y;
-                p2.dir = dir;
+        for(Actor actor : GameState.actors) {
+ 
+        	Person person = (Person) actor;
+            if (person.id == id) {
+            	person.addMovment(position);
+            	/*
+                GameState.level.get(person.level).grid.move(position.getX(), position.getY(), person.x, person.y, (Tile) person);
+                person.x = position.getX();
+                person.y = position.getY();
+                person.dir = position.getFacing();
+                */
+                break;
             }
         }
 

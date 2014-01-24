@@ -11,12 +11,16 @@ public class Position implements Serializable {
 
 	private int level;
 
-	public Position(int x, int y, int level){
+	private int facing;
+
+	public Position(int x, int y, int level, int facing){
 
 		this.x = x;
 		this.y = y;
 
 		this.level = level;
+
+		this.facing = facing;
 
 	}
 
@@ -30,6 +34,10 @@ public class Position implements Serializable {
 
 	public int getLevel(){
 		return level;
+	}
+
+	public int getFacing(){
+		return facing;
 	}
 
 }

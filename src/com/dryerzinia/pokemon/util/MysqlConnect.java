@@ -538,7 +538,7 @@ public class MysqlConnect {
 				player.level = results.getInt("level");
 				player.name = results.getString("UserName");
 				player.imgName = results.getString("picture");
-				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"));
+				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), -1);
 				player.money = results.getInt("money");
 			}
 		} catch (SQLException ex) {

@@ -30,11 +30,7 @@ public class LevelChange {
 	}
 
 	public Position getNewPosition(){
-		return new Position(newX, newY, newLevel);
-	}
-
-	public int getNewDirection(){
-		return newDirection;
+		return new Position(newX, newY, newLevel, newDirection);
 	}
 
 }

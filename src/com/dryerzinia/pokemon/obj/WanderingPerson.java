@@ -100,20 +100,10 @@ public class WanderingPerson extends Person implements Actor {
         return changed;
     }
 
-    public boolean act(int x, int y) {
+    public boolean act() {
         if ((onClick != null && !onClick.active) || onClick == null)
             return wander(x, y);
         return false;
-    }
-
-    public void draw(int x, int y, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, g);
-    }
-
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, xo, yo, g);
     }
 
     public void initializeSecondaryReferences(Grid g) {

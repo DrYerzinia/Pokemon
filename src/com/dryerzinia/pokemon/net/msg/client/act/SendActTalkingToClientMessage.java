@@ -4,44 +4,40 @@ SendActTalkingToClientMessage.java
  */
 
 import java.io.*;
-import java.util.*;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.Position;
 
 public class SendActTalkingToClientMessage extends SendActClientMessage {
 
-    // static final long serialVersionUID = 6177261564125944892L;
+	private static final long serialVersionUID = -8660483740507972045L;
 
-    boolean b;
+	boolean b;
 
-    public SendActTalkingToClientMessage(int id_i, int x_i, int y_i, int dir_i,
-            int level_i, boolean b_i) {
+    public SendActTalkingToClientMessage(int id, int x, int y, int dir, int level, boolean b) {
 
-        id = id_i;
-        x = x_i;
-        y = y_i;
-        dir = dir_i;
-        level = level_i;
+        this.id = id;
+        position = new Position(x, y, level, dir);
 
-        b = b_i;
+        this.b = b;
 
     }
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        Iterator<Actor> act = GameState.actors.iterator();
-        while (act.hasNext()) {
-            Actor a = act.next();
-            Person p2 = (Person) a;
-            if (p2.id == id) {
-                p2.dir = dir;
-                p2.onClick.active = b;
+        for(Actor actor : GameState.actors) {
+
+            Person person = (Person) actor;
+            if (person.id == id) {
+
+            	person.dir = position.getFacing();
+            	person.onClick.active = b;
+            	break;
+
             }
         }
-
     }
 
     private void readObject(ObjectInputStream ois)

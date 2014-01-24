@@ -160,7 +160,7 @@ public class Player implements Serializable {
 
     		level = newPosition.getLevel();
 
-    		int dir = levelChange.getNewDirection();
+    		int dir = newPosition.getFacing();
     		if(dir != -1) facing = dir;
 
     		canStep = true;

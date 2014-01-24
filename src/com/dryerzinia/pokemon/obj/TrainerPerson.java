@@ -71,7 +71,8 @@ public class TrainerPerson extends Person implements Actor {
         }
     }
 
-    public boolean act(int x, int y) {
+    public boolean act() {
+/*
         Level l = GameState.level.get(level);
         for (int i = 0; i < viewDist; i++) {
             int x2 = x;
@@ -109,19 +110,8 @@ public class TrainerPerson extends Person implements Actor {
                 hasBeenFought = true;
             }
         }
+        */
         return false;
-    }
-
-    public void draw(int x, int y, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, g);
-        act(this.x, this.y);
-    }
-
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
-        setImage(x, y);
-        super.draw(x, y, xo, yo, g);
-        act(this.x, this.y);
     }
 
     public void initializeSecondaryReferences(Grid g) {

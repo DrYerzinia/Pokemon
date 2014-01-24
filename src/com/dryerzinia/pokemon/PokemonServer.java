@@ -172,7 +172,7 @@ public class PokemonServer {
         public void run() {
         	for(Actor actor: GameState.actors) {
         		// TODO remove archaic position reference from this class
-        		if(actor.act(-256, -256)) {
+        		if(actor.act()) {
         			sendPlayerActorUpdate((Person) actor);
         		}
             }

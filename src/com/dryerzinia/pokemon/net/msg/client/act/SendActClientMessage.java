@@ -6,16 +6,14 @@ SendActClientMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
+import com.dryerzinia.pokemon.obj.Position;
 
 public class SendActClientMessage extends ClientMessage {
 
     static final long serialVersionUID = -168421746034798020L;
 
     int id;
-    int x;
-    int y;
-    int dir;
-    int level;
+    Position position;
 
     public SendActClientMessage() {
     }
