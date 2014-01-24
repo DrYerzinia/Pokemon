@@ -39,9 +39,7 @@ public class Player implements Serializable {
     public int facing; // facing direction
     public int level; // current level player is in
     
-    public int lpcx, lpcy; // player level position x and y ??? WTF IS THIS ???
-                           // why not just above XY
-    public int lpclevel; // player current level ??? ^^^ ??? level transition?
+    public Position lastPokemonCenter;
 
     public int money; // players amount of money
 
@@ -122,21 +120,52 @@ public class Player implements Serializable {
     	 * We still are incrementing the animation timer which lets us animate
     	 * the characters sprite so we can do the wall bump
     	 */
-    	boolean canStep = false;
+
+    	int futureX = 0;
+    	int futureY = 0;
+    	
+    	if(facing == Direction.UP){
+    		futureX = (int) Math.ceil(x);
+    		futureY = (int) Math.ceil(y - 1);
+    	}
+
+    	if(facing == Direction.DOWN){
+    		futureX = (int) Math.floor(x);
+    		futureY = (int) Math.floor(y + 1);
+    	}
+
+    	if(facing == Direction.LEFT){
+    		futureX = (int) Math.ceil(x - 1);
+    		futureY = (int) Math.ceil(y);
+    	}
+
+    	if(facing == Direction.RIGHT){
+    		futureX = (int) Math.floor(x + 1);
+    		futureY = (int) Math.floor(y);
+    	}
+
     	Grid grid = ClientState.getPlayerLevel().grid;
+    	boolean canStep = grid.canStepOn(futureX, futureY);
+    	LevelChange levelChange = grid.changeLevel(futureX, futureY);
 
-    	if(facing == Direction.UP)
-    		canStep = grid.canStepOn((int)Math.ceil(x), (int)Math.ceil(y-1));
+    	/*
+    	 * We need to continue the step through to the next level
+    	 */
+    	if(levelChange != null && levelChange.rightDirection(facing)){
 
-    	if(facing == Direction.DOWN)
-    		canStep = grid.canStepOn((int)Math.floor(x), (int)Math.floor(y+1));
+    		Position newPosition = levelChange.getNewPosition();
 
-    	if(facing == Direction.LEFT)
-    		canStep = grid.canStepOn((int)Math.ceil(x-1), (int)Math.ceil(y));
+    		x = newPosition.getX();
+    		y = newPosition.getY();
 
-    	if(facing == Direction.RIGHT)
-    		canStep = grid.canStepOn((int)Math.floor(x+1), (int)Math.floor(y));
+    		level = newPosition.getLevel();
 
+    		int dir = levelChange.getNewDirection();
+    		if(dir != -1) facing = dir;
+
+    		canStep = true;
+
+    	}
 
     	if(canStep){
     		/*
@@ -322,6 +351,15 @@ public class Player implements Serializable {
         return poke;
     }
 
+    public void goToLastPokemonCenter(){
+
+    	this.x = lastPokemonCenter.getX();
+    	this.y = lastPokemonCenter.getY();
+
+    	this.level = lastPokemonCenter.getLevel();
+
+    }
+
     public void set(Player p) {
 
         this.id = p.id;
@@ -333,10 +371,7 @@ public class Player implements Serializable {
 
         this.level = p.level;
 
-        this.lpcx = p.lpcx;
-        this.lpcy = p.lpcy;
-
-        this.lpclevel = p.lpclevel;
+        this.lastPokemonCenter = p.lastPokemonCenter;
 
         this.name = p.name;
         this.imgName = p.imgName;

@@ -142,20 +142,20 @@ public class Grid implements Serializable, JSON {
 
         if(x < 0 && l.borderL != null && l.borderL[0] != null){
         	if(l.borderL[0].grid.canStepOn(l.borderL[0].grid.getWidth() - 5, (int) ClientState.player.y + l.borderoffset[0]))
-                return new LevelChange(l.borderL[0].grid.getWidth() - 5, (int) ClientState.player.y + l.borderoffset[0], l.borders[0], 2, -1);;
+                return new LevelChange(l.borderL[0].grid.getWidth() - 5, (int) ClientState.player.y + l.borderoffset[0], l.borders[0], 2, 2);;
 
         } else if(x >= l.grid.getWidth() && l.borderL != null && l.borderL[3] != null){
         	if(l.borderL[3].grid.canStepOn(-5 + 1, (int) ClientState.player.y + l.borderoffset[3]))
-        		return new LevelChange(5, (int) ClientState.player.y + l.borderoffset[3], l.borders[3], 3, -1);
+        		return new LevelChange(5, (int) ClientState.player.y + l.borderoffset[3], l.borders[3], 3, 3);
 
         // top border level change, need to set variables based on transition...
         } else if(y < 0 && l.borderL != null && l.borderL[1] != null){
             if(l.borderL[1].grid.canStepOn((int) ClientState.player.x + l.borderoffset[1], l.borderL[1].grid.getHeight() - 5))
-            	return new LevelChange((int) ClientState.player.x + l.borderoffset[1], l.borderL[1].grid.getHeight() - 5, l.borders[1], 0, -1);
+            	return new LevelChange((int) ClientState.player.x + l.borderoffset[1], l.borderL[1].grid.getHeight() - 4, l.borders[1], 0, 0);
 
         } else if(y >= l.grid.getHeight() && l.borderL != null && l.borderL[7] != null) {
             if(l.borderL[7].grid.canStepOn((int) ClientState.player.x + l.borderoffset[7], -5 + 1))
-            	return new LevelChange((int) ClientState.player.x + l.borderoffset[7], -5, l.borders[7], 1, -1);
+            	return new LevelChange((int) ClientState.player.x + l.borderoffset[7], -5, l.borders[7], 1, 1);
 
         }
 

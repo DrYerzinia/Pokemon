@@ -9,11 +9,11 @@ public class LevelChange {
 	 * Direction you have to be facing to leave
 	 * Direction you will be facing once you leave
 	 */
-	int newLevel;
-	int newX;
-	int newY;
-	int toLeaveDirection;
-	int newDirection;
+	private int newLevel;
+	private int newX;
+	private int newY;
+	private int toLeaveDirection;
+	private int newDirection;
 
 	public LevelChange(int newX, int newY, int newLevel, int toLeaveDirection, int newDirection){
 
@@ -23,6 +23,18 @@ public class LevelChange {
 		this.toLeaveDirection = toLeaveDirection;
 		this.newDirection = newDirection;
 
+	}
+
+	public boolean rightDirection(int direction){
+		return direction == toLeaveDirection;
+	}
+
+	public Position getNewPosition(){
+		return new Position(newX, newY, newLevel);
+	}
+
+	public int getNewDirection(){
+		return newDirection;
 	}
 
 }

@@ -17,10 +17,6 @@ public class Level implements Serializable, JSON {
     static final long serialVersionUID = -5293673761061322573L;
 
     public Grid grid;
-    // public Player c; // Character Tile
-
-    // int x, y;
-    // public int direction;
 
     public transient boolean midmove = false;
     public transient boolean canMove = true;
@@ -32,14 +28,11 @@ public class Level implements Serializable, JSON {
     public Level() {
     }
 
-    // public Level(int x, int y, Grid g, int d, Player c){
     public Level(Grid g) {
-        // this.direction = d;
-        // this.x = x;
-        // this.y = y;
-        this.grid = g;
-        // this.c = c;
-        for (int i = 0; i < 9; i++)
+
+    	this.grid = g;
+
+    	for (int i = 0; i < 9; i++)
             borders[i] = -1;
     }
 

@@ -738,9 +738,9 @@ public class Fight extends Overlay implements Serializable {
             }
         } else if (golastcenter) {
             golastcenter = false;
-            ClientState.player.level = ClientState.player.lpclevel;
-            ClientState.player.x = ClientState.player.lpcx;
-            ClientState.player.y = ClientState.player.lpcy;
+
+            ClientState.player.goToLastPokemonCenter();
+
             ClientState.player.facing = 0;
             for (int i = 0; i < 6; i++) {
                 if (ClientState.player.poke.belt[i] == null)
