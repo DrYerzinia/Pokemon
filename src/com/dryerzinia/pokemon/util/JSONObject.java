@@ -8,11 +8,158 @@ import java.util.HashMap;
 public class JSONObject {
 
 	/**
+	 * Default conversion from JSON object to JSON string of the object using
+	 * Reflection
+	 * @param jsonObj the JSON object we are converting to a JSON string
+	 * 
+	 * TODO - Finish implementing for all basic TYPES!
+	 */
+	public static String defaultToJSON(JSON jsonObj) throws IllegalAccessException {
+
+		/*
+		 * Use a string builder to make the JSON
+		 * to reduce concatenation as Strings are
+		 * immutable
+		 */
+		StringBuilder json = new StringBuilder();
+
+		json.append('{');
+
+		/*
+		 * Need the class of the object so we can
+		 * iterate its fields and turn it into JSON
+		 */
+		Class<?> classJSONObj = jsonObj.getClass();
+
+		/*
+		 * Add the class type to the JSON
+		 */
+		json.append("\"class\":\"");
+		json.append(classJSONObj.getName());
+		json.append('"');
+
+		boolean hasSuperClass = true;
+
+		while(hasSuperClass){
+		
+			Field[] fields = classJSONObj.getDeclaredFields();
+
+			for(Field field : fields){
+
+				/*
+				 * Don't want to convert transient, static or final variables to
+				 * JSON by default
+				 */
+				int modifiers = field.getModifiers();
+				boolean isTransient = Modifier.isTransient(modifiers);
+				boolean isStatic = Modifier.isStatic(modifiers);
+				boolean isFinal = Modifier.isFinal(modifiers);
+
+				if(!isFinal && !isStatic && !isTransient){
+
+					/*
+					 * Need to be able to access protected and private parts
+					 * of the object
+					 */
+					field.setAccessible(true);
+
+					/*
+					 * Depending on the type of the field we need to convert it
+					 * to JSON differently
+					 */
+					Class<?> type = field.getType();
+
+					/*
+					 * Add a comma to the JSON to separate entries
+					 */
+					json.append(",");
+
+					/*
+					 * Add the fields name to the JSON
+					 */
+					json.append('"');
+					json.append(field.getName());
+					json.append("\":");
+
+					if(type == int.class)
+						json.append(field.getInt(jsonObj));
+
+					else if(type == float.class)
+						json.append(field.getFloat(jsonObj));
+
+					else if(type == boolean.class)
+						json.append(field.getBoolean(jsonObj));
+
+					else if(type == String.class)
+						json.append(stringToJSON((String)field.get(jsonObj)));
+
+					else if(type.isArray()){
+
+						Class<?> componentType = type.getComponentType();
+
+						Object array = field.get(jsonObj);
+
+						if(array == null){
+
+							json.append("null");
+
+						} else {
+
+							json.append('[');
+	
+							int arrayLength = Array.getLength(array);
+	
+							for(int i = 0; i < arrayLength; i++){
+	
+								if(i != 0) json.append(',');
+	
+								if(componentType == int.class)
+									json.append(Array.getInt(array, i));
+	
+								else if(JSON.class.isAssignableFrom(componentType))
+									json.append(JSONObject.objectToJSON((JSON) Array.get(array, i)));
+	
+								else
+									throw new NonJSONAble("Cound not convert array object type " + componentType.getName() + " to JSON in object " + classJSONObj.getName());
+							}
+	
+							json.append(']');
+
+						}
+
+					}
+
+					else if(JSON.class.isAssignableFrom(field.getType()))
+						json.append(JSONObject.objectToJSON((JSON) field.get(jsonObj)));
+
+					else
+						throw new NonJSONAble("Cound not convert object type " + field.getType().getName() + " to JSON in object " + classJSONObj.getName());
+
+				}
+			}
+
+			if(JSON.class.isAssignableFrom(classJSONObj.getSuperclass()))
+				classJSONObj = classJSONObj.getSuperclass();
+
+			else hasSuperClass = false;
+
+		}
+
+		/*
+		 * JSON objects always end with }
+		 */
+		json.append('}');
+
+		return json.toString();
+
+	}
+
+	/**
 	 * Convert Object to JSON
-	 * @param Object to conver to JSON
+	 * @param Object to convert to JSON
 	 * @return JSON representation of Object
 	 */
-    public static String objectToJSON(JSON obj){
+    public static String objectToJSON(JSON obj) throws IllegalAccessException {
    
     	if(obj == null) return "null";
     	return obj.toJSON();
@@ -112,7 +259,7 @@ public class JSONObject {
     		return JSONToArrayArray(json);
     	case '{':
     		return JSONToObjectArray(json);
-    	case '\'':
+    	case '"':
     		return JSONToStringArray(json);
     	default:
     		// TODO BOOLEAN
@@ -126,7 +273,6 @@ public class JSONObject {
 	 * @param JSON to be converted into an object
 	 * @return Object that was represented by JSON
 	 */
-    @SuppressWarnings("rawtypes")
 	public static Object JSONToObject(String json){
 
     	HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -154,9 +300,9 @@ public class JSONObject {
     				comma = indexOfEndingParenthetical(json, '{', '}', colon + 1) + 1;
     				param = JSONToObject(json.substring(colon + 1, comma - 1));
     				break;
-    			case '\'':
+    			case '"':
     				// Parse String
-    				comma = json.indexOf('\'', colon + 2);
+    				comma = json.indexOf('\"', colon + 2);
     				if(comma == -1)
     					comma = json.indexOf('}', colon);
     				if(colon + 2 > comma -1)
@@ -185,7 +331,7 @@ public class JSONObject {
     				break;
     		}
 
-    		String param_name = json.substring(json.indexOf("'", last_comma) + 1, colon - 1);
+    		String param_name = json.substring(json.indexOf("\"", last_comma) + 1, colon - 1);
 
     		parameters.put(param_name, param);
 
@@ -199,7 +345,7 @@ public class JSONObject {
 
     	try {
 
-    		Class c = Class.forName(class_name);
+    		Class<?> c = Class.forName(class_name);
     		Object o = c.newInstance();
 
     		boolean has_superclass = true;
@@ -218,20 +364,24 @@ public class JSONObject {
     					// Need to get into protected stuff
     					field.setAccessible(true);
 
-    					Class type = field.getType();
+    					Class<?> type = field.getType();
 
     					if(type == int.class)
     						field.setInt(o, ((Float)param).intValue());
+
     					else if(type == float.class)
     						field.setFloat(o, ((Float)param).floatValue());
+
     					else if(type == boolean.class)
     						field.setBoolean(o, ((Boolean)param).booleanValue());
+
     					else if(type.isArray()){
 
-							Object[] params = (Object[])param;
-							String type_name = type.toString();
+    						Class<?> componentType = type.getComponentType();
 
-							if(type_name.equals("class [I")){
+							Object[] params = (Object[])param;
+
+							if(componentType == int.class){
 
     							int[] ints = new int[params.length];
 
@@ -242,8 +392,7 @@ public class JSONObject {
 
 							} else {
 
-    							type_name = type_name.substring(8, type_name.length()-1);
-    							Object arr = Array.newInstance(Class.forName(type_name), params.length);
+    							Object arr = Array.newInstance(componentType, params.length);
     							for(int i = 0; i < params.length; i++)
     								Array.set(arr, i, params[i]);
     							field.set(o, arr);
@@ -314,7 +463,7 @@ public class JSONObject {
     public static String stringToJSON(String str){
    
     	if(str == null) return "null";
-    	return "'" + escapeJava(str) + "'";
+    	return "\"" + escapeJava(str) + "\"";
 
     }
 
@@ -328,7 +477,7 @@ public class JSONObject {
     }
 
 	/**
-	 * Unescape special characters in string
+	 * UnEscape special characters in string
 	 * @param String with special characters escaped
 	 * @return String with special characters
 	 */

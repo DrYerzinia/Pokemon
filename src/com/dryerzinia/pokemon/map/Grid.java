@@ -224,9 +224,9 @@ public class Grid implements Serializable, JSON {
 	@Override
 	public String toJSON() {
 
-		String json = "{'class':'" + this.getClass().getName() + "'";
+		String json = "{\"class\":\"" + this.getClass().getName() + "\"";
 		
-		json += ",'g':[";
+		json += ",\"grid\":[";
         for (int x = 0; x < grid.length; x++) {
     		json += "[";
         	for (int y = 0; y < grid[0].length; y++) {
@@ -249,6 +249,7 @@ public class Grid implements Serializable, JSON {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 

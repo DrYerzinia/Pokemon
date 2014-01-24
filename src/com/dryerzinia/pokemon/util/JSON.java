@@ -7,7 +7,7 @@ public interface JSON {
 	 * Convert Object to JSON
 	 * @return JSON representation of Object
 	 */
-    public String toJSON();
+    public String toJSON() throws IllegalAccessException;
 
     /**
      * Get object fromJSON

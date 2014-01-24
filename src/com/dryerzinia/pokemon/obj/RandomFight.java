@@ -9,6 +9,7 @@ import com.dryerzinia.pokemon.ui.editor.SubListener;
 import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONArray;
+import com.dryerzinia.pokemon.util.JSONObject;
 
 import java.awt.event.*;
 import java.util.*;
@@ -75,20 +76,10 @@ public class RandomFight implements Serializable, DeepCopy, JSON {
         oos.defaultWriteObject();
     }
 
-    @Override
-    public String toJSON(){
+	@Override
+	public String toJSON() throws IllegalAccessException {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'";
-    	
-        json += ",'pokemon':" + JSONArray.objectArrayToJSON(pokemon);
-
-        json += ",'chance':" + JSONArray.intArrayToJSON(chance);
-
-        json += ",'total':" + total;
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
     }
 

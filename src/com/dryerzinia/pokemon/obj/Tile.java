@@ -3,7 +3,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.awt.*;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.DeepCopy;
@@ -160,34 +159,12 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         oos.defaultWriteObject();
     }
 
-    public String toJSON(){
+	@Override
+	public String toJSON() throws IllegalAccessException {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'";
+		return JSONObject.defaultToJSON(this);
 
-    	json += ",'imgName':" + JSONObject.stringToJSON(imgName);
-
-        json += ",'canBeSteppedOn':" + canBeSteppedOn;
-
-        json += ",'id':" + id;
-
-        json += ",'pixelOffsetX':" + pixelOffsetX;
-        json += ",'pixelOffsetY':" + pixelOffsetY;
-
-        json += ",'changeToLevel':" + changeToLevel;
-        json += ",'leaveDirection':" + leaveDirection;
-        json += ",'exitDir':" + exitDir;
-        json += ",'xnew':" + xnew;
-        json += ",'ynew':" + ynew;
-
-        json += ",'onClick':" + JSONObject.objectToJSON(onClick);
-
-        json += ",'rf':"+ JSONObject.objectToJSON(rf);
-        
-        json += "}";
-
-        return json;
-        
-    }
+	}
 
     public void fromJSON(HashMap<String, Object> json){
 

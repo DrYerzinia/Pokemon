@@ -6,6 +6,7 @@ import java.awt.*;
 
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Person extends Tile implements Actor {
@@ -224,23 +225,9 @@ public class Person extends Tile implements Actor {
     }
     
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-		json += ",'px':" + px;
-		json += ",'py':" + py;
-
-		json += ",'dir':" + dir;
-		json += ",'x':" + x;
-		json += ",'y':" + y;
-		json += ",'level':" + level;
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
-
 }

@@ -272,22 +272,9 @@ public class GMenu implements Serializable, DeepCopy, JSON {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'";
-
-    	json += ",'message':" + JSONObject.stringToJSON(message);
-
-		json += ",'x':" + x;
-		json += ",'y':" + y;
-		json += ",'w':" + w;
-		json += ",'h':" + h;
-
-		json += ",'nextmenu':" + JSONObject.objectToJSON(nextmenu);
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

@@ -9,7 +9,6 @@ import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.util.JSON;
-import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 
 public class Level implements Serializable, JSON {
@@ -23,7 +22,7 @@ public class Level implements Serializable, JSON {
     public transient Level borderL[] = new Level[9];
     public int borders[] = new int[9];
     public int borderoffset[] = new int[9];
-    public int id; // TODO: appearse unused figureout wtf todo with this
+    public int id; // TODO: appears unused figureout wtf todo with this
 
     public Level() {
     }
@@ -81,21 +80,12 @@ public class Level implements Serializable, JSON {
         oos.defaultWriteObject();
     }
 
-    public String toJSON(){
+	@Override
+	public String toJSON() throws IllegalAccessException {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'";
-    	
-    	json += ",'g':" + JSONObject.objectToJSON(grid);
+		return JSONObject.defaultToJSON(this);
 
-        json += ",'borders':" + JSONArray.intArrayToJSON(borders);
-        json += ",'borderoffset':" + JSONArray.intArrayToJSON(borderoffset);
-        json += ",'id':" + id;
-
-        json += "}";
-
-        return json;
-
-    }
+	}
 
     public void fromJSON(HashMap<String, Object> json){
 

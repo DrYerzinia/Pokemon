@@ -215,7 +215,7 @@ public class Login implements View, KeyListener {
 
     	try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)))) {
 
-        	json_writer.write("{'username':'" + Login.username + "','password':'" + Login.password + "','location':'" + Login.location + "'}");
+        	json_writer.write("{\"username\":\"" + Login.username + "\",\"password\":\"" + Login.password + "\",\"location\":\"" + Login.location + "\"}");
         	json_writer.flush();
         	json_writer.close();
 

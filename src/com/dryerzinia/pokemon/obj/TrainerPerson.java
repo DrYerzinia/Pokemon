@@ -8,6 +8,7 @@ import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -127,25 +128,9 @@ public class TrainerPerson extends Person implements Actor {
     }
     
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-		json += ",'px':" + px;
-		json += ",'py':" + py;
-
-		json += ",'face':" + face;
-		json += ",'x':" + x;
-		json += ",'y':" + y;
-		json += ",'con':" + con;
-		json += ",'viewDist':" + viewDist;
-
-		json += ",'hasBeenFought':" + hasBeenFought;
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

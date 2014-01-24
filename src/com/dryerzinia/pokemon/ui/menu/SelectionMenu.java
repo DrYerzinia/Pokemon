@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.util.JSONArray;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.ui.Overlay;
 import com.dryerzinia.pokemon.ui.OverlayO;
@@ -232,18 +233,9 @@ public class SelectionMenu extends GMenu {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-	    json += ",'widthM':" + widthM;
-
-	    json += ",'submenus':" + JSONArray.objectArrayToJSON(submenus);
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

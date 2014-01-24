@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 import com.dryerzinia.pokemon.obj.Player;
+import com.dryerzinia.pokemon.util.JSONObject;
 
 public class MoneyMenu extends GMenu {
 
@@ -30,11 +31,9 @@ public class MoneyMenu extends GMenu {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

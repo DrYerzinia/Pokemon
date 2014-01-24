@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
+import com.dryerzinia.pokemon.util.JSONObject;
 
 public class WanderingPerson extends Person implements Actor {
 
@@ -119,24 +120,9 @@ public class WanderingPerson extends Person implements Actor {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-		json += ",'px':" + px;
-		json += ",'py':" + py;
-
-		json += ",'w':" + w;
-		json += ",'h':" + h;
-		json += ",'rx':" + rx;
-		json += ",'ry':" + ry;
-
-		json += ",'con':" + con;
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

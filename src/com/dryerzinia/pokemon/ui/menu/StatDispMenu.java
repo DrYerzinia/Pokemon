@@ -35,16 +35,9 @@ public class StatDispMenu extends GMenu {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-	    json += ",'p':" + JSONObject.objectToJSON(p);
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

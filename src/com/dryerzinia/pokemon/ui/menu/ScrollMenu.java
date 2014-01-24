@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class ScrollMenu extends SelectionMenu {
@@ -139,11 +140,9 @@ public class ScrollMenu extends SelectionMenu {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

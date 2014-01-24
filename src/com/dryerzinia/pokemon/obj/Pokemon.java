@@ -467,7 +467,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
         }
 
 		@Override
-		public String toJSON() {
+		public String toJSON() throws IllegalAccessException {
 
 			String json = "{'class':'" + this.getClass().getName() + "'"
 
@@ -729,34 +729,42 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 
     public static void writePokemonBaseStats(){
 
-    	// Write Pokemon Base stats to File
+    	// Write Pokemon Base stat's to File
         File file = new File("PokemonBaseStats.json");
         StringBuilder json = new StringBuilder("[");
 
-        Iterator<Entry<String, Pokemon>> it = basePokemon.entrySet().iterator();
-        while(it.hasNext()){
-        	Pokemon pokemon = it.next().getValue();
+        try {
 
-        	json.append(pokemon.toJSON());
-        	json.deleteCharAt(json.length() - 1);	// Strip } from JSON
-        	json.append(",'pokeBase':" + pokemon.getBaseStats().toJSON());	// Add BasePokemon information to the JSON string
-        	json.append("},"); // Close JSON object
+	        Iterator<Entry<String, Pokemon>> it = basePokemon.entrySet().iterator();
+	        while(it.hasNext()){
+	        	Pokemon pokemon = it.next().getValue();
+	
+	        	json.append(pokemon.toJSON());
+	        	json.deleteCharAt(json.length() - 1);	// Strip } from JSON
+	        	json.append(",'pokeBase':" + pokemon.getBaseStats().toJSON());	// Add BasePokemon information to the JSON string
+	        	json.append("},"); // Close JSON object
+	
+	        }
+	        
+	        json.replace(json.length()-1, json.length(), "]"); // Replace last extra , with array closure
+	
+	        // Attempt to write stats to the file
+	        try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+	
+	        	json_writer.write(json.toString());
+	
+	        } catch(IOException ioe) {
+	
+	        	System.err.println("Pokemon Base Stats not written to file: " + file.getAbsolutePath());
+	
+	        	ioe.printStackTrace();
+	        	
+	        }
 
-        }
-        
-        json.replace(json.length()-1, json.length(), "]"); // Replace last extra , with array closure
+        } catch(IllegalAccessException e){
 
-        // Attempt to write stats to the file
-        try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+        	System.err.println("Pokemon Base Stats not written a file because we have no reflection access: " + e.getLocalizedMessage());
 
-        	json_writer.write(json.toString());
-
-        } catch(IOException ioe) {
-
-        	System.err.println("ERROR: Pokemon Base Stats not written to file: " + file.getAbsolutePath());
-
-        	ioe.printStackTrace();
-        	
         }
 
     }
@@ -787,42 +795,16 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-    	String json = "{'class':'" + this.getClass().getName() + "'"
-	
-	    	+ ",'nickName':" + JSONObject.stringToJSON(nickName)
-	
-	    	+ ",'Species':" + JSONObject.stringToJSON(Species)
-	
-	    	+ ",'level':" + level
-	    	+ ",'currentHP':" + currentHP
-	    	+ ",'hpSE':" + hpSE
-	    	+ ",'attackSE':" + attackSE
-	    	+ ",'defenseSE':" + defenseSE
-	    	+ ",'speedSE':" + speedSE
-	    	+ ",'specialSE':" + specialSE
-	
-	    	+ ",'idNo':" + idNo
-	    	+ ",'EXP':" + EXP
-	
-	    	+ ",'status':" + JSONObject.stringToJSON(status)
-	
-	    	+ ",'moves':" + JSONArray.objectArrayToJSON(moves)
-	
-		    + ",'location':" + location
-	
-		    + ",'remoteSetDamage':" + remoteSetDamage
-	
-	        + "}";
+		return JSONObject.defaultToJSON(this);
 
-        return json;
 	}
 
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
-		// TODO If base exists in hashmap GRAB IT!
+		// TODO If base exists in HashMap GRAB IT!
 		Pokemon.BaseStats bs = (Pokemon.BaseStats) json.get("pokeBase");
 
 		if(bs != null){

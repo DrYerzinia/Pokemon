@@ -6,6 +6,7 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Pokemon;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class PokemonBoxMenu extends ScrollMenu {
@@ -212,18 +213,11 @@ public class PokemonBoxMenu extends ScrollMenu {
         sendMenuEvent(MenuEvent.X);
         return true;
     }
-
+   
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		json = json.substring(0,json.length()-1);
-
-		json += ",'mode':" + mode;
-
-        json += "}";
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

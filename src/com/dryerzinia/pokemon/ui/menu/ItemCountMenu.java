@@ -2,6 +2,8 @@ package com.dryerzinia.pokemon.ui.menu;
 import java.awt.*;
 import java.util.HashMap;
 
+import com.dryerzinia.pokemon.util.JSONObject;
+
 public class ItemCountMenu extends GMenu {
 
     int index;
@@ -45,11 +47,9 @@ public class ItemCountMenu extends GMenu {
 
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
 

@@ -7,6 +7,7 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
+import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.util.event.AbstractMenuListener;
 
@@ -236,14 +237,11 @@ public class ItemMenu extends ScrollMenu {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = super.toJSON();
-		// TODO figure out wtf is transient
-        return json;
+		return JSONObject.defaultToJSON(this);
 
 	}
-
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 		// TODO Auto-generated method stub

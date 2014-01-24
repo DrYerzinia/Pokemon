@@ -525,26 +525,10 @@ public class Move implements Serializable, DeepCopy, JSON {
     }
 
 	@Override
-	public String toJSON() {
+	public String toJSON() throws IllegalAccessException {
 
-		String json = "{'class':'" + this.getClass().getName() + "'";
+		return JSONObject.defaultToJSON(this);
 
-	    json += ",'effmod':" + effmod;
-
-	    json += ",'name':" + JSONObject.stringToJSON(name);
-	    json += ",'description':" + JSONObject.stringToJSON(description);
-
-	    json += ",'effect':" + JSONObject.stringToJSON(effect);
-	    json += ",'type':" + JSONObject.stringToJSON(type);
-
-	    json += ",'currentpp':" + currentpp;
-	    json += ",'pp':" + pp;
-	    json += ",'dmg':" + dmg;
-	    json += ",'accuracy':" + accuracy;
-	    
-	    json += "}";
-	    
-	    return json;
 	}
 
 	@Override

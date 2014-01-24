@@ -76,8 +76,12 @@ public class UI {
     	 */
     	public void paint(Graphics g) {
 
+    		super.paint(g);
+
     		g.drawImage(buffer_image, 0, 0, 320, 288, 0, 0, 160, 144, null);
     		g.dispose();
+
+    		System.out.println("Paint called!");
 
     	}
 
