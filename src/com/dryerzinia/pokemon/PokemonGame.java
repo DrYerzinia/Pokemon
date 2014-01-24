@@ -11,6 +11,8 @@
 
 package com.dryerzinia.pokemon;
 
+import java.applet.Applet;
+import java.awt.Container;
 import java.util.*;
 import java.util.Timer;
 
@@ -18,26 +20,34 @@ import javax.swing.*;
 
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.util.WindowEventHandler;
 import com.dryerzinia.pokemon.views.GameView;
 import com.dryerzinia.pokemon.views.Login;
 import com.dryerzinia.pokemon.views.View;
 
-public class PokemonGame {
+public class PokemonGame extends Applet {
 
-    private static GameLoop gameLoop;
+	private static final long serialVersionUID = -3364628634525375197L;
 
+	private static GameLoop gameLoop;
     private static View activeView;
 
-    public static void init() {
+    public void init(){
+
+    	super.init();
+
+    	gameInit(this);
+        gameStart();
+    }
+
+    public static void gameInit(Container container) {
 
         GameState.init();
         ClientState.init();
 
-        UI.init();
-        //UI.addKeyListener(ClientState.getKeyboard());
+        UI.init(container);
 
         activeView = new Login();
         UI.addKeyListener(activeView.getKeyListener());
@@ -47,7 +57,7 @@ public class PokemonGame {
     /**
      * Start the tame
      */
-    public static void start(){
+    public static void gameStart(){
 
     	gameLoop = new GameLoop();
     	gameLoop.init();
@@ -438,17 +448,17 @@ public class PokemonGame {
 
     public static void main(String[] args) {
 
-        PokemonGame.init();
 
         JFrame frame = new JFrame("Pokemon");
-
-        UI.addToContainer(frame.getContentPane());
-        UI.addAsWindowListener(frame);
 
         frame.setSize(UI.APP_WIDTH * UI.scale + 10, UI.APP_HEIGHT * UI.scale + UI.CHAT_HEIGHT + 30);
         frame.setVisible(true);
 
-        PokemonGame.start();
+        PokemonGame.gameInit(frame.getContentPane());
+
+        frame.addWindowListener(new WindowEventHandler());
+
+        PokemonGame.gameStart();
 
     }
 

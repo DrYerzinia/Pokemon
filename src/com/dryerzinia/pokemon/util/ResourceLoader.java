@@ -87,7 +87,10 @@ public final class ResourceLoader {
         	else
         		url = ResourceLoader.class.getClassLoader().getResource(image_file_path);
 
-           	return Toolkit.getDefaultToolkit().getImage(url);
+            if(url == null)
+            	return null;
+
+            return Toolkit.getDefaultToolkit().getImage(url);
 
         } catch (MalformedURLException e) {
 
