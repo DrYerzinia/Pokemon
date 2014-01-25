@@ -19,10 +19,10 @@ public class Flower extends Tile {
 		int dx2 = dx1 + 8;
 		int dy2 = dy1 + 8;
 
-		if(pos < period*0.5)
+		if(pos < period*0.375)
 			g.drawImage(img, dx1, dy1, dx2, dy2, 0, 0, 8, 8, null);
 
-		else if(pos >= period*0.5 && pos < period*0.75)
+		else if(pos >= period*0.375 && pos < period*0.75)
 			g.drawImage(img, dx1, dy1, dx2, dy2, 8, 8, 16, 16, null);
 
 		else if(pos >= period*0.75)

@@ -56,7 +56,7 @@ public class PokemonGame extends Applet {
     }
 
     /**
-     * Start the tame
+     * Start the game
      */
     public static void gameStart(){
 

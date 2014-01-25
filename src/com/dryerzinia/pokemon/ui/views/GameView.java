@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Person;
 
 public class GameView implements View {
 
@@ -46,7 +47,14 @@ public class GameView implements View {
 
 		if(!ClientState.isLoaded()) return;
 
-		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);;
+		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);
+
+		for(Actor actor : GameState.actors){
+			Person person = (Person) actor;
+			if(person.level == ClientState.player.level)
+				person.draw(0, 0, 0, 0, graphics);
+		}
+	
 		ClientState.player.draw(graphics);
 
 	}

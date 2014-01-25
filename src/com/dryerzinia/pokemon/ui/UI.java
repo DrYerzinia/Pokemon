@@ -69,7 +69,6 @@ public class UI {
     	BufferedImage bufferImage = new BufferedImage(APP_WIDTH, APP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
     	Graphics bufferGraphics = bufferImage.getGraphics();
 
-    	
     	/*
     	 * Clear buffer to black
     	 */

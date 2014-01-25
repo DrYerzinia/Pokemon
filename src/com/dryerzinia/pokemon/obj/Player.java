@@ -3,10 +3,8 @@ import java.util.*;
 import java.awt.*;
 import java.io.*; // Serializable
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
-import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -21,6 +19,13 @@ public class Player implements Serializable {
      */
     public static final int CHARACTER_OFFSET = 4;
 
+    public static final float ANIMATION_TIME_STEP = 250;
+
+    public static final int JUMPING		= 0;
+    public static final int STEPPING	= 1;
+    public static final int SLIDING		= 2;
+    public static final int NORMAL		= 3;
+
     /*
      * Global reference of Character for Client
      */
@@ -32,7 +37,7 @@ public class Player implements Serializable {
      * Drives animation
      */
     public float x, y;
-    private transient boolean sliding;
+    private transient int animationState;
     private transient boolean stepSide;
     private transient int animationElapsed;
 
@@ -61,7 +66,6 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
-        sliding = false;
         stepSide = false;
         animationElapsed = 0;
 
@@ -83,7 +87,6 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
-        sliding = false;
         stepSide = false;
         animationElapsed = 0;
 
@@ -107,7 +110,6 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
-        sliding = false;
         stepSide = false;
         animationElapsed = 0;
 
@@ -171,16 +173,16 @@ public class Player implements Serializable {
     		 * If we are facing the direction
 	    	 */
 	    	if(facing == Direction.UP)
-	    		y -= deltaTime/UI.animationTimeStep;
+	    		y -= deltaTime/ANIMATION_TIME_STEP;
 	
 	    	if(facing == Direction.DOWN)
-	    		y += deltaTime/UI.animationTimeStep;
+	    		y += deltaTime/ANIMATION_TIME_STEP;
 	
 	    	if(facing == Direction.LEFT)
-	    		x -= deltaTime/UI.animationTimeStep;
+	    		x -= deltaTime/ANIMATION_TIME_STEP;
 	
 	    	if(facing == Direction.RIGHT)
-	    		x += deltaTime/UI.animationTimeStep;
+	    		x += deltaTime/ANIMATION_TIME_STEP;
     	}
 
     }
@@ -192,7 +194,7 @@ public class Player implements Serializable {
     	/*
     	 * If we exceed time step
     	 */
-    	if(animationElapsed > UI.animationTimeStep){
+    	if(animationElapsed > ANIMATION_TIME_STEP){
     
     		/*
     		 * change step side for alternating gait
@@ -202,7 +204,7 @@ public class Player implements Serializable {
     		/*
     		 * we have to get even with the square
     		 */
-   			animationMove((int)(deltaTime-(animationElapsed-UI.animationTimeStep)));
+   			animationMove((int)(deltaTime-(animationElapsed-ANIMATION_TIME_STEP)));
     		x = Math.round(x);
     		y = Math.round(y);
 
@@ -219,7 +221,7 @@ public class Player implements Serializable {
     			 * over to the next animation and change directions in case we turned and move
     			 * that way
     			 */
-    			animationElapsed -= UI.animationTimeStep;
+    			animationElapsed -= ANIMATION_TIME_STEP;
     			facing = direction;
     			animationMove(animationElapsed);
 
@@ -280,6 +282,7 @@ public class Player implements Serializable {
 
     }
 
+
     public void draw(int x, int y, Graphics graphics) {
 
     	setImage(0, 0);
@@ -298,8 +301,8 @@ public class Player implements Serializable {
     	/*
     	 * If animation is in first 1/4 or last 1/4 we use normal image
     	 */
-    	if(animationElapsed < UI.animationTimeStep*(1.0/4.0)
-    	 || animationElapsed > UI.animationTimeStep*(3.0/4.0))
+    	if(animationElapsed < ANIMATION_TIME_STEP*0.25
+    	 || animationElapsed > ANIMATION_TIME_STEP*0.75)
     		img = sprite[facing.getValue()];
 
     	/*
@@ -409,7 +412,6 @@ public class Player implements Serializable {
         poke = new MysqlConnect.PokemonContainer();
         items = new ArrayList<Item>();
 
-        sliding = false;
         stepSide = false;
         animationElapsed = 0;
         

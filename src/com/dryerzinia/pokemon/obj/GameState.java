@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Grid;
@@ -30,13 +31,16 @@ public class GameState {
         Pokemon.readPokemonBaseStats();
 
     	load("save.json");
-    	save("testsave.json");
 
     	actors = new ArrayList<Actor>();
 
-        for(Tile tile : mtile)
-            if (tile instanceof Actor)
+        for(Tile tile : mtile){
+            if(tile instanceof Actor){
                 actors.add((Actor)tile);
+                Person person = (Person)tile;
+                level.get(person.level).grid.grid[(int)person.x][(int)person.y].remove(person);
+            }
+        }
 
     }
 

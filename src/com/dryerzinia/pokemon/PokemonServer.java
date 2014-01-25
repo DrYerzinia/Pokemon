@@ -918,10 +918,10 @@ public class PokemonServer {
         public synchronized void sendActor(Person p, int activity)
                 throws IOException {
             if (activity == Person.A_TALKING_TO)
-                oos.writeObject(new SendActTalkingToClientMessage(p.id, p.x,
-                        p.y, p.dir, p.level, p.onClick.getActive()));
+                oos.writeObject(new SendActTalkingToClientMessage(p.id, (int)p.x,
+                		(int)p.y, p.dir, p.level, p.onClick.getActive()));
             else
-                oos.writeObject(new SendActMovedClientMessage(p.id, p.x, p.y,
+                oos.writeObject(new SendActMovedClientMessage(p.id, (int)p.x, (int)p.y,
                         p.dir, p.level));
             oos.flush();
             oos.reset();

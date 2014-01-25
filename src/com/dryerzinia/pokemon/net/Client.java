@@ -25,7 +25,6 @@ import com.dryerzinia.pokemon.net.msg.server.SMLoad;
 import com.dryerzinia.pokemon.net.msg.server.SMLogOff;
 import com.dryerzinia.pokemon.net.msg.server.SMLogin;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.act.SendActMovedServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
@@ -491,27 +490,11 @@ public final class Client {
             	streamToServer.writeObject(
             		new SendActTalkingToServerMessage(
             			person.id,
-            			person.x,
-                        person.y,
+            			(int)person.x,
+                        (int)person.y,
                         person.dir,
                         person.level,
                         person.onClick.getActive()
-                    )
-            	);
-
-    		/*
-    		 * TODO
-    		 * Why would the client know about a ACTOR moving if the
-    		 * server didn't TELL THEM!!!
-    		 */
-    		else
-            	streamToServer.writeObject(
-            		new SendActMovedServerMessage(
-            			person.id,
-            			person.x,
-            			person.y,
-                        person.dir,
-                        person.level
                     )
             	);
 

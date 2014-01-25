@@ -12,34 +12,35 @@ import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Person extends Tile implements Actor {
 
-    static final long serialVersionUID = -47859827707060573L;
+	static final long serialVersionUID = -47859827707060573L;
 
-    public static final int A_MOVED = 0;
-    public static final int A_TALKING_TO = 1;
+	public static final int A_MOVED = 0;
+	public static final int A_TALKING_TO = 1;
 
-    public static final GMenu ALREADY_ACTIVE_MENU = new GMenu(
-            "He's talking to \nsomeone else...", null, 0, 6, 10, 3);
+	public static final GMenu ALREADY_ACTIVE_MENU = new GMenu("He's talking to \nsomeone else...", null, 0, 6, 10, 3);
 
-    protected transient Image sprite[];
-    protected int px = -1, py = -1;
+	public static final float ANIMATION_TIME_STEP = 666; // 2/3 of a second
 
-    public Direction dir;
-    public int x, y;
-    public int level;
+	protected transient Image sprite[];
+	protected int px = -1, py = -1;
 
-    /*
-     * Animation variables
-     * animationElapsedTime keeps track of how far into the animation we are
-     * stepSide keeps track of which foot we are stepping with (left or right)
-     */
-    protected transient int animationElapsedTime;
-    protected transient boolean stepSide;
+	public Direction dir;
+	public int level;
 
-    protected transient Direction directionBeforeTalk;
-    protected transient boolean wasTalking = false;
-    protected transient boolean wasTalkingToYou = false;
+	public float x, y;
+	/*
+	 * Animation variables
+	 * movements keeps a list of the positions we need to move to received
+	 *  from the server
+	 * animationElapsedTime keeps track of how far into the animation we are
+	 */
+	protected transient LinkedList<Position> movements;
+	protected transient Position newPosition;
+	protected transient int animationElapsedTime;
 
-    protected transient LinkedList<Position> movements;
+	protected transient Direction directionBeforeTalk;
+	protected transient boolean wasTalking = false;
+	protected transient boolean wasTalkingToYou = false;
 
     public Person() {
 
@@ -66,7 +67,6 @@ public class Person extends Tile implements Actor {
     public void init(){
 
     	animationElapsedTime = 0;
-    	stepSide = false;
 
     	movements = new LinkedList<Position>();
 
@@ -74,12 +74,20 @@ public class Person extends Tile implements Actor {
     
     public void loadImage() {
 
-        sprite = new Image[4];
+        sprite = new Image[10];
 
         sprite[0] = ResourceLoader.getSprite(imgName + "U.png");
         sprite[1] = ResourceLoader.getSprite(imgName + "D.png");
         sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
         sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
+
+        sprite[4] = ResourceLoader.getSprite(imgName + "U1.png");
+        sprite[5] = ResourceLoader.getSprite(imgName + "D1.png");
+        sprite[6] = ResourceLoader.getSprite(imgName + "L1.png");
+        sprite[7] = ResourceLoader.getSprite(imgName + "R1.png");
+
+        sprite[8] = ResourceLoader.getSprite(imgName + "U2.png");
+        sprite[9] = ResourceLoader.getSprite(imgName + "D2.png");
 
     }
 
@@ -105,6 +113,30 @@ public class Person extends Tile implements Actor {
 
     protected void setImage(int x, int y) {
 
+    	if(     animationElapsedTime < ANIMATION_TIME_STEP*0.15
+    	 ||     animationElapsedTime > ANIMATION_TIME_STEP*0.85
+    	 || (   animationElapsedTime > ANIMATION_TIME_STEP*0.45
+    	     && animationElapsedTime < ANIMATION_TIME_STEP*0.55
+    		))
+    		img = sprite[dir.getValue()];
+
+    	else if(animationElapsedTime < ANIMATION_TIME_STEP*0.45){
+
+    			img = sprite[dir.getValue()+4];
+
+    	} else if(animationElapsedTime > ANIMATION_TIME_STEP*0.55){
+
+    		if(dir == Direction.UP || dir == Direction.DOWN)
+    			img = sprite[dir.getValue()+8];
+    		else
+    			img = sprite[dir.getValue()+4];
+
+    	}
+
+    	/*
+    	 * TODO Fix talking to crap
+    	 */
+    	/*
         try {
             if ((onClick != null && !onClick.active) || onClick == null) {
                 if (wasTalking && wasTalkingToYou) {
@@ -142,21 +174,32 @@ public class Person extends Tile implements Actor {
                     loadImage();
             }
         }
+        */
     }
 
-    public void draw(int x, int y, Graphics g) {
+    @Override
+    public void draw(int x, int y, int xo, int yo, Graphics graphics) {
 
     	setImage(x, y);
-        super.draw(x, y, 0, Player.CHARACTER_OFFSET, g);
+    	graphics.drawImage(img, (int)((this.x-ClientState.player.x)*16), (int)((this.y - ClientState.player.y)*16) - Player.CHARACTER_OFFSET, null);
 
     }
 
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
+    private void animationMove(int deltaTime){
 
-    	setImage(x, y);
-        super.draw(x, y, xo, yo + Player.CHARACTER_OFFSET, g);
+    	if(dir == Direction.UP)
+    		y -= deltaTime/ANIMATION_TIME_STEP;
 
-    }
+    	if(dir == Direction.DOWN)
+    		y += deltaTime/ANIMATION_TIME_STEP;
+
+    	if(dir == Direction.LEFT)
+    		x -= deltaTime/ANIMATION_TIME_STEP;
+
+    	if(dir == Direction.RIGHT)
+    		x += deltaTime/ANIMATION_TIME_STEP;
+
+    };
 
     /*
      * Updates animation variables
@@ -169,8 +212,30 @@ public class Person extends Tile implements Actor {
     	 */
     	if(animationElapsedTime > 0){
 
-    		//
+    		animationElapsedTime += deltaTime;
 
+	    	if(animationElapsedTime > ANIMATION_TIME_STEP){
+
+	   			animationMove((int)(deltaTime-(animationElapsedTime-ANIMATION_TIME_STEP)));
+	    		x = newPosition.getX();
+	    		y = newPosition.getY();
+
+	    		// Start next movement
+	    		if(!movements.isEmpty()){
+
+	    				newPosition = movements.remove();
+	    	    		dir = newPosition.getFacing();
+
+	    	    		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
+
+	    	    			animationElapsedTime += deltaTime;
+	    	    			animationMove((int)(deltaTime-(animationElapsedTime-ANIMATION_TIME_STEP)));
+
+	    	    		}
+
+	    		} else animationElapsedTime = 0;
+
+	    	} else animationMove(deltaTime);
 
     	}
 
@@ -179,10 +244,17 @@ public class Person extends Tile implements Actor {
     	 */
     	else if(!movements.isEmpty()){
 
-    		//
+    		newPosition = movements.remove();
 
+    		dir = newPosition.getFacing();
+
+    		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
+
+    			animationElapsedTime += deltaTime;
+    			animationMove(deltaTime);
+
+    		}
     	}
-
     }
 
     @Override
