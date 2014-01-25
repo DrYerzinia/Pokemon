@@ -18,6 +18,7 @@ import com.dryerzinia.pokemon.ui.Overlay;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.util.StringStream;
 
 public class Login implements View, KeyListener {
 
@@ -233,7 +234,7 @@ public class Login implements View, KeyListener {
         	String json = json_reader.readLine();
 
         	@SuppressWarnings("unchecked")
-			HashMap<String, Object> json_obj = (HashMap<String, Object>) JSONObject.JSONToObject(json);
+			HashMap<String, Object> json_obj = (HashMap<String, Object>) JSONObject.JSONToObject(new StringStream(json));
 
         	Login.username = (String) json_obj.get("username");
             Login.password = (String) json_obj.get("password");

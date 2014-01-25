@@ -3,40 +3,15 @@ package com.dryerzinia.pokemon.ui;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Window;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TimerTask;
 
-import javax.swing.JPanel;
-
-import com.dryerzinia.pokemon.net.Client;
-import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.ui.editor.MapEditor;
-import com.dryerzinia.pokemon.util.JSONObject;
-import com.dryerzinia.pokemon.util.ResourceLoader;
-import com.dryerzinia.pokemon.views.Login;
 import com.dryerzinia.pokemon.views.View;
 
-@SuppressWarnings("serial")
 public class UI {
 
     public static final int APP_WIDTH = 160;

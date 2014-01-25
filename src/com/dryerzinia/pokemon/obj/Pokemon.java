@@ -17,6 +17,7 @@ import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.util.StringStream;
 
 import java.awt.event.*;
 
@@ -781,7 +782,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     		/* Base Pokemon loads add themselves to the master list automatically
     		 * in there fromJSON methods
     		 */
-    		JSONObject.JSONToArray(json);
+    		JSONObject.JSONToArray(new StringStream(json));
     		
     	} catch(IOException ioe) {
 

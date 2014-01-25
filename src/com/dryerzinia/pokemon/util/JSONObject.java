@@ -166,95 +166,84 @@ public class JSONObject {
 
     }
 
-    public static Object[] JSONToArrayArray(String json){
+    public static Object[] JSONToArrayArray(StringStream json){
 
     	ArrayList<Object> objs = new ArrayList<Object>();
 
-    	boolean parsing = true;
-    	int last_comma = 0;
+    	while(true){
 
-    	while(parsing){
+    		objs.add(JSONToArray(json));
+    		json.ignoreUntil("[]");
 
-    		int comma = 0;
+    		if(json.peek() == ']') break;
 
-    		if(json.length() <= last_comma || json.charAt(last_comma) == ']') break;
-
-    		comma = indexOfEndingParenthetical(json, '[', ']', last_comma + 1);
-    		objs.add(JSONToArray(json.substring(last_comma + 1, comma)));
-
-    		last_comma = comma;
-    		
     	}
+
+    	json.ignore();
 
     	return objs.toArray();
 
     }
     
-    public static Object[] JSONToObjectArray(String json){
+    public static Object[] JSONToObjectArray(StringStream json){
 
     	ArrayList<Object> objs = new ArrayList<Object>();
 
-    	boolean parsing = true;
-    	int last_comma = 0;
+    	while(true){
 
-    	while(parsing){
+    		objs.add(JSONToObject(json));
+    		json.ignoreUntil("{]");
 
-    		int comma = 0;
+    		char c = json.peek();
+    		if(c == ']') break;
 
-    		if(json.length() <= last_comma || json.charAt(last_comma) == ']') break;
-
-    		if(json.substring(last_comma + 1, last_comma + 5).equals("null")){
-    			objs.add(null);
-    			comma = last_comma + 5;
-    		} else {
-    			comma = indexOfEndingParenthetical(json, '{', '}', last_comma + 1);
-    			objs.add(JSONToObject(json.substring(last_comma + 1, comma)));
-    		}
-
-    		last_comma = comma;
-    		
     	}
+
+    	json.ignore();
 
     	return objs.toArray();
 
     }
     
-    public static Object[] JSONToStringArray(String json){
+    public static Object[] JSONToStringArray(StringStream json){
     	// TODO IMPLEMENT
 		return null;
     }
     
-    public static Object[] JSONToIntArray(String json){
+    public static Object[] JSONToNumericalArray(StringStream json){
+
     	ArrayList<Float> flts = new ArrayList<Float>();
 
-    	boolean parsing = true;
-    	int last_comma = 0;
+    	while(true){
 
-    	while(parsing){
+    		flts.add(new Float(json.readUntil(" \n\t,]")));
 
-    		int comma = json.indexOf(',', last_comma + 1);
-    		if(comma == -1)
-    			comma = json.indexOf(']', last_comma + 1);
+    		if(json.peek() == ']') break;
+    		json.ignore();
+    		json.skipWhitespace();
 
-    		if(json.length() <= last_comma || json.charAt(last_comma) == ']') break;
-    		
-    		flts.add(new Float(json.substring(last_comma + 1, comma)));
-
-    		last_comma = comma;
-    		
     	}
+
+    	json.ignore();
 
     	return flts.toArray();
     	
     }
 
-    public static Object[] JSONToArray(String json){
+    public static Object[] JSONToArray(StringStream json){
 
     	// Return empty array of len 0 if array is 0 length
 
-    	if(json.charAt(0) == '[' && json.charAt(1) == ']') return new Object[0];
+    	json.ignore();
+    	json.skipWhitespace();
+    	char c = json.peek();
 
-    	switch(json.charAt(1)){
+    	if(c == ']'){
+    		json.ignore();
+    		return new Object[0];
+    	}
+
+    	switch(c){
     	case '[':
     		return JSONToArrayArray(json);
     	case '{':
@@ -263,7 +252,7 @@ public class JSONObject {
     		return JSONToStringArray(json);
     	default:
     		// TODO BOOLEAN
-    		return JSONToIntArray(json);
+    		return JSONToNumericalArray(json);
     	}
 
     }
@@ -273,79 +262,67 @@ public class JSONObject {
 	 * @param JSON to be converted into an object
 	 * @return Object that was represented by JSON
 	 */
-	public static Object JSONToObject(String json){
+	public static Object JSONToObject(StringStream json){
 
     	HashMap<String, Object> parameters = new HashMap<String, Object>();
 
-    	boolean parsing = true;
-    	int last_comma = 0;
-
-    	while(parsing){
-
-    		int colon = json.indexOf(':', last_comma);
-    		int comma;
+    	while(true){
 
     		Object param = null;
 
-    		if(colon == -1) break;
+    		json.skipWhitespace();						//		WHITESPACE
+    		if(json.peek() == '}'){
+        		json.ignore();							// }
+        		break;
+        	}
+        	json.ignore();								// ,
+        	json.skipWhitespace();						//		WHITESPACE
+        	json.ignore();								// "
+        	String paramName = json.readUntil("\"");	// PARAM NAME
+    		json.ignore();								// "
+    		json.skipWhitespace();						//		WHITESPACE
+    		json.ignore();								// :
+    		json.skipWhitespace();						//		WHITESPACE
 
-    		switch(json.charAt(colon + 1)){
+    		switch(json.peek()){						// [ or { or " or number or boolean or null
     			case '[':
-    				// Parse Array
-    				comma = indexOfEndingParenthetical(json, '[', ']', colon + 1) + 1;
-    				param = JSONToArray(json.substring(colon + 1, comma - 1));
+    				param = JSONToArray(json);
     				break;
     			case '{':
-    				// Parse Object
-    				comma = indexOfEndingParenthetical(json, '{', '}', colon + 1) + 1;
-    				param = JSONToObject(json.substring(colon + 1, comma - 1));
+    				param = JSONToObject(json);
     				break;
     			case '"':
-    				// Parse String
-    				comma = json.indexOf('\"', colon + 2);
-    				if(comma == -1)
-    					comma = json.indexOf('}', colon);
-    				if(colon + 2 > comma -1)
-    					param = "";
-    				else
-    					param = unescapeJava(json.substring(colon + 2, comma));
-    				comma++;
+    				json.ignore();
+   					param = unescapeJava(json.readUntil("\""));
+   					json.ignore();
+   					json.skipWhitespace();
     				break;
     			default:
-    				// Parse Number or Boolean
-    				comma = json.indexOf(',', colon);
-    				if(comma == -1)
-    					comma = json.indexOf('}', colon);
-    				{
+   					String value = json.readUntil(" \n\t,}");
 
-    					String value = json.substring(colon + 1, comma);
+       				if(value.equals("false") || value.equals("true"))
+       					param = new Boolean(value);
+ 
+       				else if(value.equals("null"))
+       					param = null;
 
-        				if(value.equals("false") || value.equals("true"))
-        					param = new Boolean(value);
-        				else if(value.equals("null"))
-        					param = null;
-        				else
-            				param = new Float(value);
-    					
-    				}
+       				else
+           				param = new Float(value);
     				break;
     		}
 
-    		String param_name = json.substring(json.indexOf("\"", last_comma) + 1, colon - 1);
+    		parameters.put(paramName, param);
 
-    		parameters.put(param_name, param);
-
-    		last_comma = comma;
     	}
 
-    	String class_name = (String) parameters.get("class");
+    	String className = (String) parameters.get("class");
     	
-    	if(class_name == null)
+    	if(className == null)
     		return parameters;
 
     	try {
 
-    		Class<?> c = Class.forName(class_name);
+    		Class<?> c = Class.forName(className);
     		Object o = c.newInstance();
 
     		boolean has_superclass = true;
@@ -421,7 +398,7 @@ public class JSONObject {
     	return null;
 
     }
-
+/*
     public static int indexOfEndingParenthetical(String s, char left_paren, char right_paren, int cur_pos){
 
     	boolean searching = true;
@@ -454,7 +431,7 @@ public class JSONObject {
 		return cur_pos;
 
     }
-
+*/
 	/**
 	 * Convert String to JSON
 	 * @param String object to convert to JSON

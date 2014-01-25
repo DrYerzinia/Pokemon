@@ -13,6 +13,7 @@ import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.StringStream;
 
 public class GameState {
 
@@ -99,8 +100,8 @@ public class GameState {
 
 			json_reader.close();
 		
-			Object[] tiles = JSONObject.JSONToArray(json_1);
-			Object[] levels = JSONObject.JSONToArray(json_2);
+			Object[] tiles = JSONObject.JSONToArray(new StringStream(json_1));
+			Object[] levels = JSONObject.JSONToArray(new StringStream(json_2));
 
             for(int i = 0; i < tiles.length; i++)
             	mtile.add((Tile)tiles[i]);
