@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.net.ByteInputStream;
 import com.dryerzinia.pokemon.net.DatagramSocketStreamer;
 import com.dryerzinia.pokemon.net.Streamer;
@@ -57,7 +58,7 @@ public class PokemonServer {
     ArrayList<ObjectOutputStream> oos2;
 
     Timer server_tasks;
-    
+
     /**
      * Entry point for Pokemon game server
      * @param args
@@ -559,7 +560,7 @@ public class PokemonServer {
      */
     public synchronized Player getNextPlayer() {
         playeridcount++;
-        return new Player(playeridcount, 5, 5, 0, 9, "Player");
+        return new Player(playeridcount, 5, 5, Direction.UP, 9, "Player");
     }
     
     /**

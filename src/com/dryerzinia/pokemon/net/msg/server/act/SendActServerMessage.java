@@ -6,6 +6,7 @@ SendActServerMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 
 public class SendActServerMessage extends ServerMessage {
@@ -15,7 +16,7 @@ public class SendActServerMessage extends ServerMessage {
     int id;
     int x;
     int y;
-    int dir;
+    Direction dir;
     int level;
 
     public SendActServerMessage() {

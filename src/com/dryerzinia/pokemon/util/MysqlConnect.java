@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
@@ -143,7 +144,7 @@ public class MysqlConnect {
 			stmt.setInt(1, (int) player.x);
 			stmt.setInt(2, (int) player.y);
 			stmt.setInt(3, player.level); // current level player is on
-			stmt.setInt(4, player.facing); // player direction
+			stmt.setInt(4, player.facing.getValue()); // player direction
 			stmt.setInt(5, player.lastPokemonCenter.getX());
 			stmt.setInt(6, player.lastPokemonCenter.getY());
 			stmt.setInt(7, player.lastPokemonCenter.getLevel());
@@ -534,11 +535,11 @@ public class MysqlConnect {
 				player.id = results.getInt("id");
 				player.x = results.getInt("x");
 				player.y = results.getInt("y");
-				player.facing = results.getInt("dir");
+				player.facing = Direction.get(results.getInt("dir"));
 				player.level = results.getInt("level");
 				player.name = results.getString("UserName");
 				player.imgName = results.getString("picture");
-				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), -1);
+				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), Direction.NONE);
 				player.money = results.getInt("money");
 			}
 		} catch (SQLException ex) {

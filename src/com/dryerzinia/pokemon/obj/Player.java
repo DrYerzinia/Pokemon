@@ -36,7 +36,7 @@ public class Player implements Serializable {
     private transient boolean stepSide;
     private transient int animationElapsed;
 
-    public int facing; // facing direction
+    public Direction facing; // facing direction
     public int level; // current level player is in
     
     public Position lastPokemonCenter;
@@ -67,7 +67,7 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, int x, int y, int dir, int level, String name) {
+    public Player(int id, int x, int y, Direction dir, int level, String name) {
 
         this.id = id;
 
@@ -89,7 +89,7 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, int x, int y, int dir, int level, String name,
+    public Player(int id, int x, int y, Direction dir, int level, String name,
             String imgName) {
 
         this.id = id;
@@ -160,8 +160,7 @@ public class Player implements Serializable {
 
     		level = newPosition.getLevel();
 
-    		int dir = newPosition.getFacing();
-    		if(dir != -1) facing = dir;
+    		facing = newPosition.getFacing();
 
     		canStep = true;
 
@@ -186,7 +185,7 @@ public class Player implements Serializable {
 
     }
 
-    private void continueAnimation(byte direction, int deltaTime){
+    private void continueAnimation(Direction direction, int deltaTime){
 
 		animationElapsed += deltaTime;
 
@@ -241,7 +240,7 @@ public class Player implements Serializable {
      * @param direction The direction that the player wants the character to go
      * @param deltaTime Amount of time in ms that have elapsed since last update
      */
-    public void update(byte direction, int deltaTime) {
+    public void update(Direction direction, int deltaTime) {
 
     	/*
     	 * If there is an animation going we finish it
@@ -301,7 +300,7 @@ public class Player implements Serializable {
     	 */
     	if(animationElapsed < UI.animationTimeStep*(1.0/4.0)
     	 || animationElapsed > UI.animationTimeStep*(3.0/4.0))
-    		img = sprite[facing];
+    		img = sprite[facing.getValue()];
 
     	/*
     	 * If its in the middle 1/2 we use the moving animation
@@ -309,9 +308,9 @@ public class Player implements Serializable {
     	else {
 
     		if((facing == Direction.UP || facing == Direction.DOWN) && stepSide)
-    			img = sprite[facing+8];
+    			img = sprite[facing.getValue()+8];
     		else
-    			img = sprite[facing+4];
+    			img = sprite[facing.getValue()+4];
 
     	}
 

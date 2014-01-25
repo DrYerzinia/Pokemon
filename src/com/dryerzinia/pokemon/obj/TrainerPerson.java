@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.ui.Fight;
@@ -16,7 +17,7 @@ public class TrainerPerson extends Person implements Actor {
 
     static final long serialVersionUID = -4342729814303857101L;
 
-    protected int face;
+    protected Direction face;
     protected int x, y;
     protected int con = 0;
     protected int viewDist;
@@ -26,7 +27,7 @@ public class TrainerPerson extends Person implements Actor {
     public TrainerPerson() {
     }
 
-    public TrainerPerson(String imgName, boolean cbso, GMenu onClick, int dir,
+    public TrainerPerson(String imgName, boolean cbso, GMenu onClick, Direction dir,
             int x, int y, int viewDist) {
         this.imgName = imgName;
         this.dir = dir;
@@ -60,7 +61,7 @@ public class TrainerPerson extends Person implements Actor {
     protected void setImage(int x, int y) {
         // if(px == -1) img = sprite[dir];
         if (px == -1)
-            img = sprite[face];
+            img = sprite[face.getValue()];
         else if (x <= 3) {
             img = sprite[3];
         } else if (x >= 5) {

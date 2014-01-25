@@ -26,7 +26,7 @@ public class GameState {
 
     public static void init(){
 
-    	Move.init_base_moves();
+    	Move.readMoveBase();
         Pokemon.readPokemonBaseStats();
 
     	load("save.json");

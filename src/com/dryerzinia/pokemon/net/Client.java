@@ -33,14 +33,14 @@ import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.UI;
-import com.dryerzinia.pokemon.views.Login;
+import com.dryerzinia.pokemon.ui.views.Login;
 
 public final class Client {
 
     private static int connectMode = PokemonServer.CM_TCP;
 
-    private static ObjectOutputStream object_output_stream_to_server;
-    private static Socket socket_to_server;
+    private static ObjectOutputStream streamToServer;
+    private static Socket socketToServer;
 
     public static Timer pinger;
 
@@ -175,16 +175,16 @@ public final class Client {
 
         }
 
-        socket_to_server = new Socket(proxy);
+        socketToServer = new Socket(proxy);
 
-        socket_to_server.connect(inet);
+        socketToServer.connect(inet);
 
-        object_output_stream_to_server = new ObjectOutputStream(socket_to_server.getOutputStream());
+        streamToServer = new ObjectOutputStream(socketToServer.getOutputStream());
 
-        object_output_stream_to_server.writeObject(new SMLogin(Login.username, Login.password));
-        object_output_stream_to_server.flush();
+        streamToServer.writeObject(new SMLogin(Login.username, Login.password));
+        streamToServer.flush();
 
-        ObjectInputStream ois = new ObjectInputStream(socket_to_server.getInputStream());
+        ObjectInputStream ois = new ObjectInputStream(socketToServer.getInputStream());
 
         new MessageListener(ois).start();
 
@@ -330,8 +330,8 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new GetItemServerMessage(item));
-    		object_output_stream_to_server.flush();
+    		streamToServer.writeObject(new GetItemServerMessage(item));
+    		streamToServer.flush();
 
     	} catch (IOException ioe) {
 
@@ -348,8 +348,8 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new SMLoad());
-        	object_output_stream_to_server.flush();
+    		streamToServer.writeObject(new SMLoad());
+        	streamToServer.flush();
 
     	} catch(IOException ioe) {
 
@@ -367,8 +367,8 @@ public final class Client {
 
     	try {
 
-        	object_output_stream_to_server.writeObject(new GetPokemonServerMessage(pokemon));
-        	object_output_stream_to_server.flush();
+        	streamToServer.writeObject(new GetPokemonServerMessage(pokemon));
+        	streamToServer.flush();
 
         } catch(IOException ioe) {
 
@@ -384,8 +384,8 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new SMLogOff());
-        	object_output_stream_to_server.flush();
+    		streamToServer.writeObject(new SMLogOff());
+        	streamToServer.flush();
 
     	} catch (IOException ioe) {
 
@@ -405,9 +405,9 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new PingServerMessage());
-        	object_output_stream_to_server.flush();
-        	object_output_stream_to_server.reset();
+    		streamToServer.writeObject(new PingServerMessage());
+        	streamToServer.flush();
+        	streamToServer.reset();
 
     	} catch (IOException ioe) {
 
@@ -423,8 +423,8 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new MessageServerMessage(msg));
-    		object_output_stream_to_server.flush();
+    		streamToServer.writeObject(new MessageServerMessage(msg));
+    		streamToServer.flush();
 
         } catch (IOException ioe) {
 
@@ -441,8 +441,8 @@ public final class Client {
      */
     public static synchronized void writeServerMessage(ServerMessage sm) throws IOException {
 
-        	object_output_stream_to_server.writeObject(sm);
-        	object_output_stream_to_server.flush();
+        	streamToServer.writeObject(sm);
+        	streamToServer.flush();
 
     }
 
@@ -458,9 +458,9 @@ public final class Client {
 
     	try {
 
-    		object_output_stream_to_server.writeObject(new PlayerServerMessage(ClientState.player));
-        	object_output_stream_to_server.flush();
-        	object_output_stream_to_server.reset();
+    		streamToServer.writeObject(new PlayerServerMessage(ClientState.player));
+        	streamToServer.flush();
+        	streamToServer.reset();
 
     	} catch (IOException ioe) {
 
@@ -488,7 +488,7 @@ public final class Client {
     		 * talking to a Actor
     		 */
     		if (activity == Person.A_TALKING_TO)
-            	object_output_stream_to_server.writeObject(
+            	streamToServer.writeObject(
             		new SendActTalkingToServerMessage(
             			person.id,
             			person.x,
@@ -505,7 +505,7 @@ public final class Client {
     		 * server didn't TELL THEM!!!
     		 */
     		else
-            	object_output_stream_to_server.writeObject(
+            	streamToServer.writeObject(
             		new SendActMovedServerMessage(
             			person.id,
             			person.x,
@@ -515,8 +515,8 @@ public final class Client {
                     )
             	);
 
-            object_output_stream_to_server.flush();
-            object_output_stream_to_server.reset();
+            streamToServer.flush();
+            streamToServer.reset();
 
         } catch (IOException ioe) {
 

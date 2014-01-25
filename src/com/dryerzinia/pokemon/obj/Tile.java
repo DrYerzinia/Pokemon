@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.awt.*;
 
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.DeepCopy;
@@ -26,8 +27,8 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
     public int pixelOffsetY;
 
     public int changeToLevel = -1;
-    public int leaveDirection = -1;
-    public int exitDir = -1;
+    public Direction leaveDirection = Direction.NONE;
+    public Direction exitDir = Direction.NONE;
     public int xnew = -1;
     public int ynew = -1;
 
@@ -88,7 +89,7 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         this.onClick = onClick;
     }
 
-    public Tile(String imgName, boolean cbso, int ctl, int ld, int xnew,
+    public Tile(String imgName, boolean cbso, int ctl, Direction ld, int xnew,
             int ynew) {
         this.imgName = imgName;
         pixelOffsetX = 0;
@@ -102,8 +103,8 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         onClick = null;
     }
 
-    public Tile(String imgName, boolean cbso, int ctl, int ld, int xnew,
-            int ynew, int ed) {
+    public Tile(String imgName, boolean cbso, int ctl, Direction ld, int xnew,
+            int ynew, Direction ed) {
         this.imgName = imgName;
         pixelOffsetX = 0;
         pixelOffsetY = 0;

@@ -1,12 +1,46 @@
 package com.dryerzinia.pokemon.map;
 
-public final class Direction {
+public enum Direction {
 
-	public static final byte UP = 0;
-	public static final byte DOWN = 1;
-	public static final byte LEFT = 2;
-	public static final byte RIGHT = 3;
+	UP(0, "UP"),
+	DOWN(1, "DOWN"),
+	LEFT(2, "LEFT"),
+	RIGHT(3, "RIGHT"),
 
-	public static final byte NONE = 4;
+	NONE(4, "NONE");
+
+	private int value;
+	private String strValue;
+
+	Direction(int value, String strValue){
+		this.value = value;
+		this.strValue = strValue;
+	}
+
+	public int getValue(){
+		return value;
+	}
+
+	public String getStringValue(){
+		return strValue;
+	}
+
+	public static Direction get(int value){
+
+		for(Direction direction : Direction.values())
+			if(direction.getValue() == value) return direction;
+
+		return NONE;
+
+	}
+
+	public static Direction getFromString(String string){
+
+		for(Direction direction : Direction.values())
+			if(direction.getStringValue().equals(string)) return direction;
+
+		return NONE;
+
+	}
 
 }

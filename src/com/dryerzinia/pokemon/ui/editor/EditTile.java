@@ -1,6 +1,7 @@
 package com.dryerzinia.pokemon.ui.editor;
 import javax.swing.*;
 
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
@@ -159,8 +160,8 @@ public class EditTile extends JFrame {
             t.canBeSteppedOn = cbso.isSelected();
 
             t.changeToLevel = Integer.parseInt(ctltf.getText());
-            t.leaveDirection = Integer.parseInt(ldtf.getText());
-            t.exitDir = Integer.parseInt(edtf.getText());
+            t.leaveDirection = Direction.get(Integer.parseInt(ldtf.getText()));
+            t.exitDir = Direction.get(Integer.parseInt(edtf.getText()));
             t.xnew = Integer.parseInt(xntf.getText());
             t.ynew = Integer.parseInt(yntf.getText());
             t.pixelOffsetX = Integer.parseInt(poxtf.getText());
@@ -176,8 +177,8 @@ public class EditTile extends JFrame {
             t.canBeSteppedOn = cbso.isSelected();
 
             t.changeToLevel = Integer.parseInt(ctltf.getText());
-            t.leaveDirection = Integer.parseInt(ldtf.getText());
-            t.exitDir = Integer.parseInt(edtf.getText());
+            t.leaveDirection = Direction.get(Integer.parseInt(ldtf.getText()));
+            t.exitDir = Direction.get(Integer.parseInt(edtf.getText()));
             t.xnew = Integer.parseInt(xntf.getText());
             t.ynew = Integer.parseInt(yntf.getText());
             t.pixelOffsetX = Integer.parseInt(poxtf.getText());

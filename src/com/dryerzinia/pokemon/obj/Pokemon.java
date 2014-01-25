@@ -786,7 +786,7 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
     		
     	} catch(IOException ioe) {
 
-    		System.err.println("ERROR: Failed to load Pokemon Bast Stats!");
+    		System.err.println("ERROR: Failed to load Pokemon Base Stats!");
     		ioe.printStackTrace();
     		
     		// TODO Terminate program

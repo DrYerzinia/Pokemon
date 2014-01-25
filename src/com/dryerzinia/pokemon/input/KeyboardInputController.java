@@ -11,7 +11,7 @@ public class KeyboardInputController implements InputController, KeyListener {
 	/*
 	 * Last key to be the only one that was pressed
 	 */
-	private byte onlyPressed;
+	private Direction onlyPressed;
 
 	/*
 	 * States of the directional keys
@@ -40,7 +40,7 @@ public class KeyboardInputController implements InputController, KeyListener {
 	 * multiple keys down it sends the last key to be the only one pressed
 	 */
 	@Override
-	public byte direction() {
+	public Direction direction() {
 
 		return onlyPressed;
 

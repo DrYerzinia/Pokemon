@@ -1,6 +1,7 @@
 package com.dryerzinia.pokemon.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +93,21 @@ public class JSONObject {
 
 					else if(type == String.class)
 						json.append(stringToJSON((String)field.get(jsonObj)));
+
+					else if(type.isEnum()){
+
+						try {
+
+							json.append(stringToJSON((String)type.getMethod("getStringValue").invoke(field.get(jsonObj))));
+
+						} catch (InvocationTargetException | IllegalArgumentException | NoSuchMethodException | SecurityException e) {
+
+							System.err.println("Enum " + type.getName() + " failed to convert to JSON");
+							e.printStackTrace();
+
+						}
+
+					}
 
 					else if(type.isArray()){
 
@@ -351,6 +367,9 @@ public class JSONObject {
 
     					else if(type == boolean.class)
     						field.setBoolean(o, ((Boolean)param).booleanValue());
+
+    					else if(type.isEnum())
+    						field.set(o, type.getMethod("getFromString", String.class).invoke(null, (String) param));
 
     					else if(type.isArray()){
 

@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.dryerzinia.pokemon.ui.editor.MapEditor;
-import com.dryerzinia.pokemon.views.View;
+import com.dryerzinia.pokemon.ui.views.View;
 
 public class UI {
 

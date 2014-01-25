@@ -5,6 +5,7 @@ SendActTalkingToClientMessage.java
 
 import java.io.*;
 
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
@@ -16,7 +17,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
 	boolean b;
 
-    public SendActTalkingToClientMessage(int id, int x, int y, int dir, int level, boolean b) {
+    public SendActTalkingToClientMessage(int id, int x, int y, Direction dir, int level, boolean b) {
 
         this.id = id;
         position = new Position(x, y, level, dir);

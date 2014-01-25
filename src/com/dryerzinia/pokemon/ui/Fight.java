@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSGetNextPokemon;
 import com.dryerzinia.pokemon.net.msg.server.fight.FMTSSelectedAttack;
@@ -741,7 +742,7 @@ public class Fight extends Overlay implements Serializable {
 
             ClientState.player.goToLastPokemonCenter();
 
-            ClientState.player.facing = 0;
+            ClientState.player.facing = Direction.UP;
             for (int i = 0; i < 6; i++) {
                 if (ClientState.player.poke.belt[i] == null)
                     break;

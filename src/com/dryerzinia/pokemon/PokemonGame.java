@@ -22,10 +22,10 @@ import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.UI;
+import com.dryerzinia.pokemon.ui.views.GameView;
+import com.dryerzinia.pokemon.ui.views.Login;
+import com.dryerzinia.pokemon.ui.views.View;
 import com.dryerzinia.pokemon.util.WindowEventHandler;
-import com.dryerzinia.pokemon.views.GameView;
-import com.dryerzinia.pokemon.views.Login;
-import com.dryerzinia.pokemon.views.View;
 
 public class PokemonGame extends Applet {
 
@@ -40,6 +40,7 @@ public class PokemonGame extends Applet {
 
     	gameInit(this);
         gameStart();
+
     }
 
     public static void gameInit(Container container) {

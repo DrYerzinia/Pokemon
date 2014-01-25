@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.views;
+package com.dryerzinia.pokemon.ui.views;
 
 import java.awt.Graphics;
 import java.awt.event.KeyListener;

@@ -2,6 +2,8 @@ package com.dryerzinia.pokemon.obj;
 
 import java.io.Serializable;
 
+import com.dryerzinia.pokemon.map.Direction;
+
 public class Position implements Serializable {
 
 	private static final long serialVersionUID = 5663646265119040753L;
@@ -11,9 +13,9 @@ public class Position implements Serializable {
 
 	private int level;
 
-	private int facing;
+	private Direction facing;
 
-	public Position(int x, int y, int level, int facing){
+	public Position(int x, int y, int level, Direction facing){
 
 		this.x = x;
 		this.y = y;
@@ -36,7 +38,7 @@ public class Position implements Serializable {
 		return level;
 	}
 
-	public int getFacing(){
+	public Direction getFacing(){
 		return facing;
 	}
 

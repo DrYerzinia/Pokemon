@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
@@ -17,7 +18,7 @@ public class SendActMovedClientMessage extends SendActClientMessage {
 
     // static final long serialVersionUID = 6177261564125944892L;
 
-    public SendActMovedClientMessage(int id, int x, int y, int dir, int level) {
+    public SendActMovedClientMessage(int id, int x, int y, Direction dir, int level) {
 
         this.id = id;
         position = new Position(x, y, level, dir);

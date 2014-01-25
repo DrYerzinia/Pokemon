@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.awt.*;
 
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -22,7 +23,7 @@ public class Person extends Tile implements Actor {
     protected transient Image sprite[];
     protected int px = -1, py = -1;
 
-    public int dir;
+    public Direction dir;
     public int x, y;
     public int level;
 
@@ -34,7 +35,7 @@ public class Person extends Tile implements Actor {
     protected transient int animationElapsedTime;
     protected transient boolean stepSide;
 
-    protected transient int directionBeforeTalk;
+    protected transient Direction directionBeforeTalk;
     protected transient boolean wasTalking = false;
     protected transient boolean wasTalkingToYou = false;
 
@@ -46,7 +47,7 @@ public class Person extends Tile implements Actor {
 
     }
 
-    public Person(String imgName, boolean cbso, GMenu onClick, int dir) {
+    public Person(String imgName, boolean cbso, GMenu onClick, Direction dir) {
 
     	this.imgName = imgName;
         this.dir = dir;
@@ -111,27 +112,27 @@ public class Person extends Tile implements Actor {
                     wasTalkingToYou = false;
                     Client.writeActor(this, A_TALKING_TO);
                 }
-                img = sprite[dir];
+                img = sprite[dir.getValue()];
                 directionBeforeTalk = dir;
                 wasTalking = false;
             } else if (!wasTalkingToYou) {
-                img = sprite[dir];
+                img = sprite[dir.getValue()];
                 wasTalking = true;
             } else if (x <= 3) {
                 wasTalking = true;
-                dir = 3;
+                dir = Direction.RIGHT;
                 img = sprite[3];
             } else if (x >= 5) {
                 wasTalking = true;
-                dir = 2;
+                dir = Direction.LEFT;
                 img = sprite[2];
             } else if (y <= 3) {
                 wasTalking = true;
-                dir = 1;
+                dir = Direction.DOWN;
                 img = sprite[1];
             } else if (y >= 5) {
                 wasTalking = true;
-                dir = 0;
+                dir = Direction.UP;
                 img = sprite[0];
             }
         } catch (NullPointerException npe) {
@@ -192,18 +193,6 @@ public class Person extends Tile implements Actor {
     public void addMovment(Position position){
 
     	movements.add(position);
-
-    }
-
-    public void writePersonID(ObjectOutputStream out) throws IOException {
-
-        // TODO: Make PokemonGame function Serializable
-
-        out.writeInt(id);
-        out.writeInt(x);
-        out.writeInt(y);
-        out.writeInt(dir);
-        out.writeInt(level);
 
     }
 

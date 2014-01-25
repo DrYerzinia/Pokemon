@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.views;
+package com.dryerzinia.pokemon.ui.views;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;

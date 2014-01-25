@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
@@ -20,14 +21,13 @@ public class SendActMovedServerMessage extends SendActServerMessage {
     public SendActMovedServerMessage() {
     }
 
-    public SendActMovedServerMessage(int id_i, int x_i, int y_i, int dir_i,
-            int level_i) {
+    public SendActMovedServerMessage(int id, int x, int y, Direction dir, int level) {
 
-        id = id_i;
-        x = x_i;
-        y = y_i;
-        dir = dir_i;
-        level = level_i;
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.level = level;
 
     }
 

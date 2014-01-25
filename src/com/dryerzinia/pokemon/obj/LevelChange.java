@@ -1,5 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 
+import com.dryerzinia.pokemon.map.Direction;
+
 public class LevelChange {
 
 	/*
@@ -12,10 +14,10 @@ public class LevelChange {
 	private int newLevel;
 	private int newX;
 	private int newY;
-	private int toLeaveDirection;
-	private int newDirection;
+	private Direction toLeaveDirection;
+	private Direction newDirection;
 
-	public LevelChange(int newX, int newY, int newLevel, int toLeaveDirection, int newDirection){
+	public LevelChange(int newX, int newY, int newLevel, Direction toLeaveDirection, Direction newDirection){
 
 		this.newX = newX;
 		this.newY = newY;
@@ -25,7 +27,7 @@ public class LevelChange {
 
 	}
 
-	public boolean rightDirection(int direction){
+	public boolean rightDirection(Direction direction){
 		return direction == toLeaveDirection;
 	}
 
