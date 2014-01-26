@@ -5,6 +5,8 @@ import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
+import com.dryerzinia.pokemon.net.Client;
+import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -208,6 +210,15 @@ public class Player implements Serializable {
     		x = Math.round(x);
     		y = Math.round(y);
 
+    		/*
+    		 * Update server to our new position
+    		 */
+    		try {
+				Client.writeServerMessage(new PlayerPositionMessage(new Position((int)x, (int)y, level, facing)));
+			} catch (IOException e) {
+				System.out.println("Failed to update server on our position: " + e.getMessage());
+			}
+
     		if(direction == Direction.NONE){
 
     			/*
@@ -379,6 +390,20 @@ public class Player implements Serializable {
         this.imgName = p.imgName;
 
         this.money = p.money;
+
+    }
+
+    /**
+     * Updates the players position
+     * 
+     * @param position New player position
+     */
+    public void setPosition(Position position){
+
+    	level = position.getLevel();
+    	x = position.getX();
+    	y = position.getY();
+    	facing = position.getFacing();
 
     }
 

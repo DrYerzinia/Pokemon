@@ -78,7 +78,7 @@ public class KeyboardInputController implements InputController, KeyListener {
 		else if(!upPressed && !downPressed && !leftPressed && rightPressed)
 			onlyPressed = Direction.RIGHT;
 
-		else
+		else if(!upPressed && !downPressed && !leftPressed && !rightPressed)
 			onlyPressed = Direction.NONE;
 
 	}

@@ -83,7 +83,7 @@ public final class ResourceLoader {
             URL url = null;
 
             if(in_a_jar)
-                url = new URL("jar:" + path_to_jar + "!/" + image_file_path);
+                url = new URL(path_to_jar + "!/" + image_file_path);
         	else
         		url = ResourceLoader.class.getClassLoader().getResource(image_file_path);
 

@@ -83,7 +83,7 @@ public class PokemonGame extends Applet {
 
     public static final class GameLoop extends TimerTask {
 
-    	private static final int loopDelay = 25;
+    	private static final int loopDelay = 33;
 
     	private Timer self;
 
