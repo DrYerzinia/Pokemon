@@ -26,6 +26,7 @@ import com.dryerzinia.pokemon.net.msg.client.MessageClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.PlayerUpdateMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActTalkingToClientMessage;
+import com.dryerzinia.pokemon.net.msg.client.act.SendPerson;
 import com.dryerzinia.pokemon.net.msg.client.fight.SendFightClientMessage;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
@@ -95,6 +96,9 @@ public class PokemonServer {
 
         // Game Instance Data
         GameState.init();
+
+        // Load Actors
+        GameState.loadActors("actors.json");
 
         System.out.println("Game World Instace Created");
 
@@ -171,12 +175,10 @@ public class PokemonServer {
      */
     public class ActTask extends TimerTask {
         public void run() {
-        	for(Actor actor: GameState.actors) {
-        		// TODO remove archaic position reference from this class
-        		if(actor.act()) {
-        			sendPlayerActorUpdate((Person) actor);
-        		}
-            }
+
+        	for(Person person: GameState.people)
+       			sendPlayerActorUpdate(person, person.act());
+
         }
     }
 
@@ -185,12 +187,20 @@ public class PokemonServer {
      * @param person Actor that changed and needs to be updated
      * TODO all actors are persons???
      */
-    public synchronized static void sendPlayerActorUpdate(Person person){
+    public synchronized static void sendPlayerActorUpdate(Person person, boolean changed){
 
 		for(PlayerInstanceData pid : players) {
             if (pid.getPlayer().getLevel() == person.level)
 				try {
-					pid.sendActor(person, Person.A_MOVED);
+
+					if(!pid.hasSeen(person)){
+						pid.saw(person);
+						pid.writeClientMessage(new SendPerson(person));
+					}
+
+					if(changed)
+						pid.sendActor(person, Person.A_MOVED);
+
 				} catch (IOException ioe) {
 					System.err.println("Could not send actor update to player: " + ioe.getMessage());
 					// TODO likely cause client is disconnected we should probably remove them here
@@ -834,6 +844,8 @@ public class PokemonServer {
         private Fight f = null;
         private boolean isChallenger = false;
 
+        private HashMap<Integer, Person> peopleSeen = new HashMap<Integer, Person>();
+
         public PlayerInstanceData() {
         }
 
@@ -851,6 +863,14 @@ public class PokemonServer {
 
         public void stop() {
             message_listener.stop_listening();
+        }
+
+        public boolean hasSeen(Person person){
+        	return peopleSeen.containsKey(person.id);
+        }
+
+        public void saw(Person person){
+        	peopleSeen.put(person.id, person);
         }
 
         public Player getPlayer() {

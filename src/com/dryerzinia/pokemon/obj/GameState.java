@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Grid;
@@ -18,12 +19,10 @@ import com.dryerzinia.pokemon.util.StringStream;
 
 public class GameState {
 
-    public static ArrayList<Actor> actors = new ArrayList<Actor>();
+    public static CopyOnWriteArrayList<Person> people;
 
     public static ArrayList<Level> level;
-
     public static  ArrayList<Tile> mtile;
-    public static  ArrayList<String> chathist;
 
     public static void init(){
 
@@ -32,15 +31,7 @@ public class GameState {
 
     	load("save.json");
 
-    	actors = new ArrayList<Actor>();
-
-        for(Tile tile : mtile){
-            if(tile instanceof Actor){
-                actors.add((Actor)tile);
-                Person person = (Person)tile;
-                level.get(person.level).grid.grid[(int)person.x][(int)person.y].remove(person);
-            }
-        }
+    	people = new CopyOnWriteArrayList<Person>();
 
     }
 
@@ -54,26 +45,85 @@ public class GameState {
         }
     }
 
+    /**
+     * Save the actors as a JSON array
+     * @param filename file to save actors in
+     */
+    public static void saveActors(String filename){
+
+    	try(PrintWriter json_writer = new PrintWriter(filename)){
+    	
+        	json_writer.print(JSONArray.arrayListToJSON(new ArrayList<Person>(people)));
+
+    	} catch(FileNotFoundException e){
+
+        	System.err.println("Could not find Actors file: " + filename);
+        	System.err.println(e.getMessage());
+
+    	} catch(IllegalAccessException e) {
+
+        	System.err.println("Unable to write Actors JSON with reflection: " + e.getMessage());
+
+        }
+
+    }
+
+    /**
+     * Loads the actors from a JSON file
+     * @param filename actors JSON file
+     */
+	public static void loadActors(String filename) {
+
+    	people = new CopyOnWriteArrayList<Person>();
+
+		try(BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+                PokemonGame.class.getClassLoader().getResourceAsStream(filename)));){
+
+			String json = json_reader.readLine();
+
+			Object[] actors = JSONObject.JSONToArray(new StringStream(json));
+
+			/*
+			 * Add all actors to CopyOnWrite array using array list as 
+			 * inbetween to prevent ton of new array allocations
+			 */
+			ArrayList<Person> newPeople = new ArrayList<Person>();
+            for(Object actor : actors){
+
+            	Person person = (Person) actor;
+
+            	person.initializeSecondaryReferences(level.get(person.level).grid);
+            	newPeople.add((Person)person);
+
+            }
+            people.addAll(newPeople);
+
+        } catch (Exception x) {
+            x.printStackTrace();
+        }
+
+	}
+
+	/**
+     * Save the map file
+     * @param filename file to save map in
+     */
     public static void save(String filename) {
 
-    	try {
-
-        	PrintWriter json_writer = new PrintWriter(filename);
+    	try(PrintWriter json_writer = new PrintWriter(filename)){
 
         	json_writer.print(JSONArray.arrayListToJSON(mtile));
         	json_writer.print("\n");
         	json_writer.print(JSONArray.arrayListToJSON(level));
         	
-        	json_writer.close();
-
         } catch(FileNotFoundException e){
 
-        	System.err.println("Could not find file: " + filename);
+        	System.err.println("Could not find Map file: " + filename);
         	System.err.println(e.getMessage());
 
         } catch(IllegalAccessException e) {
 
-        	System.err.println("Unable to write JSON with reflection: " + e.getMessage());
+        	System.err.println("Unable to write Map JSON with reflection: " + e.getMessage());
 
         }
 
@@ -89,21 +139,17 @@ public class GameState {
      */
     public static void load(String filename) {
 
-        try {
+        mtile = new ArrayList<Tile>();
+        level = new ArrayList<Level>();
 
-            mtile = new ArrayList<Tile>();
-            level = new ArrayList<Level>();
+        System.out.println("Loading game from: " + filename);
 
-            System.out.println("Loading game from: " + filename);
-
-            BufferedReader json_reader = new BufferedReader(new InputStreamReader(
-                    PokemonGame.class.getClassLoader().getResourceAsStream(filename)));
+        try(BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+                PokemonGame.class.getClassLoader().getResourceAsStream(filename)));){
 
 			String json_1 = json_reader.readLine();
 			String json_2 = json_reader.readLine();
 
-			json_reader.close();
-		
 			Object[] tiles = JSONObject.JSONToArray(new StringStream(json_1));
 			Object[] levels = JSONObject.JSONToArray(new StringStream(json_2));
 

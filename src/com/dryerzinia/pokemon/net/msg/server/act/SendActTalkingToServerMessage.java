@@ -36,24 +36,23 @@ public class SendActTalkingToServerMessage extends SendActServerMessage {
 
     }
 
-    public void proccess(ObjectInputStream ois,
-            PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
-            IOException {
+    public void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException {
 
-        Iterator<Actor> act = GameState.actors.iterator();
-        while (act.hasNext()) {
-            Actor a = act.next();
-            Person p5 = (Person) a;
-            if (p5.id == id) {
-                p5.dir = dir;
-                p5.onClick.active = b;
-                Iterator<PokemonServer.PlayerInstanceData> pidt = PokemonServer.pokes.players
-                        .iterator();
+        Iterator<Person> peopleIterator = GameState.people.iterator();
+        while(peopleIterator.hasNext()) {
+
+        	Person person = peopleIterator.next();
+
+        	if (person.id == id) {
+
+        		person.dir = dir;
+                person.onClick.active = b;
+
+                Iterator<PokemonServer.PlayerInstanceData> pidt = PokemonServer.pokes.players.iterator();
                 while (pidt.hasNext()) {
                     PokemonServer.PlayerInstanceData pid = pidt.next();
-                    if (pid != p) {
-                        pid.sendActor((Person) a, Person.A_TALKING_TO);
-                    }
+                    if (pid != p)
+                        pid.sendActor(person, Person.A_TALKING_TO);
                 }
             }
         }

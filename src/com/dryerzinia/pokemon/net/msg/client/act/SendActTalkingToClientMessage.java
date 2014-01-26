@@ -28,9 +28,8 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        for(Actor actor : GameState.actors) {
+        for(Person person : GameState.people) {
 
-            Person person = (Person) actor;
             if (person.id == id) {
 
             	person.dir = position.getFacing();

@@ -27,9 +27,8 @@ public class GameView implements View {
 
 		ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
 
-		for(Actor actor : GameState.actors)
+		for(Actor actor : GameState.people)
 			actor.update(deltaTime);
-	
 
 		/*
 		 * Process menu related input if no animations are running
@@ -49,11 +48,9 @@ public class GameView implements View {
 
 		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);
 
-		for(Actor actor : GameState.actors){
-			Person person = (Person) actor;
+		for(Person person : GameState.people)
 			if(person.level == ClientState.player.level)
 				person.draw(0, 0, 0, 0, graphics);
-		}
 	
 		ClientState.player.draw(graphics);
 
