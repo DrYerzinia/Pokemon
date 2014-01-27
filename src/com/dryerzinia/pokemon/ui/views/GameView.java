@@ -49,7 +49,7 @@ public class GameView implements View {
 		/*
 		 * Draws the level and the characters in it
 		 */
-		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);
+		ClientState.getPlayerLevel().draw(graphics, ClientState.player.getLocation().getX() - 4, ClientState.player.getLocation().getY() - 4);
 	
 		ClientState.player.draw(graphics);
 

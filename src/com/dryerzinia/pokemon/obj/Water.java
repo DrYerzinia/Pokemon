@@ -5,7 +5,7 @@ import java.awt.Graphics;
 public class Water extends Tile {
 
 	@Override
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
+    public void draw(float x, float y, int xo, int yo, Graphics g) {
 
 		long time = System.currentTimeMillis();
 
@@ -15,8 +15,8 @@ public class Water extends Tile {
 		int offset = (int) ((time/(period/segments))%segments);
 		if(offset > 4) offset = 8 - offset;
 
-		int dx1 = x * 16 + pixelOffsetX - xo + offset;
-		int dy1 = y * 16 + pixelOffsetY - yo;
+		int dx1 = (int) (x * 16 + pixelOffsetX - xo + offset);
+		int dy1 = (int) (y * 16 + pixelOffsetY - yo);
 		int dx2 = dx1 + 16 - offset;
 		int dy2 = dy1 + 16;
 
@@ -29,7 +29,7 @@ public class Water extends Tile {
 
 		if(offset != 0){
 
-			dx1 = x * 16 + pixelOffsetX - xo;
+			dx1 = (int) (x * 16 + pixelOffsetX - xo);
 			dx2 = dx1 + offset;
 
 			sx1 = 16-offset;

@@ -36,7 +36,7 @@ public class PlayerServerMessage extends ServerMessage {
         Player thisPlayer = p.getPlayer();
 
         boolean levelchange = false;
-        if (thisPlayer.level != receivedPlayer.level)
+        if (thisPlayer.getLocation().getLevel() != receivedPlayer.getLocation().getLevel())
             levelchange = true;
 
         thisPlayer.set(receivedPlayer);
@@ -63,7 +63,7 @@ public class PlayerServerMessage extends ServerMessage {
                     // Also this will spam on level changes fix that
                     Player pGone = new Player();
                     pGone.set(thisPlayer);
-                    pGone.level = -1;
+                    pGone.getLocation().setLevel(-1);
                     try {
                         p.sendPlayerUpdate(pGone, false);
                     } catch (IOException x) {
@@ -73,7 +73,7 @@ public class PlayerServerMessage extends ServerMessage {
             }
         }
 
-        Pokemon pRandom = GameState.level.get(thisPlayer.level)
+        Pokemon pRandom = GameState.getMap().getLevel(thisPlayer.getLocation().getLevel())
                 .attacked(thisPlayer);
         if (pRandom != null) {
             Pokemon p2Random = new Pokemon(pRandom);

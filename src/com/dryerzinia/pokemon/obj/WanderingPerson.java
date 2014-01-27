@@ -62,19 +62,19 @@ public class WanderingPerson extends Person implements Actor {
         if (pos > 2 && con % 4 == 0) {
             if (dir == Direction.UP) {
                 if (!PokemonServer.isPlayer((int)x, (int)y - 1, level)
-                        && g.canStepOnB((int)x, (int)y - 1))
+                        && g.canStepOn((int)x, (int)y - 1))
                     canMove = true;
             } else if (dir == Direction.DOWN) {
                 if (!PokemonServer.isPlayer((int)x, (int)y + 1, level)
-                        && g.canStepOnB((int)x, (int)y + 1))
+                        && g.canStepOn((int)x, (int)y + 1))
                     canMove = true;
             } else if (dir == Direction.LEFT) {
                 if (!PokemonServer.isPlayer((int)x - 1, (int)y, level)
-                        && g.canStepOnB((int)x - 1, (int)y))
+                        && g.canStepOn((int)x - 1, (int)y))
                     canMove = true;
             } else if (dir == Direction.RIGHT) {
                 if (!PokemonServer.isPlayer((int)x + 1, (int)y, level)
-                        && g.canStepOnB((int)x + 1, (int)y))
+                        && g.canStepOn((int)x + 1, (int)y))
                     canMove = true;
             }
         }

@@ -13,7 +13,8 @@ import com.dryerzinia.pokemon.obj.Tile;
 import java.awt.event.*;
 import java.util.*;
 import java.awt.*;
-
+/*
+ * Fix this class
 public class MapEditor extends JFrame implements MouseListener {
 
     ArrayList<Tile> sector = null;
@@ -203,5 +204,5 @@ public class MapEditor extends JFrame implements MouseListener {
 
     public void mouseExited(MouseEvent e) {
     }
-
 }
+*/

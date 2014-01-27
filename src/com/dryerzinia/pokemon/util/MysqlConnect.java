@@ -141,12 +141,12 @@ public class MysqlConnect {
 				+ "level = ?, Dir = ?, LPCX = ?, LPCY = ?, LPCLEVEL = ?, "
 				+ "Money = ? WHERE UserName = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, (int) player.x);
-			stmt.setInt(2, (int) player.y);
-			stmt.setInt(3, player.level); // current level player is on
-			stmt.setInt(4, player.facing.getValue()); // player direction
-			stmt.setInt(5, player.lastPokemonCenter.getX());
-			stmt.setInt(6, player.lastPokemonCenter.getY());
+			stmt.setInt(1, (int) player.getLocation().getX());
+			stmt.setInt(2, (int) player.getLocation().getY());
+			stmt.setInt(3, player.getLocation().getLevel()); // current level player is on
+			stmt.setInt(4, player.getLocation().facing().getValue()); // player direction
+			stmt.setInt(5, (int) player.lastPokemonCenter.getX());
+			stmt.setInt(6, (int) player.lastPokemonCenter.getY());
 			stmt.setInt(7, player.lastPokemonCenter.getLevel());
 			stmt.setInt(8, player.money);
 			stmt.setString(9, player.name);
@@ -170,7 +170,7 @@ public class MysqlConnect {
 				continue;
 			}
 			if (item.number > 0) {
-				if (item.added) // item marked for adding to db
+				if (item.added) // item marked for adding to DB
 					addItem(connection, player, item);
 				else
 					updateItem(connection, player, item);
@@ -533,10 +533,7 @@ public class MysqlConnect {
 				}
 				player = new Player();
 				player.id = results.getInt("id");
-				player.x = results.getInt("x");
-				player.y = results.getInt("y");
-				player.facing = Direction.get(results.getInt("dir"));
-				player.level = results.getInt("level");
+				player.setPosition(new Position(results.getInt("x"), results.getInt("y"), results.getInt("level"), Direction.get(results.getInt("dir"))));
 				player.name = results.getString("UserName");
 				player.imgName = results.getString("picture");
 				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), Direction.NONE);

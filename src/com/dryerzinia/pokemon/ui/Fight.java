@@ -742,7 +742,7 @@ public class Fight extends Overlay implements Serializable {
 
             ClientState.player.goToLastPokemonCenter();
 
-            ClientState.player.facing = Direction.UP;
+            ClientState.player.getLocation().setDirection(Direction.UP);
             for (int i = 0; i < 6; i++) {
                 if (ClientState.player.poke.belt[i] == null)
                     break;

@@ -32,6 +32,9 @@ public class PlayerUpdateMessage extends ClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
+    	// TODO fix what is causing this!!!
+    	if(receivedPlayer.getLocation().getLevel() == -1) return;
+
         if (isSelf) {
 
             ClientState.player = receivedPlayer;
@@ -40,13 +43,13 @@ public class PlayerUpdateMessage extends ClientMessage {
             Client.writeLoadMessage();
 
         } else {
-
+System.out.println("name="+receivedPlayer.getName()+",level="+receivedPlayer.getLocation().getLevel());
             boolean found = false;
             Iterator<Player> i = ClientState.players.iterator();
             while (i.hasNext()) {
                 Player foundPlayer = i.next();
                 if (receivedPlayer.id == foundPlayer.id) {
-                    if (receivedPlayer.level == -1) {
+                    if (receivedPlayer.getLocation().getLevel() == -1) {
                         i.remove();
                     } else {
                         foundPlayer.set(receivedPlayer);

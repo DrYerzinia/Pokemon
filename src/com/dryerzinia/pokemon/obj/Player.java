@@ -36,16 +36,14 @@ public class Player implements Serializable {
 
     public int id; // Player MYSQL_ID
 
+    private Position location;
+
     /*
      * Drives animation
      */
-    public float x, y;
     private transient int animationState;
     private transient boolean stepSide;
     private transient int animationElapsed;
-
-    public Direction facing; // facing direction
-    public int level; // current level player is in
     
     public Position lastPokemonCenter;
 
@@ -74,16 +72,11 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, int x, int y, Direction dir, int level, String name) {
+    public Player(int id, Position location, String name) {
 
         this.id = id;
 
-        this.x = x;
-        this.y = y;
-
-        this.facing = dir;
-
-        this.level = level;
+        this.location = location;
 
         this.name = name;
 
@@ -95,17 +88,12 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, int x, int y, Direction dir, int level, String name,
+    public Player(int id, Position location, String name,
             String imgName) {
 
         this.id = id;
 
-        this.x = x;
-        this.y = y;
-
-        this.facing = dir;
-
-        this.level = level;
+        this.location = location;
 
         this.name = name;
         this.imgName = imgName;
@@ -129,24 +117,24 @@ public class Player implements Serializable {
     	int futureX = 0;
     	int futureY = 0;
     	
-    	if(facing == Direction.UP){
-    		futureX = (int) Math.ceil(x);
-    		futureY = (int) Math.ceil(y - 1);
+    	if(location.facing() == Direction.UP){
+    		futureX = (int) Math.ceil(location.getX());
+    		futureY = (int) Math.ceil(location.getY() - 1);
     	}
 
-    	if(facing == Direction.DOWN){
-    		futureX = (int) Math.floor(x);
-    		futureY = (int) Math.floor(y + 1);
+    	if(location.facing() == Direction.DOWN){
+    		futureX = (int) Math.floor(location.getX());
+    		futureY = (int) Math.floor(location.getY() + 1);
     	}
 
-    	if(facing == Direction.LEFT){
-    		futureX = (int) Math.ceil(x - 1);
-    		futureY = (int) Math.ceil(y);
+    	if(location.facing() == Direction.LEFT){
+    		futureX = (int) Math.ceil(location.getX() - 1);
+    		futureY = (int) Math.ceil(location.getY());
     	}
 
-    	if(facing == Direction.RIGHT){
-    		futureX = (int) Math.floor(x + 1);
-    		futureY = (int) Math.floor(y);
+    	if(location.facing() == Direction.RIGHT){
+    		futureX = (int) Math.floor(location.getX() + 1);
+    		futureY = (int) Math.floor(location.getY());
     	}
 
     	Level lev = ClientState.getPlayerLevel();
@@ -156,17 +144,9 @@ public class Player implements Serializable {
     	/*
     	 * We need to continue the step through to the next level
     	 */
-    	if(levelChange != null && levelChange.rightDirection(facing)){
+    	if(levelChange != null && levelChange.rightDirection(location.facing())){
 
-    		Position newPosition = levelChange.getNewPosition();
-
-    		x = newPosition.getX();
-    		y = newPosition.getY();
-
-    		level = newPosition.getLevel();
-
-    		facing = newPosition.getFacing();
-
+    		location.set(levelChange.getNewPosition());
     		canStep = true;
 
     	}
@@ -175,17 +155,17 @@ public class Player implements Serializable {
     		/*
     		 * If we are facing the direction
 	    	 */
-	    	if(facing == Direction.UP)
-	    		y -= deltaTime/ANIMATION_TIME_STEP;
+	    	if(location.facing() == Direction.UP)
+	    		location.subY(deltaTime/ANIMATION_TIME_STEP);
 	
-	    	if(facing == Direction.DOWN)
-	    		y += deltaTime/ANIMATION_TIME_STEP;
+	    	if(location.facing() == Direction.DOWN)
+	    		location.addY(deltaTime/ANIMATION_TIME_STEP);
 	
-	    	if(facing == Direction.LEFT)
-	    		x -= deltaTime/ANIMATION_TIME_STEP;
+	    	if(location.facing() == Direction.LEFT)
+	    		location.subX(deltaTime/ANIMATION_TIME_STEP);
 	
-	    	if(facing == Direction.RIGHT)
-	    		x += deltaTime/ANIMATION_TIME_STEP;
+	    	if(location.facing() == Direction.RIGHT)
+	    		location.addX(deltaTime/ANIMATION_TIME_STEP);
     	}
 
     }
@@ -208,15 +188,15 @@ public class Player implements Serializable {
     		 * we have to get even with the square
     		 */
    			animationMove((int)(deltaTime-(animationElapsed-ANIMATION_TIME_STEP)));
-    		x = Math.round(x);
-    		y = Math.round(y);
+    		location.setX(Math.round(location.getX()));
+    		location.setY(Math.round(location.getY()));
 
     		/*
     		 * Update server to our new position
     		 */
     		try {
-				Client.writeServerMessage(new PlayerPositionMessage(new Position((int)x, (int)y, level, facing)));
-			} catch (IOException e) {
+				Client.writeServerMessage(new PlayerPositionMessage(location));
+    		} catch (IOException e) {
 				System.out.println("Failed to update server on our position: " + e.getMessage());
 			}
 
@@ -234,7 +214,7 @@ public class Player implements Serializable {
     			 * that way
     			 */
     			animationElapsed -= ANIMATION_TIME_STEP;
-    			facing = direction;
+    			location.setDirection(direction);
     			animationMove(animationElapsed);
 
     		}
@@ -271,8 +251,8 @@ public class Player implements Serializable {
         	/*
         	 * If we change directions we just return
         	 */
-    		if(direction != facing){
-    			facing = direction;
+    		if(direction != location.facing()){
+    			location.setDirection(direction);
     			return;
     		}
 
@@ -295,10 +275,10 @@ public class Player implements Serializable {
     }
 
 
-    public void draw(int x, int y, Graphics graphics) {
+    public void draw(float x, float y, Graphics graphics) {
 
     	setImage(0, 0);
-        graphics.drawImage(img, (int) ((this.x - x + 4) * 16), (int)((this.y - y + 4) * 16), null);
+        graphics.drawImage(img, (int) ((getLocation().getX() - x) * 16), (int)((getLocation().getY() - y) * 16) - CHARACTER_OFFSET, null);
 
     }
 
@@ -315,17 +295,17 @@ public class Player implements Serializable {
     	 */
     	if(animationElapsed < ANIMATION_TIME_STEP*0.25
     	 || animationElapsed > ANIMATION_TIME_STEP*0.75)
-    		img = sprite[facing.getValue()];
+    		img = sprite[location.facing().getValue()];
 
     	/*
     	 * If its in the middle 1/2 we use the moving animation
     	 */
     	else {
 
-    		if((facing == Direction.UP || facing == Direction.DOWN) && stepSide)
-    			img = sprite[facing.getValue()+8];
+    		if((location.facing() == Direction.UP || location.facing() == Direction.DOWN) && stepSide)
+    			img = sprite[location.facing().getValue()+8];
     		else
-    			img = sprite[facing.getValue()+4];
+    			img = sprite[location.facing().getValue()+4];
 
     	}
 
@@ -353,8 +333,8 @@ public class Player implements Serializable {
         return id;
     }
 
-    public int getLevel() {
-        return level;
+    public Position getLocation(){
+    	return location;
     }
 
     public Pokemon getFirstOut() {
@@ -367,30 +347,22 @@ public class Player implements Serializable {
 
     public void goToLastPokemonCenter(){
 
-    	this.x = lastPokemonCenter.getX();
-    	this.y = lastPokemonCenter.getY();
-
-    	this.level = lastPokemonCenter.getLevel();
+    	location.set(lastPokemonCenter);
 
     }
 
     public void set(Player p) {
 
-        this.id = p.id;
+        id = p.id;
 
-        this.x = p.x;
-        this.y = p.y;
+       	location = p.location.copy();
 
-        this.facing = p.facing;
+        lastPokemonCenter = p.lastPokemonCenter;
 
-        this.level = p.level;
+        name = p.name;
+        imgName = p.imgName;
 
-        this.lastPokemonCenter = p.lastPokemonCenter;
-
-        this.name = p.name;
-        this.imgName = p.imgName;
-
-        this.money = p.money;
+        money = p.money;
 
     }
 
@@ -401,10 +373,7 @@ public class Player implements Serializable {
      */
     public void setPosition(Position position){
 
-    	level = position.getLevel();
-    	x = position.getX();
-    	y = position.getY();
-    	facing = position.getFacing();
+       	location = position.copy();
 
     }
 

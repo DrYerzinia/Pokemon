@@ -30,7 +30,7 @@ public class PlayerPositionMessage extends ServerMessage {
          * SEEN list we need to implement this
          */
         boolean levelchange = false;
-        if (player.getLevel() != playerPosition.getLevel())
+        if (player.getLocation().getLevel() != playerPosition.getLevel())
             levelchange = true;
 
         /*
@@ -51,7 +51,7 @@ public class PlayerPositionMessage extends ServerMessage {
         	 * is nearby send a update to let them know he moved
         	 */
         	if(player != nearbyPlayer
-              && PokemonServer.localized(player, nearbyPlayer)) { // TODO improve localization via manhattan distance
+              && PokemonServer.localized(player, nearbyPlayer)) { // TODO improve localization via Manhattan distance
 
         		try {
                    nearbyPID.sendPlayerUpdate(player, false);
@@ -61,7 +61,7 @@ public class PlayerPositionMessage extends ServerMessage {
 
         	/*
         	 * If they are not nearby
-        	 * TODO we shouldent send remove self to SELF!
+        	 * TODO we shoulden't send remove self to SELF!
         	 */
         	} else {
 
@@ -76,7 +76,7 @@ public class PlayerPositionMessage extends ServerMessage {
                     // Also this will spam on level changes fix that
                     Player pGone = new Player();
                     pGone.set(player);
-                    pGone.level = -1;
+                    pGone.getLocation().setLevel(-1);
                     try {
                         p.sendPlayerUpdate(pGone, false);
                     } catch (IOException x) {

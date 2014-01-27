@@ -102,7 +102,7 @@ public class Person extends Tile implements Actor {
             py = y;
             onClick.active = true;
             wasTalkingToYou = true;
-            setImage(x - (int)ClientState.player.x, y - (int)ClientState.player.y);
+            setImage(x - (int)ClientState.player.getLocation().getX(), y - (int)ClientState.player.getLocation().getY());
             Client.writeActor(this, A_TALKING_TO);
             return onClick;
         } else {
@@ -178,10 +178,10 @@ public class Person extends Tile implements Actor {
     }
 
     @Override
-    public void draw(int x, int y, int xo, int yo, Graphics graphics) {
+    public void draw(float x, float y, int xo, int yo, Graphics graphics) {
 
-    	setImage(x, y);
-    	graphics.drawImage(img, (int)((this.x-ClientState.player.x)*16), (int)((this.y - ClientState.player.y)*16) - Player.CHARACTER_OFFSET, null);
+    	setImage((int)x, (int)y);
+    	graphics.drawImage(img, (int)(x*16), (int)(y*16) - Player.CHARACTER_OFFSET, null);
 
     }
 
@@ -224,7 +224,7 @@ public class Person extends Tile implements Actor {
 	    		if(!movements.isEmpty()){
 
 	    				newPosition = movements.remove();
-	    	    		dir = newPosition.getFacing();
+	    	    		dir = newPosition.facing();
 
 	    	    		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
 
@@ -246,7 +246,7 @@ public class Person extends Tile implements Actor {
 
     		newPosition = movements.remove();
 
-    		dir = newPosition.getFacing();
+    		dir = newPosition.facing();
 
     		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
 

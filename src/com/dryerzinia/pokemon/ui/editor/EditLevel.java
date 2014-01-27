@@ -10,7 +10,8 @@ import com.dryerzinia.pokemon.obj.Tile;
 import java.awt.event.*;
 import java.util.*;
 import java.awt.*;
-
+/*
+ * Fix level editor
 public class EditLevel extends JFrame {
 
     Level l;
@@ -29,7 +30,7 @@ public class EditLevel extends JFrame {
         setLayout(new FlowLayout());
 
 
-        l = GameState.level.get(ClientState.player.level);
+        l = GameState.getMap().getLevel(ClientState.player.level);
 
         JButton saveB;
 
@@ -72,7 +73,7 @@ public class EditLevel extends JFrame {
             System.out.println("off" + offset + "lve" + level);
             if (level != -1) {
                 l.borders[i] = level;
-                l.borderL[i] = GameState.level.get(level);
+                l.borderL[i] = GameState.getMap().getLevel(level);
                 l.borderoffset[i] = offset;
                 int x = Integer.parseInt(xTF.getText());
                 int y = Integer.parseInt(yTF.getText());
@@ -105,3 +106,4 @@ public class EditLevel extends JFrame {
     }
 
 }
+*/

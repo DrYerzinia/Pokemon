@@ -73,6 +73,8 @@ public class AddLevel extends JFrame {
     }
 
     private void add() {
+    	// Fix level add
+    	/*
         int w = Integer.parseInt(wtf.getText());
         int h = Integer.parseInt(htf.getText());
         Grid g = new Grid(w, h);
@@ -87,6 +89,7 @@ public class AddLevel extends JFrame {
         System.out.println("lvlid" + level.id);
 
         GameState.level.add(level);
+        */
 
     }
 

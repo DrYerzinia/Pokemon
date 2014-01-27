@@ -123,8 +123,8 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         return onClick;
     }
 
-    public void draw(int x, int y, int xo, int yo, Graphics g) {
-        g.drawImage(img, x * 16 + pixelOffsetX - xo, y * 16 + pixelOffsetY - yo, null);
+    public void draw(float x, float y, int xo, int yo, Graphics g) {
+        g.drawImage(img, (int)(x * 16 + pixelOffsetX - xo), (int)(y * 16 + pixelOffsetY - yo), null);
     }
 
     public void loadImage() {

@@ -65,8 +65,7 @@ public final class Client {
                 while (true) {
                     try {
 
-                        ClientMessage receivedMessage = (ClientMessage) ois
-                                .readObject();
+                        ClientMessage receivedMessage = (ClientMessage) ois.readObject();
                         receivedMessage.proccess();
 
                     } catch (Exception x) {
@@ -437,11 +436,14 @@ public final class Client {
      * TODO this may be completely unused but could also be use to replace
      * all the other messages and likely move error handling to a more
      * appropriate place
+     * The stream annoyingly will rewrite this object in spite of the fact that it has
+     * changes so we reset it so it sends new information in the object
      */
     public static synchronized void writeServerMessage(ServerMessage sm) throws IOException {
 
         	streamToServer.writeObject(sm);
         	streamToServer.flush();
+        	streamToServer.reset();
 
     }
 

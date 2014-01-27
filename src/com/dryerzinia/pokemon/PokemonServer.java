@@ -33,6 +33,7 @@ import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
+import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
@@ -190,7 +191,7 @@ public class PokemonServer {
     public synchronized static void sendPlayerActorUpdate(Person person, boolean changed){
 
 		for(PlayerInstanceData pid : players) {
-            if (pid.getPlayer().getLevel() == person.level)
+            if (pid.getPlayer().getLocation().getLevel() == person.level)
 				try {
 
 					if(!pid.hasSeen(person)){
@@ -219,9 +220,9 @@ public class PokemonServer {
     public synchronized static boolean isPlayer(int x, int y, int level) {
        for(PlayerInstanceData pid : players) {
             Player player = pid.getPlayer();
-            if(player.x + 4 == x
-            && player.y + 4 == y
-            && player.level == level)
+            if(player.getLocation().getX() + 4 == x
+            && player.getLocation().getY() + 4 == y
+            && player.getLocation().getLevel() == level)
                 return true;
         }
         return false;
@@ -570,7 +571,7 @@ public class PokemonServer {
      */
     public synchronized Player getNextPlayer() {
         playeridcount++;
-        return new Player(playeridcount, 5, 5, Direction.UP, 9, "Player");
+        return new Player(playeridcount, new Position(5, 5, 9, Direction.UP), "Player");
     }
     
     /**
@@ -590,7 +591,7 @@ public class PokemonServer {
      * we are likely updating players in a message in a non thread
      * safe way!!!
      */
-    public synchronized void replace(Player to_replace) {
+    public synchronized void replace(Player toReplace) {
 
     	boolean levelchange = false;
 
@@ -599,14 +600,14 @@ public class PokemonServer {
         	Player player = pid.getPlayer();
 
         	// Found the player to replace
-        	if (player.getID() == to_replace.getID()) {
+        	if (player.getID() == toReplace.getID()) {
 
         		// If there level changed we make a note of that
-        		if (player.level != to_replace.level)
+        		if (player.getLocation().getLevel() != toReplace.getLocation().getLevel())
                     levelchange = true;
 
         		// set the player in the master list equal to the replace player
-        		player.set(to_replace);
+        		player.set(toReplace);
 
         		// for all the other players
                 for(PlayerInstanceData pid2 : players) {
@@ -627,7 +628,7 @@ public class PokemonServer {
                         Player p4 = new Player();
 
                         p4.set(player);
-                        p4.level = -1;
+                        p4.getLocation().setLevel(-1);
 
                         try {
                             pid.sendPlayerUpdate(p4, false);
@@ -652,7 +653,7 @@ public class PokemonServer {
      */
     public static boolean localized(Player p1, Player p2) {
 
-        return p1.level == p2.level;
+        return p1.getLocation().getLevel() == p2.getLocation().getLevel();
 
     }
 
@@ -775,13 +776,14 @@ public class PokemonServer {
      * Removes kicked or disconnected player from master list
      * @param to_remove player to remove from master list
      */
-    public synchronized void remove(Player to_remove) {
+    public synchronized void remove(Player toRemove) {
     	/* If the player is not logged in there level will be -1
     	 * so we check for this, we only want to save changes if
     	 * they where logged in
     	 */
-        if (to_remove.level != -1)
-            MysqlConnect.savePlayerData(to_remove);
+
+        if(toRemove.getLocation().getLevel() != -1)
+            MysqlConnect.savePlayerData(toRemove);
 
         Iterator<PlayerInstanceData> pid_iterator = players.iterator();
 
@@ -792,11 +794,11 @@ public class PokemonServer {
         	/* If the ID's are equal we found the player we are
         	 * removing from the master list
         	 */
-        	if (player.getID() == to_remove.getID()) {
+        	if (player.getID() == toRemove.getID()) {
 
         		Player p3 = new Player();
                 p3.set(player);
-                p3.level = -1;
+                p3.getLocation().setLevel(-1);
 
                 replace(p3);
 

@@ -9,7 +9,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import com.dryerzinia.pokemon.ui.editor.MapEditor;
 import com.dryerzinia.pokemon.ui.views.View;
 
 public class UI {
@@ -19,13 +18,19 @@ public class UI {
     public static final int CHAT_HEIGHT = 100;
 
     /*
+     * The minimum Manhattan Distance to not show players at
+     */
+    public static int visibleManhattanDistance = 12;
+
+    /*
      * Amount to scale the Applet/JFrame
      */
     public static int scale = 2;
 
     private static Canvas uiCanvas;
 
-    public static MapEditor me;
+    // TODO fix this or probably remove totaly
+    //public static MapEditor me;
 
     private static BufferStrategy bufferStrategy;
 

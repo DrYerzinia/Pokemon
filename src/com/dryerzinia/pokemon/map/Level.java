@@ -10,7 +10,9 @@ import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
+import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.obj.RandomFight;
+import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
 
@@ -52,23 +54,62 @@ public class Level implements Serializable, JSON {
 
         if (borderL != null) {
             if (borderL[0] != null)
-                borderL[0].grid.draw(x + borderL[0].grid.grid.length, y + borderoffset[0], graphics);
+            	borderL[0].drawOffset(x, y, borderL[0].grid.grid.length, borderoffset[0], graphics);
             if (borderL[3] != null)
-                borderL[3].grid.draw(x - grid.grid.length, y + borderoffset[3], graphics);
+            	borderL[3].drawOffset(x, y, -1*grid.grid.length, borderoffset[3], graphics);
             if (borderL[1] != null)
-                borderL[1].grid.draw(x + borderoffset[1], y + borderL[1].grid.grid[0].length, graphics);
+            	borderL[1].drawOffset(x, y, borderoffset[1], borderL[1].grid.grid[0].length, graphics);
             if (borderL[7] != null)
-                borderL[7].grid.draw(x + borderoffset[7], y - grid.grid[0].length, graphics);
+            	borderL[7].drawOffset(x, y, borderoffset[7], -1*grid.grid[0].length, graphics);
         }
 
 		for(Person person : peopleInLevel)
-			person.draw(0, 0, 0, 0, graphics);
+    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), new Position((int)person.x, (int)person.y, person.level, Direction.NONE)))
+    			person.draw(person.x - x, person.y - y, 0, 0, graphics);
+
+		for(Player player : ClientState.players)
+			if(this == GameState.getMap().getLevel(player.getLocation().getLevel()))
+				player.draw(x, y, graphics);
+
+    }
+
+    public void drawOffset(float x, float y, int xOffset, int yOffset, Graphics graphics){
+
+    	grid.draw(x + xOffset, y + yOffset, graphics);
+
+    	for(Person person : peopleInLevel)
+    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), new Position((int)person.x, (int)person.y, person.level, Direction.NONE)))
+    			person.draw(person.x - x - xOffset, person.y - y - yOffset, 0, 0, graphics);
+
+    }
+
+    public BorderOffset borderOffset(Level level){
+
+    	/*
+    	 * DOWN  7
+    	 * UP    1
+    	 */
+    	for(int i = 0; i < 8; i++)
+    		if(borderL[i] == level)
+    			switch(i){
+    			case 1:
+    				return new BorderOffset(Direction.UP, borderoffset[i], borderL[i].grid.getHeight());
+    			case 7:
+    				return new BorderOffset(Direction.DOWN, borderoffset[i], grid.getHeight());
+    			case 0:
+        			return new BorderOffset(Direction.LEFT, borderoffset[i], borderL[i].grid.getWidth());
+    			case 3:
+    				return new BorderOffset(Direction.RIGHT, borderoffset[i], grid.getWidth());
+    			default:
+    			}
+
+    	return null;
 
     }
 
     public Pokemon attacked(Player player) {
 
-    	RandomFight rf = grid.getRF((int) player.x, (int) player.y);
+    	RandomFight rf = grid.getRF((int) player.getLocation().getY(), (int) player.getLocation().getY());
 
     	if (rf != null)
             return rf.getAttack();
@@ -82,7 +123,7 @@ public class Level implements Serializable, JSON {
     	if(!grid.canStepOn(x, y)) return false;
 
     	for(Person person : peopleInLevel)
-    		if(((int)person.x) == x + 4 && ((int)person.y) == y + 4)
+    		if(((int)person.x) == x && ((int)person.y) == y)
     			return false;
 
     	return true;

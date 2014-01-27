@@ -32,7 +32,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
             if (person.id == id) {
 
-            	person.dir = position.getFacing();
+            	person.dir = position.facing();
             	person.onClick.active = b;
             	break;
 
