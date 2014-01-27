@@ -26,6 +26,8 @@ public class SendPerson extends ClientMessage {
 	 */
     public void proccess() throws ClassNotFoundException, IOException {
 
+    	GameState.level.get(receivedPerson.level).addPerson(receivedPerson);
+
     	ListIterator<Person> personIterator = GameState.people.listIterator();
         while(personIterator.hasNext()) {
 

@@ -46,11 +46,10 @@ public class GameView implements View {
 
 		if(!ClientState.isLoaded()) return;
 
+		/*
+		 * Draws the level and the characters in it
+		 */
 		ClientState.getPlayerLevel().draw(graphics, ClientState.player.x, ClientState.player.y);
-
-		for(Person person : GameState.people)
-			if(person.level == ClientState.player.level)
-				person.draw(0, 0, 0, 0, graphics);
 	
 		ClientState.player.draw(graphics);
 

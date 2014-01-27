@@ -2,9 +2,12 @@ package com.dryerzinia.pokemon.map;
 import java.io.*;
 import java.awt.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
@@ -14,6 +17,8 @@ import com.dryerzinia.pokemon.util.JSONObject;
 public class Level implements Serializable, JSON {
 
     static final long serialVersionUID = -5293673761061322573L;
+
+    private transient CopyOnWriteArrayList<Person> peopleInLevel = new CopyOnWriteArrayList<Person>();
 
     public Grid grid;
 
@@ -56,6 +61,9 @@ public class Level implements Serializable, JSON {
                 borderL[7].grid.draw(x + borderoffset[7], y - grid.grid[0].length, graphics);
         }
 
+		for(Person person : peopleInLevel)
+			person.draw(0, 0, 0, 0, graphics);
+
     }
 
     public Pokemon attacked(Player player) {
@@ -66,6 +74,34 @@ public class Level implements Serializable, JSON {
             return rf.getAttack();
 
     	return null;
+
+    }
+
+    public boolean canStepOn(int x, int y){
+
+    	if(!grid.canStepOn(x, y)) return false;
+
+    	for(Person person : peopleInLevel)
+    		if(((int)person.x) == x + 4 && ((int)person.y) == y + 4)
+    			return false;
+
+    	return true;
+
+    }
+
+    public void addPerson(Person newPerson){
+
+    	ListIterator<Person> personIterator = peopleInLevel.listIterator();
+        while(personIterator.hasNext()) {
+
+        	Person person = personIterator.next();
+            if (person.id == newPerson.id) {
+            	peopleInLevel.set(personIterator.previousIndex(), newPerson);
+                return;
+            }
+        }
+
+        peopleInLevel.add(newPerson);
 
     }
 

@@ -5,6 +5,7 @@ import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
+import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.util.MysqlConnect;
@@ -148,9 +149,9 @@ public class Player implements Serializable {
     		futureY = (int) Math.floor(y);
     	}
 
-    	Grid grid = ClientState.getPlayerLevel().grid;
-    	boolean canStep = grid.canStepOn(futureX, futureY);
-    	LevelChange levelChange = grid.changeLevel(futureX, futureY);
+    	Level lev = ClientState.getPlayerLevel();
+    	boolean canStep = lev.canStepOn(futureX, futureY);
+    	LevelChange levelChange = lev.grid.changeLevel(futureX, futureY);
 
     	/*
     	 * We need to continue the step through to the next level

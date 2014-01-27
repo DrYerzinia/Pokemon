@@ -23,7 +23,8 @@ public class Grid implements Serializable, JSON {
     public Grid() {
     }
 
-    public Grid(int x, int y) {
+    @SuppressWarnings("unchecked")
+	public Grid(int x, int y) {
         grid = new ArrayList[x][y];
     }
 
@@ -182,7 +183,8 @@ public class Grid implements Serializable, JSON {
     // GRID loads reference from master tile list so we want to load the tile
     // ids manualy instead of the tiles
 
-    private void readObject(ObjectInputStream ois)
+    @SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream ois)
             throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
 
