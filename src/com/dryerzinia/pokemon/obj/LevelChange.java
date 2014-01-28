@@ -1,6 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 
 public class LevelChange {
 

@@ -6,6 +6,8 @@ GetPlayerServerMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
+import com.dryerzinia.pokemon.obj.Player;
 
 public class GetPlayerServerMessage extends ServerMessage {
 
@@ -20,6 +22,26 @@ public class GetPlayerServerMessage extends ServerMessage {
 
         p.sendPlayerUpdate(p.getPlayer(), true);
         PokemonServer.pokes.addPlayer(p);
+
+        /*
+         * Tell the client about nearby players and nearby players about client
+         */
+        for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players) {
+        	 
+        	if(nearbyPID != p){
+
+        		Player nearbyPlayer = nearbyPID.getPlayer();
+        		Player player = p.getPlayer();
+        		int distance = PokemonServer.distance(player, nearbyPlayer);
+
+        		if(distance < 14){
+        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), player.getLocation()));
+        			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
+        		}
+
+        	}
+
+        }
 
     }
 

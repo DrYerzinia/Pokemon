@@ -16,6 +16,7 @@ import java.net.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 import com.dryerzinia.pokemon.net.ByteInputStream;
 import com.dryerzinia.pokemon.net.DatagramSocketStreamer;
 import com.dryerzinia.pokemon.net.Streamer;
@@ -23,7 +24,7 @@ import com.dryerzinia.pokemon.net.TCPStreamer;
 import com.dryerzinia.pokemon.net.msg.client.CMLoad;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.MessageClientMessage;
-import com.dryerzinia.pokemon.net.msg.client.PlayerUpdateMessage;
+import com.dryerzinia.pokemon.net.msg.client.PlayerInfo;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActTalkingToClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendPerson;
@@ -33,7 +34,6 @@ import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
@@ -614,7 +614,7 @@ public class PokemonServer {
 
                 	// If the player is near them update
                     Player p3 = pid2.getPlayer();
-                    if (player != p3 && localized(player, p3)) { // Add localization for
+                    if (player != p3){// && localized(player, p3)) { // Add localization for
                                                          // updates
                         try {
                             pid.sendPlayerUpdate(player, false);
@@ -644,16 +644,15 @@ public class PokemonServer {
     }
 
     /**
-     * Checks to see if two players are in the same area
+	 * Calculates the Manhattan Distance between 2 players
+	 * 
      * @param p1 first player
      * @param p2 second player
-     * @return if they are in same area returns true else false
-     * TODO Increase the accuracy of this method to an actual Manhattan
-     * distance
+     * @return Manhattan Distance between players
      */
-    public static boolean localized(Player p1, Player p2) {
+    public static int distance(Player p1, Player p2) {
 
-        return p1.getLocation().getLevel() == p2.getLocation().getLevel();
+        return GameState.getMap().manhattanDistance(p1.getLocation(), p2.getLocation());
 
     }
 
@@ -694,7 +693,7 @@ public class PokemonServer {
                     while (i.hasNext()) {
                         PlayerInstanceData pid = i.next();
                         Player p = pid.getPlayer();
-                        if (p.name.equals(name) && localized(p, p2)) {
+                        if (p.name.equals(name)){// && localized(p, p2)) {
 
                             Fight f;
 
@@ -747,7 +746,7 @@ public class PokemonServer {
             while (i.hasNext()) {
                 PlayerInstanceData pid = i.next();
                 Player p = pid.getPlayer();
-                if (p.id != p2.id && localized(p, p2)) {
+                if (p.id != p2.id){// TODO && localized(p, p2)) {
                     try {
                         pid.sendMessage(p2.name + ": " + s);
                     } catch (IOException x) {
@@ -951,7 +950,7 @@ public class PokemonServer {
 
         public synchronized void sendPlayerUpdate(Player p, boolean self)
                 throws IOException {
-            oos.writeObject(new PlayerUpdateMessage(p, self));
+            oos.writeObject(new PlayerInfo(p, self));
             oos.flush();
             oos.reset();
         }

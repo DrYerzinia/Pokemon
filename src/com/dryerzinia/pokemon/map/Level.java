@@ -1,4 +1,5 @@
 package com.dryerzinia.pokemon.map;
+
 import java.io.*;
 import java.awt.*;
 import java.util.*;
@@ -10,7 +11,6 @@ import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;

@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.obj.Position;
 
 public class PlayerPositionMessage extends ServerMessage {
 
@@ -29,9 +31,9 @@ public class PlayerPositionMessage extends ServerMessage {
          * TODO fix this to players who have us in there
          * SEEN list we need to implement this
          */
-        boolean levelchange = false;
+        boolean levelChange = false;
         if (player.getLocation().getLevel() != playerPosition.getLevel())
-            levelchange = true;
+            levelChange = true;
 
         /*
          * Update servers copy of the players position
@@ -43,47 +45,39 @@ public class PlayerPositionMessage extends ServerMessage {
          * Update near-by players to our position
          */
         for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players) {
- 
-        	Player nearbyPlayer = nearbyPID.getPlayer();
 
         	/*
         	 * If the player is not SELF and
         	 * is nearby send a update to let them know he moved
         	 */
-        	if(player != nearbyPlayer
-              && PokemonServer.localized(player, nearbyPlayer)) { // TODO improve localization via Manhattan distance
+        	if(p != nearbyPID) {
 
-        		try {
-                   nearbyPID.sendPlayerUpdate(player, false);
-                } catch (IOException ioe) {
-                    System.err.println("Failed to Update Player: " + ioe.getMessage());
-                }
-
-        	/*
-        	 * If they are not nearby
-        	 * TODO we shoulden't send remove self to SELF!
-        	 */
-        	} else {
+            	Player nearbyPlayer = nearbyPID.getPlayer();
+        		int distance = PokemonServer.distance(player, nearbyPlayer);
 
         		/*
-        		 * If we left the level
-        		 * this can be merged with ELSE!
-        		 * TODO fuck this is just retarted fix this shit
+        		 * people who are only 2 tiles away from being on screen are updated
         		 */
-                if (levelchange) {
-                    // Player has left there level TODO: Show players in range
-                    // but different level
-                    // Also this will spam on level changes fix that
-                    Player pGone = new Player();
-                    pGone.set(player);
-                    pGone.getLocation().setLevel(-1);
-                    try {
-                        p.sendPlayerUpdate(pGone, false);
-                    } catch (IOException x) {
-                        System.err.println("Failed to Update Player");
-                    }
-                }
-            }
+        		if(distance < 14)
+        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), playerPosition));
+
+        		/*
+        		 * people who are in the leaving sweet spot need to have there level
+        		 * set to -1 so they wont be drawn where they were
+        		 */
+        		else if((distance >= 14 && distance < 16) || (distance >= 14 && levelChange)){
+        			Position nowhereLand = new Position(0, 0, -1, Direction.NONE);
+        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), nowhereLand));
+        		}
+
+        		/*
+        		 * Sweet spot for visibility change at this distance stationary
+        		 * players send updates to players moving near them
+        		 */
+        		if(distance < 14 && distance > 12)
+        			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
+
+        	}
         }
 
         /*

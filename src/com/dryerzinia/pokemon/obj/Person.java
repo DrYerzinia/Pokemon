@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.awt.*;
 
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -262,7 +263,7 @@ public class Person extends Tile implements Actor {
         return false;
     }
 
-    public void addMovment(Position position){
+    public void addMovement(Position position){
 
     	movements.add(position);
 

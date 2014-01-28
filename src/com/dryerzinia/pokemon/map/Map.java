@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.obj.Tile;
 import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
 import com.dryerzinia.pokemon.util.JSONArray;
@@ -27,6 +26,7 @@ public class Map {
 
     public Level getLevel(int id){
  
+    	if(id == -1) return null;
     	return levels.get(id);
 
     }

@@ -6,10 +6,10 @@ SendActTalkingToClientMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Position;
 
 public class SendActTalkingToClientMessage extends SendActClientMessage {
 

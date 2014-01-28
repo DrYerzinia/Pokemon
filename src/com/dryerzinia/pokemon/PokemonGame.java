@@ -4,8 +4,6 @@
  * username password location and transport mode (TCP, UDP) to populate in the
  * Login menu.
  * 
- * TODO fucking seperate NET CODE, GAME STATE CODE, UI CODE into seperate SINGLETONS
- * 
  * @author DrYerzinia <dryerzinia@gmail.com>
  */
 

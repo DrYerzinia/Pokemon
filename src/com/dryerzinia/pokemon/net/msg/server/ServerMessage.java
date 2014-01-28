@@ -7,17 +7,14 @@ import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonServer;
 
-public class ServerMessage implements Serializable {
+public abstract class ServerMessage implements Serializable {
 
     static final long serialVersionUID = 7256252232322597017L;
 
     public ServerMessage() {
     }
 
-    public void proccess(ObjectInputStream ois,
-            PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
-            IOException {
-    }
+    public abstract void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException;
 
     private void readObject(ObjectInputStream ois)
             throws ClassNotFoundException, IOException {

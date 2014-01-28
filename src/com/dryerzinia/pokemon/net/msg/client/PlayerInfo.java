@@ -11,7 +11,7 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 
-public class PlayerUpdateMessage extends ClientMessage {
+public class PlayerInfo extends ClientMessage {
 
     // static final long serialVersionUID = 6177261564125944892L;
 
@@ -19,10 +19,10 @@ public class PlayerUpdateMessage extends ClientMessage {
 
     boolean isSelf;
 
-    public PlayerUpdateMessage() {
+    public PlayerInfo() {
     }
 
-    public PlayerUpdateMessage(Player updatePlayer, boolean self) {
+    public PlayerInfo(Player updatePlayer, boolean self) {
 
         receivedPlayer = updatePlayer;
 
@@ -43,7 +43,7 @@ public class PlayerUpdateMessage extends ClientMessage {
             Client.writeLoadMessage();
 
         } else {
-System.out.println("name="+receivedPlayer.getName()+",level="+receivedPlayer.getLocation().getLevel());
+
             boolean found = false;
             Iterator<Player> i = ClientState.players.iterator();
             while (i.hasNext()) {

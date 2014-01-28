@@ -47,7 +47,7 @@ public class PlayerServerMessage extends ServerMessage {
             PokemonServer.PlayerInstanceData otherPlayerPID = plyrIt.next();
             Player otherPlayer = otherPlayerPID.getPlayer();
             if (thisPlayer != otherPlayer
-                    && PokemonServer.localized(thisPlayer, otherPlayer)) { // Add
+                    ){//&& PokemonServer.localized(thisPlayer, otherPlayer)) { // Add
                                                                            // localization
                                                                            // for
                                                                            // updates

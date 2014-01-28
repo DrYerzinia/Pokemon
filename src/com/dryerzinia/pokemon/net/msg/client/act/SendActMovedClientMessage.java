@@ -8,12 +8,12 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.act.RequestPerson;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Position;
 import com.dryerzinia.pokemon.obj.Tile;
 
 public class SendActMovedClientMessage extends SendActClientMessage {
@@ -32,7 +32,7 @@ public class SendActMovedClientMessage extends SendActClientMessage {
         for(Person person : GameState.people) {
  
             if(person.id == id){
-            	person.addMovment(position);
+            	person.addMovement(position);
                 return;
             }
         }

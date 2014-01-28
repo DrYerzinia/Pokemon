@@ -6,14 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
-import com.dryerzinia.pokemon.map.Grid;
-import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Map;
-import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.StringStream;

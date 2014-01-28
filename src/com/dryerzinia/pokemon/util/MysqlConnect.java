@@ -11,19 +11,18 @@ import java.util.Properties;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Position;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.obj.Position;
 import com.mysql.jdbc.CommunicationsException;
 
 public class MysqlConnect {
 
 	public static boolean localized = false;
 
-	// hard-coded for now; change this
 	public static String username;
 	public static String password;
 	public static String dbname;
@@ -49,12 +48,12 @@ public class MysqlConnect {
 
 		} catch(IllegalAccessException e){
 
-			System.err.println("Cant access com.mysql.jdbc.Driver: " + e.getMessage());
+			System.err.println("Can't access com.mysql.jdbc.Driver: " + e.getMessage());
 			throw new SQLException("Not allowed to access MySQL Driver!");
 
 		} catch (InstantiationException e) {
 
-			System.err.println("Cant instantiate com.mysql.jdbc.Driver: " + e.getMessage());
+			System.err.println("Can't instantiate com.mysql.jdbc.Driver: " + e.getMessage());
 			throw new SQLException("Could not create MySQL Driver Instance!");
 
 		} catch (ClassNotFoundException e) {

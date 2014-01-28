@@ -47,8 +47,8 @@ public class SMLogin extends ServerMessage {
 
         System.out.println("Login Attempt: " + username + ":" + password);
 
-        Player login_result = MysqlConnect.login(username, password);
-        if (login_result == null) {
+        Player loginResult = MysqlConnect.login(username, password);
+        if (loginResult == null) {
 
         	System.out.println("Error: Credentials do not exist in Database!");
 
@@ -63,7 +63,7 @@ public class SMLogin extends ServerMessage {
         	pid.writeClientMessage(new LoginSuccessMessage());
             pid.setLoggedIn(true);
 
-            player.set(login_result);
+            player.set(loginResult);
             player.poke = MysqlConnect.getCharacterPokemon(player.getID());
             player.items = MysqlConnect.getCharacterItems(player.getID());
             

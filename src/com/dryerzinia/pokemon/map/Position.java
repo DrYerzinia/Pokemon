@@ -1,8 +1,6 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.map;
 
 import java.io.Serializable;
-
-import com.dryerzinia.pokemon.map.Direction;
 
 public class Position implements Serializable {
 
@@ -89,6 +87,10 @@ public class Position implements Serializable {
 
 	public void setLevel(int level){
 		this.level = level;
+	}
+
+	public String toString(){
+		return "{x:"+x+",y:"+y+",level:"+level+",facing:"+facing+"}";
 	}
 
 }
