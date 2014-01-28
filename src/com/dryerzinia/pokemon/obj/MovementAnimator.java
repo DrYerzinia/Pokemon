@@ -163,6 +163,7 @@ public class MovementAnimator {
     			return null;
     		}
 
+    		boolean directionChange = position.facing() != newPosition.facing();
     		/*
     		 * Turn the character in new direction specified by movement
     		 */
@@ -174,6 +175,8 @@ public class MovementAnimator {
         	Point futurePoint = nextTile(position);
         	Level level = GameState.getMap().getLevel(position.getLevel());
 
+        	boolean levelChanged = false;
+
         	/*
         	 * If level is null then they are in the Fog of War
         	 */
@@ -182,17 +185,24 @@ public class MovementAnimator {
         			position.setLevel(newPosition.getLevel());
         		else
         			return null;
+        	} else {
+            	LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
+            	if(levelChange != null)
+            		levelChanged = true;
         	}
+
+        	boolean sameSpot = (Math.round(position.getX()) != Math.round(newPosition.getX()) ||  Math.round(position.getY()) != Math.round(newPosition.getY()));
+        	boolean canStepNew = level.canStepOn(futurePoint.getX(), futurePoint.getY());
 
         	/*
         	 * If we are in different spot move
         	 * or if we are in same spot but next tile can not be stepped on
         	 * we bump the wall and don't move
         	 * or we just don't move (Probably a turn)
+        	 * or if it is a level change and we are in same position it was
+        	 * just a turn
         	 */
-    		if((Math.round(position.getX()) != Math.round(newPosition.getX())
-    		||  Math.round(position.getY()) != Math.round(newPosition.getY()))
-    		|| !level.canStepOn(futurePoint.getX(), futurePoint.getY())){
+    		if(sameSpot || !canStepNew && !(levelChanged && directionChange)){
 
     			elapsedTime += deltaTime;
     			animationMove(position, deltaTime);
@@ -228,7 +238,11 @@ public class MovementAnimator {
     	 */
     	if(levelChange != null && levelChange.rightDirection(position.facing())){
 
-    		position.set(levelChange.getNewPosition());
+    		/*
+    		 * If we are the clients player we change positions immediatly
+    		 */
+    		if(newPosition == null)
+    			position.set(levelChange.getNewPosition());
     		canStep = true;
 
     	}

@@ -72,7 +72,7 @@ public class PlayerPositionMessage extends ServerMessage {
         		 * Sweet spot for visibility change at this distance stationary
         		 * players send updates to players moving near them
         		 */
-        		if(distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE)
+        		if((distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE) || (distance < PokemonServer.VISIBLE_DISTANCE && levelChange))
         			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
 
         	}
