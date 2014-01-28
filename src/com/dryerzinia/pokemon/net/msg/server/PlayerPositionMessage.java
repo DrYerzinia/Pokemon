@@ -58,23 +58,21 @@ public class PlayerPositionMessage extends ServerMessage {
         		/*
         		 * people who are only 2 tiles away from being on screen are updated
         		 */
-        		if(distance < 14)
+        		if(distance < PokemonServer.VISIBLE_DISTANCE)
         			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), playerPosition));
 
         		/*
         		 * people who are in the leaving sweet spot need to have there level
         		 * set to -1 so they wont be drawn where they were
         		 */
-        		else if((distance >= 14 && distance < 16) || (distance >= 14 && levelChange)){
-        			Position nowhereLand = new Position(0, 0, -1, Direction.NONE);
-        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), nowhereLand));
-        		}
+        		else if((distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && distance < PokemonServer.FOG_OF_WAR) || (distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && levelChange))
+        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), Position.NOWHERE_LAND));
 
         		/*
         		 * Sweet spot for visibility change at this distance stationary
         		 * players send updates to players moving near them
         		 */
-        		if(distance < 14 && distance > 12)
+        		if(distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE)
         			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
 
         	}

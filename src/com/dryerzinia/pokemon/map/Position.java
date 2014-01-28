@@ -6,6 +6,11 @@ public class Position implements Serializable {
 
 	private static final long serialVersionUID = 5663646265119040753L;
 
+	/*
+	 * The place that logged of clients get sent to
+	 */
+	public static final Position NOWHERE_LAND = new Position(0, 0, -1, Direction.NONE);
+
 	private float x;
 	private float y;
 

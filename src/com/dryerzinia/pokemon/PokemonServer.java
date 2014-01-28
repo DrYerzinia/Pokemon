@@ -25,6 +25,7 @@ import com.dryerzinia.pokemon.net.msg.client.CMLoad;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.MessageClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.PlayerInfo;
+import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActTalkingToClientMessage;
 import com.dryerzinia.pokemon.net.msg.client.act.SendPerson;
@@ -39,6 +40,25 @@ import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class PokemonServer {
+
+	/*
+	 * Number for Manhattan distances
+	 * 14 Max distance at which fights can be initiated
+	 * 50 Max distance at which people can hear each other in chat without whispering
+	 * 16 Distance at which other players and actors movements are no longer being told
+	 * 14 Distance at which other players and actors movements start being told
+	 * 2 width of the transition zone where clients are told either that a player is
+	 * coming into view or a player is going out of view
+	 * [16-14) going out of view
+	 * [14-12) Coming into view
+	 * 
+	 * TODO move values to configuration file
+	 */
+	public static final int FIGHT_DISTANCE = 14;
+	public static final int TALK_DISTANCE = 50;
+	public static final int FOG_OF_WAR = 16;
+	public static final int VISIBLE_DISTANCE = 14;
+	public static final int TRANSITION_ZONE = 2;
 
 	// TODO possibly multiple ports with per port mode settings in file
     public static final int PORT_NUM = 53879;
@@ -143,11 +163,11 @@ public class PokemonServer {
      */
     public synchronized void kickInactive() {
 
-    	Iterator<PlayerInstanceData> pid_iterator = players.iterator();
+    	Iterator<PlayerInstanceData> pidIterator = players.iterator();
 
-    	while(pid_iterator.hasNext()) {
+    	while(pidIterator.hasNext()) {
             
-    		PlayerInstanceData pid = pid_iterator.next();
+    		PlayerInstanceData pid = pidIterator.next();
 
     		/* Players who have not send a message in the last 45 seconds
     		 * Are removed from the game, They should ping at least once
@@ -162,7 +182,7 @@ public class PokemonServer {
                 MysqlConnect.savePlayerData(pid.getPlayer());
 
                 // Remove PlayerInstanceData from server
-                pid_iterator.remove();
+                pidIterator.remove();
                 // TODO Proper disconnect and killing of all threads
                 System.out.println("Player kicked!");
 
@@ -366,7 +386,7 @@ public class PokemonServer {
             	// Remove player from list of connected players
                 if (pid.isLoggedIn())
                 	// Save player
-                    remove(pid.getPlayer());
+                    remove(pid);
                 else
                 	// Don't save anything for players who never logged in successfully
                     removeNoSave(pid);
@@ -583,67 +603,6 @@ public class PokemonServer {
     }
 
     /**
-     * Sends update information for a player to all clients
-     * if the player is near them or was near them and has moved
-     * @param to_replace player to change
-     * TODO as of right now this function is only called to remove 
-     * players figure out what other usage it should have
-     * we are likely updating players in a message in a non thread
-     * safe way!!!
-     */
-    public synchronized void replace(Player toReplace) {
-
-    	boolean levelchange = false;
-
-        for(PlayerInstanceData pid : players) {
-
-        	Player player = pid.getPlayer();
-
-        	// Found the player to replace
-        	if (player.getID() == toReplace.getID()) {
-
-        		// If there level changed we make a note of that
-        		if (player.getLocation().getLevel() != toReplace.getLocation().getLevel())
-                    levelchange = true;
-
-        		// set the player in the master list equal to the replace player
-        		player.set(toReplace);
-
-        		// for all the other players
-                for(PlayerInstanceData pid2 : players) {
-
-                	// If the player is near them update
-                    Player p3 = pid2.getPlayer();
-                    if (player != p3){// && localized(player, p3)) { // Add localization for
-                                                         // updates
-                        try {
-                            pid.sendPlayerUpdate(player, false);
-                        } catch (IOException x) {
-                            System.err.println("Failed to Update Player");
-                        }
-
-                    // If he left where they where update them that he is gone
-                    } else if (levelchange) {
-
-                        Player p4 = new Player();
-
-                        p4.set(player);
-                        p4.getLocation().setLevel(-1);
-
-                        try {
-                            pid.sendPlayerUpdate(p4, false);
-                        } catch (IOException x) {
-                            System.err.println("Failed to Update Player");
-                        }
-
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    /**
 	 * Calculates the Manhattan Distance between 2 players
 	 * 
      * @param p1 first player
@@ -664,9 +623,12 @@ public class PokemonServer {
      * @param p2id the player who sent the message
      */
     public synchronized void sendMessage(String s, PlayerInstanceData p2id) {
-        Player p2 = p2id.getPlayer();
-        if (s.charAt(0) == '/') {
-            switch (s.charAt(1)) {
+
+    	Player p2 = p2id.getPlayer();
+
+    	if(s.charAt(0) == '/') {
+
+    		switch (s.charAt(1)) {
             case 'w':
                 try {
                     int sp = s.indexOf(' ', 3);
@@ -683,6 +645,7 @@ public class PokemonServer {
                 } catch (Exception x) {
                 }
                 break;
+
             case 'f':
                 try {
 
@@ -693,7 +656,7 @@ public class PokemonServer {
                     while (i.hasNext()) {
                         PlayerInstanceData pid = i.next();
                         Player p = pid.getPlayer();
-                        if (p.name.equals(name)){// && localized(p, p2)) {
+                        if (p.name.equals(name) && FIGHT_DISTANCE > distance(p, p2)){
 
                             Fight f;
 
@@ -741,12 +704,14 @@ public class PokemonServer {
                 }
                 break;
             }
-        } else {
-            Iterator<PlayerInstanceData> i = players.iterator();
-            while (i.hasNext()) {
+
+    	} else {
+
+    		Iterator<PlayerInstanceData> i = players.iterator();
+            while(i.hasNext()) {
                 PlayerInstanceData pid = i.next();
                 Player p = pid.getPlayer();
-                if (p.id != p2.id){// TODO && localized(p, p2)) {
+                if(p.id != p2.id && TALK_DISTANCE > distance(p, p2)){
                     try {
                         pid.sendMessage(p2.name + ": " + s);
                     } catch (IOException x) {
@@ -754,7 +719,8 @@ public class PokemonServer {
                     }
                 }
             }
-        }
+
+    	}
     }
 
     /**
@@ -773,39 +739,51 @@ public class PokemonServer {
 
     /**
      * Removes kicked or disconnected player from master list
-     * @param to_remove player to remove from master list
+     * @param toRemove PlayerInstance Data of player to remove from master list
      */
-    public synchronized void remove(Player toRemove) {
-    	/* If the player is not logged in there level will be -1
+    public synchronized void remove(PlayerInstanceData toRemove) {
+
+    	Player playerToRemove = toRemove.getPlayer();
+
+    	/* If the player is not logged in their level will be -1
     	 * so we check for this, we only want to save changes if
-    	 * they where logged in
+    	 * they where logged in, also we only need to update nearby
+    	 * people if they where logged in
     	 */
+    	boolean loggedIn = false;
+        if(playerToRemove.getLocation().getLevel() != -1)
+        	loggedIn = true;
 
-        if(toRemove.getLocation().getLevel() != -1)
-            MysqlConnect.savePlayerData(toRemove);
+        /*
+         * Save player if they where logged in
+         */
+        if(loggedIn)
+        	MysqlConnect.savePlayerData(playerToRemove);
 
-        Iterator<PlayerInstanceData> pid_iterator = players.iterator();
+        /*
+         * Tell any near by players this one is gone and remove this players
+         * Instance data from the list
+         */
+        Iterator<PlayerInstanceData> pidIterator = players.iterator();
+        while(pidIterator.hasNext()){
 
-        while(pid_iterator.hasNext()){
+        	PlayerInstanceData pid = pidIterator.next();
 
-        	Player player = pid_iterator.next().getPlayer();
+        	Player player = pid.getPlayer();
 
         	/* If the ID's are equal we found the player we are
         	 * removing from the master list
         	 */
-        	if (player.getID() == toRemove.getID()) {
+        	if(pid == toRemove)
+                pidIterator.remove();
 
-        		Player p3 = new Player();
-                p3.set(player);
-                p3.getLocation().setLevel(-1);
+        	/*
+        	 * If this player was near the player to remove tell them he is in
+        	 * nowhere land
+        	 */
+        	else if(VISIBLE_DISTANCE < distance(playerToRemove, player))
+    			pid.writeClientMessage(new PlayerMovement(player.getID(), Position.NOWHERE_LAND));
 
-                replace(p3);
-
-                pid_iterator.remove(); // Remove player from master list
-
-                break;
-
-        	}
         }
     }
     

@@ -179,7 +179,7 @@ public class Player implements Serializable {
 
     }
 
-    public void addMovement(Position position){System.out.println(position);
+    public void addMovement(Position position){
     	movement.addMovement(position);
     }
 

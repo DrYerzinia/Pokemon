@@ -5,33 +5,87 @@ import java.util.LinkedList;
 
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Level;
+import com.dryerzinia.pokemon.map.Point;
 import com.dryerzinia.pokemon.map.Position;
 
+/**
+ * Handles all animation of Player and Person objects and updating there
+ * positions
+ * 
+ * TODO JUMPing requires us to draw a shadow so this class needs a draw
+ * function
+ * 
+ * @author DrYerzinia
+ */
 public class MovementAnimator {
 
-    public static final int JUMPING		= 0;
-    public static final int STEPPING	= 1;
-    public static final int SLIDING		= 2;
-    public static final int NORMAL		= 3;
+	/*
+	 * Possible animation states for players and persons
+	 * They can Jump down off of ledges
+	 * They can be in the process of taking a step
+	 * They can Spin/Slide from a Arrow Tile to a Stop tile
+	 * They can be in a normal standing state
+	 */
+    private static final int JUMPING	= 0;
+    private static final int STEPPING	= 1;
+    private static final int SLIDING	= 2;
+    private static final int NORMAL		= 3;
 
+    /*
+     * Animation timing constants
+     * A lazy step that a wandering character does takes 2/3 of a second
+     * A fast step that Oak, Trainers, and Players take is 1/4 of a second
+     * The time it takes to make one revolution when sliding is
+     * The time it takes to make it down a ledge is
+     */
     private static final int LAZY_STEP_TIME = 666;
     private static final int FAST_STEP_TIME = 250;
     private static final int ROTATION_TIME	= 0; // TODO figure this out
     private static final int JUMP_TIME		= 0; // TODO figure this out
 
+    /*
+     * When movement is not being driven from the keyboard the character
+     * executes a sequence of movements determined by a list of positions
+     * the character should be in
+     */
 	private LinkedList<Position> movements;
 
+	/*
+	 * When the character is making a movement from the movements list the
+	 * character needs to keep track of where he is going so he cant set
+	 * his X, Y and level variables accordingly if there is a malfunction
+	 * and he misses a movement update
+	 */
 	private Position newPosition;
 
+	/*
+	 * The animation state (Jump, Step, Slide, Normal)
+	 * How many millisecond into the animation we are
+	 */
 	private int state;
     private int elapsedTime;
 
+    /*
+     * Time it takes to complete a step in the current state
+     */
     private float stepTime;
 
+    /*
+     * Which foot the character should step with next
+     */
     private boolean stepSide;
 
+    /*
+     * Does the character walk lazily or fast
+     */
     private boolean isLazy;
 
+    /**
+     * Creates a MovmentAnimator to manage a characters motion
+     * 
+     * @param isLazy Does the character take long lazy steps 666ms or short
+     * fast ones 250ms
+     */
     public MovementAnimator(boolean isLazy){
 
     	this.isLazy = isLazy;
@@ -46,14 +100,15 @@ public class MovementAnimator {
     }
 
     /**
-	 * Animate character movement from keyboard input
+	 * Animate character movement from keyboard input or the movements queue
 	 * 
-	 * @param direction
-	 * @param position
-	 * @param deltaTime
+	 * @param direction Key that is being pressed if not being driven from
+	 * KeyBoard Direction.NONE must be sent
+	 * @param position Current position of the character
+	 * @param deltaTime Change in time in milliseconds
 	 */
 	public Position update(Direction direction, Position position, int deltaTime){
-	
+
     	/*
     	 * If there is an animation going we finish it
     	 */
@@ -61,6 +116,9 @@ public class MovementAnimator {
     		return continueAnimation(direction, position, deltaTime);
     	}
 
+    	/*
+    	 * If its a lazy character we take our time with steps
+    	 */
 		if(isLazy)
 			stepTime = LAZY_STEP_TIME;
 		else
@@ -95,31 +153,25 @@ public class MovementAnimator {
 
     		newPosition = movements.remove();
 
+    		/*
+    		 * If we get a new position where character is facing
+    		 * Direction.NONE that means player is in fog of war so we need to
+    		 * forget where player is
+    		 */
+    		if(newPosition.facing() == Direction.NONE){
+    			position.set(newPosition);
+    			return null;
+    		}
+
+    		/*
+    		 * Turn the character in new direction specified by movement
+    		 */
     		position.setDirection(newPosition.facing());
 
-        	int futureX = 0;
-        	int futureY = 0;
-        	
-        	if(position.facing() == Direction.UP){
-        		futureX = (int) Math.ceil(position.getX());
-        		futureY = (int) Math.ceil(position.getY() - 1);
-        	}
-
-        	if(position.facing() == Direction.DOWN){
-        		futureX = (int) Math.floor(position.getX());
-        		futureY = (int) Math.floor(position.getY() + 1);
-        	}
-
-        	if(position.facing() == Direction.LEFT){
-        		futureX = (int) Math.ceil(position.getX() - 1);
-        		futureY = (int) Math.ceil(position.getY());
-        	}
-
-        	if(position.facing() == Direction.RIGHT){
-        		futureX = (int) Math.floor(position.getX() + 1);
-        		futureY = (int) Math.floor(position.getY());
-        	}
-
+    		/*
+    		 * See where character is going
+    		 */
+        	Point futurePoint = nextTile(position);
         	Level level = GameState.getMap().getLevel(position.getLevel());
 
         	/*
@@ -132,9 +184,15 @@ public class MovementAnimator {
         			return null;
         	}
 
+        	/*
+        	 * If we are in different spot move
+        	 * or if we are in same spot but next tile can not be stepped on
+        	 * we bump the wall and don't move
+        	 * or we just don't move (Probably a turn)
+        	 */
     		if((Math.round(position.getX()) != Math.round(newPosition.getX())
     		||  Math.round(position.getY()) != Math.round(newPosition.getY()))
-    		|| !level.canStepOn(futureX, futureY)){
+    		|| !level.canStepOn(futurePoint.getX(), futurePoint.getY())){
 
     			elapsedTime += deltaTime;
     			animationMove(position, deltaTime);
@@ -146,6 +204,11 @@ public class MovementAnimator {
 
 	}
 
+	/**
+	 * If there are no obsturctions moves character forward based on how much of time step has occurred
+	 * @param position Current character position to be moved (mutated) forward
+	 * @param deltaTime Change in time scince last move in milliseconds
+	 */
     private void animationMove(Position position, int deltaTime){
 
     	/*
@@ -153,33 +216,12 @@ public class MovementAnimator {
     	 * We still are incrementing the animation timer which lets us animate
     	 * the characters sprite so we can do the wall bump
     	 */
-
-    	int futureX = 0;
-    	int futureY = 0;
     	
-    	if(position.facing() == Direction.UP){
-    		futureX = (int) Math.ceil(position.getX());
-    		futureY = (int) Math.ceil(position.getY() - 1);
-    	}
-
-    	if(position.facing() == Direction.DOWN){
-    		futureX = (int) Math.floor(position.getX());
-    		futureY = (int) Math.floor(position.getY() + 1);
-    	}
-
-    	if(position.facing() == Direction.LEFT){
-    		futureX = (int) Math.ceil(position.getX() - 1);
-    		futureY = (int) Math.ceil(position.getY());
-    	}
-
-    	if(position.facing() == Direction.RIGHT){
-    		futureX = (int) Math.floor(position.getX() + 1);
-    		futureY = (int) Math.floor(position.getY());
-    	}
+    	Point futurePoint = nextTile(position);
 
     	Level level = GameState.getMap().getLevel(position.getLevel());
-    	boolean canStep = level.canStepOn(futureX, futureY);
-    	LevelChange levelChange = level.grid.changeLevel(futureX, futureY);
+    	boolean canStep = level.canStepOn(futurePoint.getX(), futurePoint.getY());
+    	LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
 
     	/*
     	 * We need to continue the step through to the next level
@@ -194,27 +236,46 @@ public class MovementAnimator {
     	if(canStep){
 
     		/*
-    		 * If we are facing the direction
+    		 * If we are facing the direction move the character in that direction
 	    	 */
-
-    		if(position.facing() == Direction.UP)
+    		switch(position.facing()){
+    		case UP:
 	    		position.subY(deltaTime/stepTime);
-	
-	    	if(position.facing() == Direction.DOWN)
+	    		break;
+
+    		case DOWN:
 	    		position.addY(deltaTime/stepTime);
-	
-	    	if(position.facing() == Direction.LEFT)
+	    		break;
+
+    		case LEFT:
 	    		position.subX(deltaTime/stepTime);
+	    		break;
 	
-	    	if(position.facing() == Direction.RIGHT)
+    		case RIGHT:
 	    		position.addX(deltaTime/stepTime);
+	    		break;
+
+    		case NONE:
+    			throw new IllegalArgumentException("Character can not be animated in Direction.NONE");
+    		}
 
     	}
 
     }
-	
+
+    /**
+     * Helper function to continue animation
+     * 
+     * @param direction Direction pressed down
+     * @param position Current character position
+     * @param deltaTime Change in time in milliseconds
+     * @return new position of character to send to server if its The PLAYER
+     */
     private Position continueAnimation(Direction direction, Position position, int deltaTime){
 
+    	/*
+    	 * Increment elapsed time
+    	 */
 		elapsedTime += deltaTime;
 
     	/*
@@ -241,6 +302,10 @@ public class MovementAnimator {
    				newPosition = null;
    			}
 
+   			/*
+   			 * Copy position right after we finish moving to return to the
+   			 * server at end of block
+   			 */
    			Position updated = position.copy();
 
 			/*
@@ -275,6 +340,9 @@ public class MovementAnimator {
 
     		}
 
+   			/*
+   			 * Tell the server where we are
+   			 */
     		return updated;
 
     	}
@@ -284,6 +352,37 @@ public class MovementAnimator {
    		 */
     	else
     		animationMove(position, deltaTime);
+
+    	/*
+    	 * Tell the server we havent finsished moving
+    	 */
+    	return null;
+
+    }
+
+    /**
+     * Returns the x y of the next tile player will step on
+     * @param position Location of the player
+     * @return Next point the player will step on
+     */
+    private Point nextTile(Position position){
+    
+    	switch(position.facing()){
+    	case UP:
+    		return new Point((int) Math.ceil(position.getX()), (int) Math.ceil(position.getY() - 1));
+
+    	case DOWN:
+    		return new Point((int) Math.floor(position.getX()), (int) Math.floor(position.getY() + 1));
+
+    	case LEFT:
+    		return new Point((int) Math.ceil(position.getX() - 1), (int) Math.ceil(position.getY()));
+
+    	case RIGHT:
+    		return new Point((int) Math.floor(position.getX() + 1), (int) Math.floor(position.getY()));
+    	
+    	case NONE:
+    		throw new IllegalArgumentException("Player is facing direction NONE!");
+    	}
 
     	return null;
 
@@ -300,7 +399,10 @@ public class MovementAnimator {
 
 		// TODO jumping and sliding sprite selection
 
-		// Slow stepping, wandering motion
+		/*
+		 * Slow stepping, wandering motion
+		 * 5 part step with alternating feet
+		 */
 		if(isLazy){
 
 			if(elapsedTime < LAZY_STEP_TIME*0.15
@@ -317,7 +419,10 @@ public class MovementAnimator {
 			&& (facing == Direction.UP || facing == Direction.DOWN))
 				return sprites[facing.getValue() + 8];
 
-		// Fast stepping, trainers, oak, player
+		/*
+		 * Fast stepping, trainers, oak, player
+		 * 3 Part step only one side used
+		 */
 		} else {
 
 		
@@ -330,10 +435,17 @@ public class MovementAnimator {
 
     	}
 
+		/*
+		 * Default Mid step if we are not in normal position or other side
+		 */
     	return sprites[facing.getValue()+4];
 
 	}
 
+	/**
+	 * Add a new position for the character to animate into
+	 * @param position Additional position for character to animate into
+	 */
     public void addMovement(Position position){
 
     	movements.add(position);

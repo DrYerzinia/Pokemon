@@ -33,6 +33,9 @@ public class Map {
 
     public int manhattanDistance(Position a, Position b){
 
+    	if(a.getLevel() == -1 || b.getLevel() == -1)
+    		return Integer.MAX_VALUE;
+
     	if(a.getLevel() == b.getLevel())
     		return Math.abs((int) a.getX() - (int) b.getX()) + Math.abs((int) a.getY() - (int) b.getY());
 

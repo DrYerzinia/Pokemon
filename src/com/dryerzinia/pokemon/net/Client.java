@@ -20,18 +20,15 @@ import com.dryerzinia.pokemon.net.msg.server.GetItemServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.GetPokemonServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.MessageServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.PingServerMessage;
-import com.dryerzinia.pokemon.net.msg.server.PlayerServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.SMLoad;
 import com.dryerzinia.pokemon.net.msg.server.SMLogOff;
 import com.dryerzinia.pokemon.net.msg.server.SMLogin;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
-import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.views.Login;
 
 public final class Client {
@@ -445,29 +442,6 @@ public final class Client {
         	streamToServer.flush();
         	streamToServer.reset();
 
-    }
-
-    /**
-     * Write the current player to the server
-     * TODO once again server should always know current player status
-     * this may be for position updates however in which case its IMPORTANT
-     * and we need to make sure there is no funny business going on and check
-     * that the player is making legal moves server side
-     * TODO WHY RESET!!!
-     */
-    public static synchronized void writePlayer() {
-
-    	try {
-
-    		streamToServer.writeObject(new PlayerServerMessage(ClientState.player));
-        	streamToServer.flush();
-        	streamToServer.reset();
-
-    	} catch (IOException ioe) {
-
-    		System.err.println("Write Player Failed: " + ioe.getMessage());
-
-    	}
     }
 
     /**

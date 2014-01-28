@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
+import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
@@ -68,8 +69,9 @@ public class Level implements Serializable, JSON {
     			person.draw(person.x - x, person.y - y, 0, 0, graphics);
 
 		for(Player player : ClientState.players)
-			if(this == GameState.getMap().getLevel(player.getLocation().getLevel()))
-				player.draw(x, y, graphics);
+			if(id == player.getLocation().getLevel())
+				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), player.getLocation()))
+					player.draw(x, y, graphics);
 
     }
 
@@ -81,6 +83,11 @@ public class Level implements Serializable, JSON {
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), new Position((int)person.x, (int)person.y, person.level, Direction.NONE)))
     			person.draw(person.x - x - xOffset, person.y - y - yOffset, 0, 0, graphics);
 
+		for(Player player : ClientState.players)
+			if(id == player.getLocation().getLevel())
+				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), player.getLocation()))
+					player.draw(x + xOffset, y + yOffset, graphics);
+    	
     }
 
     public BorderOffset borderOffset(Level level){

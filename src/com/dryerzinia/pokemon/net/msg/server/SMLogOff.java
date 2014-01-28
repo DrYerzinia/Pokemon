@@ -14,11 +14,9 @@ public class SMLogOff extends ServerMessage {
     public SMLogOff() {
     }
 
-    public void proccess(ObjectInputStream ois,
-            PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
-            IOException {
+    public void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException {
 
-        PokemonServer.pokes.remove(p.getPlayer());
+        PokemonServer.pokes.remove(p);
 
     }
 

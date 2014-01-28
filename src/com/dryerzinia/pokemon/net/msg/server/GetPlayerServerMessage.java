@@ -34,7 +34,7 @@ public class GetPlayerServerMessage extends ServerMessage {
         		Player player = p.getPlayer();
         		int distance = PokemonServer.distance(player, nearbyPlayer);
 
-        		if(distance < 14){
+        		if(distance < PokemonServer.VISIBLE_DISTANCE){
         			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), player.getLocation()));
         			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
         		}
