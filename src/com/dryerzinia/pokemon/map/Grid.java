@@ -94,8 +94,8 @@ public class Grid implements Serializable, JSON {
     	/*
     	 * Pixel shift due to characters position float
     	 */
-    	int x_off = (int) ((x - ((int)x))*16);
-    	int y_off = (int) ((y - ((int)y))*16);
+    	int x_off = (int) Math.floor((x - ((int)x))*16);
+    	int y_off = (int) Math.floor((y - ((int)y))*16);
 
     	/*
     	 * Draw 10x10 swath of tiles for the game
