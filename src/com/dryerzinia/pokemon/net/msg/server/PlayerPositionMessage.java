@@ -7,6 +7,9 @@ import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
+import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
+import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class PlayerPositionMessage extends ServerMessage {
@@ -43,6 +46,7 @@ public class PlayerPositionMessage extends ServerMessage {
 
         /*
          * Update near-by players to our position
+         * TODO leve list search
          */
         for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players) {
 
@@ -76,6 +80,28 @@ public class PlayerPositionMessage extends ServerMessage {
         			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getPose()));
 
         	}
+        }
+
+        /*
+         * Actor fog of war
+         * TODO level list search
+         */
+        for(Person person : GameState.people.values()){
+
+        	int distance = GameState.getMap().manhattanDistance(player.getPose(), person.getPose());
+
+        	/*
+        	 * Sweet spot for Spotting people
+        	 */
+    		if((distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE) || (distance < PokemonServer.VISIBLE_DISTANCE && levelChange))
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, (int)person.x, (int)person.y, person.dir, person.level));
+
+    		/*
+        	 * Sweet spot for people leaving
+        	 */
+    		if((distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && distance < PokemonServer.FOG_OF_WAR) || (distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && levelChange))
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, 0, 0, Direction.NONE, -1));
+
         }
 
         /*

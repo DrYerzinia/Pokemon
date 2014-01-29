@@ -7,6 +7,9 @@ import java.io.*;
 
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
+import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
+import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class GetPlayerServerMessage extends ServerMessage {
@@ -40,6 +43,18 @@ public class GetPlayerServerMessage extends ServerMessage {
         		}
 
         	}
+
+        }
+
+        /*
+         * Tell the client about nearby people
+         */
+        for(Person person : GameState.people.values()){
+
+        	int distance = GameState.getMap().manhattanDistance(p.getPlayer().getPose(), person.getPose());
+
+    		if(distance < PokemonServer.VISIBLE_DISTANCE)
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, (int)person.x, (int)person.y, person.dir, person.level));
 
         }
 

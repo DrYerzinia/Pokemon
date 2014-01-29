@@ -215,11 +215,6 @@ public class PokemonServer {
             if(VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(pid.getPlayer().getPose(), person.getPose()))
 				try {
 
-					if(!pid.hasSeen(person)){
-						pid.saw(person);
-						pid.writeClientMessage(new SendPerson(person));
-					}
-
 					if(changed)
 						pid.sendActor(person, Person.A_MOVED);
 
@@ -824,8 +819,6 @@ public class PokemonServer {
         private Fight f = null;
         private boolean isChallenger = false;
 
-        private HashMap<Integer, Person> peopleSeen = new HashMap<Integer, Person>();
-
         public PlayerInstanceData() {
         }
 
@@ -843,14 +836,6 @@ public class PokemonServer {
 
         public void stop() {
             message_listener.stop_listening();
-        }
-
-        public boolean hasSeen(Person person){
-        	return peopleSeen.containsKey(person.id);
-        }
-
-        public void saw(Person person){
-        	peopleSeen.put(person.id, person);
         }
 
         public Player getPlayer() {
