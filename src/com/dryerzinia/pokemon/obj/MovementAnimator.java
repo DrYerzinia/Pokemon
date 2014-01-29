@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Point;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 
 /**
  * Handles all animation of Player and Person objects and updating there
@@ -48,7 +48,7 @@ public class MovementAnimator {
      * executes a sequence of movements determined by a list of positions
      * the character should be in
      */
-	private LinkedList<Position> movements;
+	private LinkedList<Pose> movements;
 
 	/*
 	 * When the character is making a movement from the movements list the
@@ -56,7 +56,7 @@ public class MovementAnimator {
 	 * his X, Y and level variables accordingly if there is a malfunction
 	 * and he misses a movement update
 	 */
-	private Position newPosition;
+	private Pose newPosition;
 
 	/*
 	 * The animation state (Jump, Step, Slide, Normal)
@@ -90,7 +90,7 @@ public class MovementAnimator {
 
     	this.isLazy = isLazy;
 
-    	movements = new LinkedList<Position>();
+    	movements = new LinkedList<Pose>();
 
     	stepSide = false;
 
@@ -107,7 +107,7 @@ public class MovementAnimator {
 	 * @param position Current position of the character
 	 * @param deltaTime Change in time in milliseconds
 	 */
-	public Position update(Direction direction, Position position, int deltaTime){
+	public Pose update(Direction direction, Pose position, int deltaTime){
 
     	/*
     	 * If there is an animation going we finish it
@@ -179,11 +179,14 @@ public class MovementAnimator {
 
         	/*
         	 * If level is null then they are in the Fog of War
+        	 * or if it was null and the number of the new level is not -1
+        	 * they are coming out of Fog of War
         	 */
         	if(level == null){
-        		if(newPosition.getLevel() != -1)
+        		if(newPosition.getLevel() != -1){
         			position.setLevel(newPosition.getLevel());
-        		else
+        			level = GameState.getMap().getLevel(position.getLevel());
+        		} else
         			return null;
         	} else {
             	LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
@@ -215,11 +218,11 @@ public class MovementAnimator {
 	}
 
 	/**
-	 * If there are no obsturctions moves character forward based on how much of time step has occurred
+	 * If there are no obstructions moves character forward based on how much of time step has occurred
 	 * @param position Current character position to be moved (mutated) forward
-	 * @param deltaTime Change in time scince last move in milliseconds
+	 * @param deltaTime Change in time since last move in milliseconds
 	 */
-    private void animationMove(Position position, int deltaTime){
+    private void animationMove(Pose position, int deltaTime){
 
     	/*
     	 * Before we can move we have to make sure the tile can be stepped on
@@ -285,7 +288,7 @@ public class MovementAnimator {
      * @param deltaTime Change in time in milliseconds
      * @return new position of character to send to server if its The PLAYER
      */
-    private Position continueAnimation(Direction direction, Position position, int deltaTime){
+    private Pose continueAnimation(Direction direction, Pose position, int deltaTime){
 
     	/*
     	 * Increment elapsed time
@@ -320,7 +323,7 @@ public class MovementAnimator {
    			 * Copy position right after we finish moving to return to the
    			 * server at end of block
    			 */
-   			Position updated = position.copy();
+   			Pose updated = position.copy();
 
 			/*
 			 * If we have no where to go we end the animation
@@ -379,7 +382,7 @@ public class MovementAnimator {
      * @param position Location of the player
      * @return Next point the player will step on
      */
-    private Point nextTile(Position position){
+    private Point nextTile(Pose position){
     
     	switch(position.facing()){
     	case UP:
@@ -460,7 +463,7 @@ public class MovementAnimator {
 	 * Add a new position for the character to animate into
 	 * @param position Additional position for character to animate into
 	 */
-    public void addMovement(Position position){
+    public void addMovement(Pose position){
 
     	movements.add(position);
 

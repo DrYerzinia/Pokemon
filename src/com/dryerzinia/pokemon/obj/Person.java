@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.awt.*;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -35,8 +35,8 @@ public class Person extends Tile implements Actor {
 	 *  from the server
 	 * animationElapsedTime keeps track of how far into the animation we are
 	 */
-	protected transient LinkedList<Position> movements;
-	protected transient Position newPosition;
+	protected transient LinkedList<Pose> movements;
+	protected transient Pose newPosition;
 	protected transient int animationElapsedTime;
 
 	protected transient Direction directionBeforeTalk;
@@ -69,7 +69,7 @@ public class Person extends Tile implements Actor {
 
     	animationElapsedTime = 0;
 
-    	movements = new LinkedList<Position>();
+    	movements = new LinkedList<Pose>();
 
     }
     
@@ -103,7 +103,7 @@ public class Person extends Tile implements Actor {
             py = y;
             onClick.active = true;
             wasTalkingToYou = true;
-            setImage(x - (int)ClientState.player.getLocation().getX(), y - (int)ClientState.player.getLocation().getY());
+            setImage(x - (int)ClientState.player.getPose().getX(), y - (int)ClientState.player.getPose().getY());
             Client.writeActor(this, A_TALKING_TO);
             return onClick;
         } else {
@@ -176,6 +176,10 @@ public class Person extends Tile implements Actor {
             }
         }
         */
+    }
+
+    public Pose getPose(){
+    	return new Pose(x, y, level, dir);
     }
 
     @Override
@@ -263,7 +267,7 @@ public class Person extends Tile implements Actor {
         return false;
     }
 
-    public void addMovement(Position position){
+    public void addMovement(Pose position){
 
     	movements.add(position);
 

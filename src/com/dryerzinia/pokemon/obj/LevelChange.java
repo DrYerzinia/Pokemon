@@ -1,7 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 
 public class LevelChange {
 
@@ -32,8 +32,8 @@ public class LevelChange {
 		return direction == toLeaveDirection;
 	}
 
-	public Position getNewPosition(){
-		return new Position(newX, newY, newLevel, newDirection);
+	public Pose getNewPosition(){
+		return new Pose(newX, newY, newLevel, newDirection);
 	}
 
 }

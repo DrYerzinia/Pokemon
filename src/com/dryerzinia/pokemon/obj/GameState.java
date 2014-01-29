@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
@@ -16,7 +17,10 @@ import com.dryerzinia.pokemon.util.StringStream;
 
 public class GameState {
 
-    public static CopyOnWriteArrayList<Person> people;
+	public static int peopleExpected = 100;
+	public static int threadsForPeople = 1;
+
+    public static ConcurrentHashMap<Integer, Person> people;
 
     private static Map map;
 
@@ -29,7 +33,7 @@ public class GameState {
 
     	map.load("save.json");
 
-    	people = new CopyOnWriteArrayList<Person>();
+    	people = new ConcurrentHashMap<Integer, Person> (peopleExpected, 0.75f, threadsForPeople);
 
     }
 
@@ -47,7 +51,7 @@ public class GameState {
 
     	try(PrintWriter json_writer = new PrintWriter(filename)){
     	
-        	json_writer.print(JSONArray.arrayListToJSON(new ArrayList<Person>(people)));
+        	json_writer.print(JSONArray.setToJSON(people.values()));
 
     	} catch(FileNotFoundException e){
 
@@ -68,7 +72,8 @@ public class GameState {
      */
 	public static void loadActors(String filename) {
 
-    	people = new CopyOnWriteArrayList<Person>();
+		if(people == null)
+			new ConcurrentHashMap<Integer, Person> (peopleExpected, 0.75f, threadsForPeople);
 
 		try(BufferedReader json_reader = new BufferedReader(new InputStreamReader(
                 PokemonGame.class.getClassLoader().getResourceAsStream(filename)));){
@@ -77,20 +82,15 @@ public class GameState {
 
 			Object[] actors = JSONObject.JSONToArray(new StringStream(json));
 
-			/*
-			 * Add all actors to CopyOnWrite array using array list as 
-			 * inbetween to prevent ton of new array allocations
-			 */
-			ArrayList<Person> newPeople = new ArrayList<Person>();
+
             for(Object actor : actors){
 
             	Person person = (Person) actor;
 
             	person.initializeSecondaryReferences(map.getLevel(person.level).grid);
-            	newPeople.add((Person)person);
+            	people.put(person.id, person);
 
             }
-            people.addAll(newPeople);
 
         } catch (Exception x) {
             x.printStackTrace();

@@ -2,14 +2,14 @@ package com.dryerzinia.pokemon.map;
 
 import java.io.Serializable;
 
-public class Position implements Serializable {
+public class Pose implements Serializable {
 
 	private static final long serialVersionUID = 5663646265119040753L;
 
 	/*
 	 * The place that logged of clients get sent to
 	 */
-	public static final Position NOWHERE_LAND = new Position(0, 0, -1, Direction.NONE);
+	public static final Pose NOWHERE_LAND = new Pose(0, 0, -1, Direction.NONE);
 
 	private float x;
 	private float y;
@@ -18,7 +18,7 @@ public class Position implements Serializable {
 
 	private Direction facing;
 
-	public Position(float x, float y, int level, Direction facing){
+	public Pose(float x, float y, int level, Direction facing){
 
 		this.x = x;
 		this.y = y;
@@ -29,8 +29,8 @@ public class Position implements Serializable {
 
 	}
 
-	public Position copy(){
-		return new Position(x, y, level, facing);
+	public Pose copy(){
+		return new Pose(x, y, level, facing);
 	}
 
 	public float getX(){
@@ -69,7 +69,7 @@ public class Position implements Serializable {
 		facing = newDirection;
 	}
 
-	public void set(Position position){
+	public void set(Pose position){
 
 		this.x = position.x;
 		this.y = position.y;

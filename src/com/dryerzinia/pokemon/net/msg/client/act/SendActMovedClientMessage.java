@@ -8,7 +8,7 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.act.RequestPerson;
 import com.dryerzinia.pokemon.obj.Actor;
@@ -23,24 +23,22 @@ public class SendActMovedClientMessage extends SendActClientMessage {
     public SendActMovedClientMessage(int id, int x, int y, Direction dir, int level) {
 
         this.id = id;
-        position = new Position(x, y, level, dir);
+        position = new Pose(x, y, level, dir);
 
     }
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        for(Person person : GameState.people) {
- 
-            if(person.id == id){
-            	person.addMovement(position);
-                return;
-            }
-        }
+        Person person = GameState.people.get(id);
+
+        if(person != null)
+        	person.addMovement(position);
 
         /*
          * We don't know this actor
          */
-        Client.writeServerMessage(new RequestPerson(id));
+        else
+        	Client.writeServerMessage(new RequestPerson(id));
 
     }
 

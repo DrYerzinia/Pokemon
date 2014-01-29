@@ -52,7 +52,7 @@ public class TrainerPerson extends Person implements Actor {
         sprite[2] = ResourceLoader.getSprite(imgName + "L.png");
         sprite[3] = ResourceLoader.getSprite(imgName + "R.png");
 
-        Grid g = GameState.getMap().getLevel(ClientState.player.getLocation().getLevel()).grid;
+        Grid g = GameState.getMap().getLevel(ClientState.player.getPose().getLevel()).grid;
 
         face = dir;// (int)(Math.random()*3);
 

@@ -1,5 +1,7 @@
 package com.dryerzinia.pokemon.util;
-import java.util.ArrayList;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class JSONArray {
 
@@ -8,18 +10,24 @@ public class JSONArray {
 	 * @param String object array to convert to JSON
 	 * @return JSON representation of Object
 	 */
-    public static String arrayListToJSON(ArrayList<? extends JSON> array) throws IllegalAccessException {
+    public static String setToJSON(Collection<? extends JSON> collection) throws IllegalAccessException {
    
-    	if(array == null) return "null";
+    	if(collection == null) return "null";
     	
-    	String json = "";
+    	StringBuilder json = new StringBuilder();
 
-    	json += "[";
-        for(int i = 0; i < array.size()-1; i++)
-        	json += JSONObject.objectToJSON((JSON)array.get(i)) + ",";
-        json += JSONObject.objectToJSON((JSON)array.get(array.size()-1)) + "]";
+    	json.append('[');
 
-        return json;
+    	Iterator<? extends JSON> collectionIterator = collection.iterator();
+        while(true){
+        	json.append(JSONObject.objectToJSON((JSON)collectionIterator.next()));
+        	if(collectionIterator.hasNext()) json.append(',');
+        	else break;
+        }
+
+        json.append(']');
+
+        return json.toString();
 
     }
 

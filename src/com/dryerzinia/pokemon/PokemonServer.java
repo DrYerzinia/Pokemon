@@ -16,7 +16,7 @@ import java.net.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.ByteInputStream;
 import com.dryerzinia.pokemon.net.DatagramSocketStreamer;
 import com.dryerzinia.pokemon.net.Streamer;
@@ -149,7 +149,7 @@ public class PokemonServer {
      * Kicks any players who we have not received a message from in the last
      * 45 seconds.  Player should send pings every 15 seconds to insure they
      * stay connected.  This helps remove UDP Clients who have disconnected
-     * without saying anything.  This taks runs once every 30 seconds so the
+     * without saying anything.  This takes runs once every 30 seconds so the
      * longest a player can be disconnected and not removed is 1:15
      */
     public class KickInactiveTask extends TimerTask {
@@ -197,7 +197,7 @@ public class PokemonServer {
     public class ActTask extends TimerTask {
         public void run() {
 
-        	for(Person person: GameState.people)
+        	for(Person person: GameState.people.values())
        			sendPlayerActorUpdate(person, person.act());
 
         }
@@ -210,8 +210,9 @@ public class PokemonServer {
      */
     public synchronized static void sendPlayerActorUpdate(Person person, boolean changed){
 
+    	// TODO PER level search
 		for(PlayerInstanceData pid : players) {
-            if (pid.getPlayer().getLocation().getLevel() == person.level)
+            if(VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(pid.getPlayer().getPose(), person.getPose()))
 				try {
 
 					if(!pid.hasSeen(person)){
@@ -240,9 +241,9 @@ public class PokemonServer {
     public synchronized static boolean isPlayer(int x, int y, int level) {
        for(PlayerInstanceData pid : players) {
             Player player = pid.getPlayer();
-            if(player.getLocation().getX() + 4 == x
-            && player.getLocation().getY() + 4 == y
-            && player.getLocation().getLevel() == level)
+            if(player.getPose().getX() + 4 == x
+            && player.getPose().getY() + 4 == y
+            && player.getPose().getLevel() == level)
                 return true;
         }
         return false;
@@ -591,7 +592,7 @@ public class PokemonServer {
      */
     public synchronized Player getNextPlayer() {
         playeridcount++;
-        return new Player(playeridcount, new Position(5, 5, 9, Direction.UP), "Player");
+        return new Player(playeridcount, new Pose(5, 5, 9, Direction.UP), "Player");
     }
     
     /**
@@ -611,7 +612,7 @@ public class PokemonServer {
      */
     public static int distance(Player p1, Player p2) {
 
-        return GameState.getMap().manhattanDistance(p1.getLocation(), p2.getLocation());
+        return GameState.getMap().manhattanDistance(p1.getPose(), p2.getPose());
 
     }
 
@@ -751,7 +752,7 @@ public class PokemonServer {
     	 * people if they where logged in
     	 */
     	boolean loggedIn = false;
-        if(playerToRemove.getLocation().getLevel() != -1)
+        if(playerToRemove.getPose().getLevel() != -1)
         	loggedIn = true;
 
         /*
@@ -782,7 +783,7 @@ public class PokemonServer {
         	 * nowhere land
         	 */
         	else if(VISIBLE_DISTANCE < distance(playerToRemove, player))
-    			pid.writeClientMessage(new PlayerMovement(player.getID(), Position.NOWHERE_LAND));
+    			pid.writeClientMessage(new PlayerMovement(player.getID(), Pose.NOWHERE_LAND));
 
         }
     }

@@ -34,7 +34,7 @@ public class ClientState {
 
     public static Level getPlayerLevel(){
 
-    	return GameState.getMap().getLevel(player.getLocation().getLevel());
+    	return GameState.getMap().getLevel(player.getPose().getLevel());
 
     }
 

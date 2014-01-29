@@ -5,7 +5,7 @@ SendActClientMessage.java
 
 import java.io.*;
 
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 
 public class SendActClientMessage extends ClientMessage {
@@ -13,7 +13,7 @@ public class SendActClientMessage extends ClientMessage {
     static final long serialVersionUID = -168421746034798020L;
 
     int id;
-    Position position;
+    Pose position;
 
     public SendActClientMessage() {
     }

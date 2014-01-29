@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.obj.Actor;
@@ -31,7 +31,7 @@ public class GameView implements View {
 
 		if(!ClientState.isLoaded()) return;
 
-		Position updated = ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
+		Pose updated = ClientState.player.update(ClientState.getKeyboard().direction(), deltaTime);
 
 		if(updated != null){
 
@@ -46,7 +46,8 @@ public class GameView implements View {
 
 		}
 
-		for(Actor actor : GameState.people)
+		// TODO update by map AREA!
+		for(Actor actor : GameState.people.values())
 			actor.update(deltaTime);
 
 		for(Player player : ClientState.players)
@@ -71,7 +72,7 @@ public class GameView implements View {
 		/*
 		 * Draws the level and the characters in it
 		 */
-		ClientState.getPlayerLevel().draw(graphics, ClientState.player.getLocation().getX() - 4, ClientState.player.getLocation().getY() - 4);
+		ClientState.getPlayerLevel().draw(graphics, ClientState.player.getPose().getX() - 4, ClientState.player.getPose().getY() - 4);
 	
 		ClientState.player.draw(graphics);
 

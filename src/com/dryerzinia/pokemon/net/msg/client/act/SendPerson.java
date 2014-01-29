@@ -1,7 +1,6 @@
 package com.dryerzinia.pokemon.net.msg.client.act;
 
 import java.io.IOException;
-import java.util.ListIterator;
 
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.obj.GameState;
@@ -27,18 +26,7 @@ public class SendPerson extends ClientMessage {
     public void proccess() throws ClassNotFoundException, IOException {
 
     	GameState.getMap().getLevel(receivedPerson.level).addPerson(receivedPerson);
-
-    	ListIterator<Person> personIterator = GameState.people.listIterator();
-        while(personIterator.hasNext()) {
-
-        	Person person = personIterator.next();
-            if (person.id == receivedPerson.id) {
-            	GameState.people.set(personIterator.previousIndex(), receivedPerson);
-                return;
-            }
-        }
-
-        GameState.people.add(receivedPerson);
+    	GameState.people.put(receivedPerson.id, receivedPerson);
 
     }
 

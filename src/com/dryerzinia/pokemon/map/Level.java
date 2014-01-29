@@ -65,12 +65,12 @@ public class Level implements Serializable, JSON {
         }
 
 		for(Person person : peopleInLevel)
-    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), new Position((int)person.x, (int)person.y, person.level, Direction.NONE)))
+    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), new Pose((int)person.x, (int)person.y, person.level, Direction.NONE)))
     			person.draw(person.x - x, person.y - y, 0, 0, graphics);
 
 		for(Player player : ClientState.players)
-			if(id == player.getLocation().getLevel())
-				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), player.getLocation()))
+			if(id == player.getPose().getLevel())
+				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
 					player.draw(x, y, graphics);
 
     }
@@ -80,12 +80,12 @@ public class Level implements Serializable, JSON {
     	grid.draw(x + xOffset, y + yOffset, graphics);
 
     	for(Person person : peopleInLevel)
-    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), new Position((int)person.x, (int)person.y, person.level, Direction.NONE)))
+    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), person.getPose()))
     			person.draw(person.x - x - xOffset, person.y - y - yOffset, 0, 0, graphics);
 
 		for(Player player : ClientState.players)
-			if(id == player.getLocation().getLevel())
-				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getLocation(), player.getLocation()))
+			if(id == player.getPose().getLevel())
+				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
 					player.draw(x + xOffset, y + yOffset, graphics);
     	
     }
@@ -116,7 +116,7 @@ public class Level implements Serializable, JSON {
 
     public Pokemon attacked(Player player) {
 
-    	RandomFight rf = grid.getRF((int) player.getLocation().getY(), (int) player.getLocation().getY());
+    	RandomFight rf = grid.getRF((int) player.getPose().getY(), (int) player.getPose().getY());
 
     	if (rf != null)
             return rf.getAttack();

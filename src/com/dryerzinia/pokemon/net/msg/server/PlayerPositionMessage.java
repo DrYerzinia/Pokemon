@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.obj.Player;
 
@@ -13,9 +13,9 @@ public class PlayerPositionMessage extends ServerMessage {
 
 	private static final long serialVersionUID = -6642155985356809953L;
 
-	private Position playerPosition;
+	private Pose playerPosition;
 
-	public PlayerPositionMessage(Position playerPosition){
+	public PlayerPositionMessage(Pose playerPosition){
 
 		this.playerPosition = playerPosition;
 
@@ -32,7 +32,7 @@ public class PlayerPositionMessage extends ServerMessage {
          * SEEN list we need to implement this
          */
         boolean levelChange = false;
-        if (player.getLocation().getLevel() != playerPosition.getLevel())
+        if (player.getPose().getLevel() != playerPosition.getLevel())
             levelChange = true;
 
         /*
@@ -66,14 +66,14 @@ public class PlayerPositionMessage extends ServerMessage {
         		 * set to -1 so they wont be drawn where they were
         		 */
         		else if((distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && distance < PokemonServer.FOG_OF_WAR) || (distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && levelChange))
-        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), Position.NOWHERE_LAND));
+        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), Pose.NOWHERE_LAND));
 
         		/*
         		 * Sweet spot for visibility change at this distance stationary
         		 * players send updates to players moving near them
         		 */
         		if((distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE) || (distance < PokemonServer.VISIBLE_DISTANCE && levelChange))
-        			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getLocation()));
+        			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getPose()));
 
         	}
         }

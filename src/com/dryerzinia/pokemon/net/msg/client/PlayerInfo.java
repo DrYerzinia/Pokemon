@@ -33,7 +33,7 @@ public class PlayerInfo extends ClientMessage {
     public void proccess() throws ClassNotFoundException, IOException {
 
     	// TODO fix what is causing this!!!
-    	if(receivedPlayer.getLocation().getLevel() == -1) return;
+    	if(receivedPlayer.getPose().getLevel() == -1) return;
 
         if (isSelf) {
 
@@ -49,7 +49,7 @@ public class PlayerInfo extends ClientMessage {
             while (i.hasNext()) {
                 Player foundPlayer = i.next();
                 if (receivedPlayer.id == foundPlayer.id) {
-                    if (receivedPlayer.getLocation().getLevel() == -1) {
+                    if (receivedPlayer.getPose().getLevel() == -1) {
                         i.remove();
                     } else {
                         foundPlayer.set(receivedPlayer);

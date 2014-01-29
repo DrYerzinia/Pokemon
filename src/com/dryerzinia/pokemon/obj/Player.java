@@ -6,7 +6,7 @@ import java.io.*; // Serializable
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.util.MysqlConnect;
@@ -27,11 +27,11 @@ public class Player implements Serializable {
 
     public int id; // Player MYSQL_ID
 
-    private Position location;
+    private Pose location;
 
     private MovementAnimator movement;
 
-    public Position lastPokemonCenter;
+    public Pose lastPokemonCenter;
 
     public int money; // players amount of money
 
@@ -55,7 +55,7 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, Position location, String name) {
+    public Player(int id, Pose location, String name) {
 
         this.id = id;
 
@@ -68,7 +68,7 @@ public class Player implements Serializable {
 
     }
 
-    public Player(int id, Position location, String name,
+    public Player(int id, Pose location, String name,
             String imgName) {
 
         this.id = id;
@@ -89,7 +89,7 @@ public class Player implements Serializable {
      * @param direction The direction that the player wants the character to go
      * @param deltaTime Amount of time in ms that have elapsed since last update
      */
-    public Position update(Direction direction, int deltaTime) {
+    public Pose update(Direction direction, int deltaTime) {
 
     	return movement.update(direction, location, deltaTime);
 
@@ -106,7 +106,7 @@ public class Player implements Serializable {
     public void draw(float x, float y, Graphics graphics) {
 
     	img = movement.animationImage(sprite, location.facing());
-        graphics.drawImage(img, (int) ((getLocation().getX() - x) * 16), (int)((getLocation().getY() - y) * 16) - CHARACTER_OFFSET, null);
+        graphics.drawImage(img, (int) ((getPose().getX() - x) * 16), (int)((getPose().getY() - y) * 16) - CHARACTER_OFFSET, null);
 
     }
 
@@ -135,7 +135,7 @@ public class Player implements Serializable {
         return id;
     }
 
-    public Position getLocation(){
+    public Pose getPose(){
     	return location;
     }
 
@@ -173,13 +173,13 @@ public class Player implements Serializable {
      * 
      * @param position New player position
      */
-    public void setPosition(Position position){
+    public void setPosition(Pose position){
 
        	location = position.copy();
 
     }
 
-    public void addMovement(Position position){
+    public void addMovement(Pose position){
     	movement.addMovement(position);
     }
 

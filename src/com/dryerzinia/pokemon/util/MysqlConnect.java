@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
@@ -140,10 +140,10 @@ public class MysqlConnect {
 				+ "level = ?, Dir = ?, LPCX = ?, LPCY = ?, LPCLEVEL = ?, "
 				+ "Money = ? WHERE UserName = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, (int) player.getLocation().getX());
-			stmt.setInt(2, (int) player.getLocation().getY());
-			stmt.setInt(3, player.getLocation().getLevel()); // current level player is on
-			stmt.setInt(4, player.getLocation().facing().getValue()); // player direction
+			stmt.setInt(1, (int) player.getPose().getX());
+			stmt.setInt(2, (int) player.getPose().getY());
+			stmt.setInt(3, player.getPose().getLevel()); // current level player is on
+			stmt.setInt(4, player.getPose().facing().getValue()); // player direction
 			stmt.setInt(5, (int) player.lastPokemonCenter.getX());
 			stmt.setInt(6, (int) player.lastPokemonCenter.getY());
 			stmt.setInt(7, player.lastPokemonCenter.getLevel());
@@ -532,10 +532,10 @@ public class MysqlConnect {
 				}
 				player = new Player();
 				player.id = results.getInt("id");
-				player.setPosition(new Position(results.getInt("x"), results.getInt("y"), results.getInt("level"), Direction.get(results.getInt("dir"))));
+				player.setPosition(new Pose(results.getInt("x"), results.getInt("y"), results.getInt("level"), Direction.get(results.getInt("dir"))));
 				player.name = results.getString("UserName");
 				player.imgName = results.getString("picture");
-				player.lastPokemonCenter = new Position(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), Direction.NONE);
+				player.lastPokemonCenter = new Pose(results.getInt("lpcx"), results.getInt("lpcy"), results.getInt("lpclevel"), Direction.NONE);
 				player.money = results.getInt("money");
 			}
 		} catch (SQLException ex) {

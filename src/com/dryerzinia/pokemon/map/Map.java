@@ -31,7 +31,7 @@ public class Map {
 
     }
 
-    public int manhattanDistance(Position a, Position b){
+    public int manhattanDistance(Pose a, Pose b){
 
     	if(a.getLevel() == -1 || b.getLevel() == -1)
     		return Integer.MAX_VALUE;
@@ -66,9 +66,9 @@ public class Map {
 
     	try(PrintWriter json_writer = new PrintWriter(filename)){
 
-        	json_writer.print(JSONArray.arrayListToJSON(masterTileSet));
+        	json_writer.print(JSONArray.setToJSON(masterTileSet));
         	json_writer.print("\n");
-        	json_writer.print(JSONArray.arrayListToJSON(levels));
+        	json_writer.print(JSONArray.setToJSON(levels));
         	
         } catch(FileNotFoundException e){
 

@@ -24,14 +24,9 @@ public class RequestPerson extends ServerMessage {
 
     public void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException {
 
-        for(Person person : GameState.people) {
+        Person person = GameState.people.get(id);
+       	p.writeClientMessage(new SendPerson(person));
  
-            if (person.id == id) {
-            	p.writeClientMessage(new SendPerson(person));
-                return;
-            }
-        }
-
     }
 
 }

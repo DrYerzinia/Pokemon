@@ -6,8 +6,7 @@ SendActTalkingToClientMessage.java
 import java.io.*;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Position;
-import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
 
@@ -20,7 +19,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
     public SendActTalkingToClientMessage(int id, int x, int y, Direction dir, int level, boolean b) {
 
         this.id = id;
-        position = new Position(x, y, level, dir);
+        position = new Pose(x, y, level, dir);
 
         this.b = b;
 
@@ -28,16 +27,11 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
     public void proccess() throws ClassNotFoundException, IOException {
 
-        for(Person person : GameState.people) {
+        Person person = GameState.people.get(id);
 
-            if (person.id == id) {
+        person.dir = position.facing();
+        person.onClick.active = b;
 
-            	person.dir = position.facing();
-            	person.onClick.active = b;
-            	break;
-
-            }
-        }
     }
 
     private void readObject(ObjectInputStream ois)
