@@ -3,10 +3,8 @@ import java.io.*;
 import java.awt.*;
 import java.util.*;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.LevelChange;
-import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.obj.Tile;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
@@ -57,7 +55,7 @@ public class Grid implements Serializable, JSON {
         return false;
     }
 
-    public RandomFight getRF(int x, int y) {
+    public RandomFight getRandomFight(int x, int y) {
         if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return null;
         for (int i = 0; i < grid[x][y].size(); i++)
@@ -88,23 +86,23 @@ public class Grid implements Serializable, JSON {
     	/*
     	 * Floor the player coordinates to get which tiles to draw
     	 */
-    	int x_square = (int) x;
-    	int y_square = (int) y;
+    	int xSquare = (int) x;
+    	int ySquare = (int) y;
 
     	/*
     	 * Pixel shift due to characters position float
     	 */
-    	int x_off = (int) Math.floor((x - ((int)x))*16);
-    	int y_off = (int) Math.floor((y - ((int)y))*16);
+    	int xOff = (int) Math.floor((x - ((int)x))*16);
+    	int yOff = (int) Math.floor((y - ((int)y))*16);
 
     	/*
     	 * Draw 10x10 swath of tiles for the game
     	 */
     	for(int j = 0; j < 11; j++)
     		for(int k = 0; k < 10; k++)
-    			if(j + x_square >= 0 && j + x_square < getWidth() && k + y_square >= 0 && k + y_square < getHeight())
-    				for(int i = 0; i < grid[j + x_square][k + y_square].size(); i++)
-    					grid[j + x_square][k + y_square].get(i).draw(j, k, x_off, y_off, graphics);
+    			if(j + xSquare >= 0 && j + xSquare < getWidth() && k + ySquare >= 0 && k + ySquare < getHeight())
+    				for(int i = 0; i < grid[j + xSquare][k + ySquare].size(); i++)
+    					grid[j + xSquare][k + ySquare].get(i).draw(j, k, xOff, yOff, graphics);
 
     }
 

@@ -116,7 +116,7 @@ public class Level implements Serializable, JSON {
 
     public Pokemon attacked(Player player) {
 
-    	RandomFight rf = grid.getRF((int) player.getPose().getY(), (int) player.getPose().getY());
+    	RandomFight rf = grid.getRandomFight((int) player.getPose().getY(), (int) player.getPose().getY());
 
     	if (rf != null)
             return rf.getAttack();
