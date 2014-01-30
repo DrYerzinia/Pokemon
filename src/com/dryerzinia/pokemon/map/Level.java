@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
@@ -16,12 +17,14 @@ import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.MultiIterator;
 
 public class Level implements Serializable, JSON {
 
     static final long serialVersionUID = -5293673761061322573L;
 
     private transient CopyOnWriteArrayList<Person> peopleInLevel = new CopyOnWriteArrayList<Person>();
+    private transient CopyOnWriteArrayList<Player> playersInLevel = new CopyOnWriteArrayList<Player>();
 
     public Grid grid;
 
@@ -30,7 +33,7 @@ public class Level implements Serializable, JSON {
     public transient Level borderL[] = new Level[9];
     public int borders[] = new int[9];
     public int borderoffset[] = new int[9];
-    public int id; // TODO: appears unused figureout wtf todo with this
+    public int id;
 
     public Level() {
     }
@@ -68,10 +71,9 @@ public class Level implements Serializable, JSON {
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), new Pose((int)person.x, (int)person.y, person.level, Direction.NONE)))
     			person.draw(person.x - x, person.y - y, 0, 0, graphics);
 
-		for(Player player : ClientState.players)
-			if(id == player.getPose().getLevel())
-				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
-					player.draw(x, y, graphics);
+		for(Player player : playersInLevel)
+			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
+				player.draw(x, y, graphics);
 
     }
 
@@ -83,13 +85,50 @@ public class Level implements Serializable, JSON {
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), person.getPose()))
     			person.draw(person.x - x - xOffset, person.y - y - yOffset, 0, 0, graphics);
 
-		for(Player player : ClientState.players)
-			if(id == player.getPose().getLevel())
-				if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
-					player.draw(x + xOffset, y + yOffset, graphics);
+		for(Player player : playersInLevel)
+			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
+				player.draw(x + xOffset, y + yOffset, graphics);
     	
     }
 
+    /**
+     * Update other players and persons so they do there movement animations
+     * @param deltaTime Time Delta since last update
+     */
+    public void update(int deltaTime){
+
+    	updateLocal(deltaTime);
+    	
+    	/*
+		 * TODO create adjacent level list with adjacent level wrapper
+		 */
+        if (borderL != null) {
+            if (borderL[0] != null)
+            	borderL[0].updateLocal(deltaTime);
+            if (borderL[3] != null)
+            	borderL[3].updateLocal(deltaTime);
+            if (borderL[1] != null)
+            	borderL[1].updateLocal(deltaTime);
+            if (borderL[7] != null)
+            	borderL[7].updateLocal(deltaTime);
+        }
+
+    }
+
+    /**
+     * Updates players and people in this level only
+     * @param deltaTime Time Delta since last update
+     */
+    private void updateLocal(int deltaTime){
+
+    	for(Actor actor : peopleInLevel)
+			actor.update(deltaTime);
+	
+		for(Player player : playersInLevel)
+			player.update(Direction.NONE, deltaTime);
+	
+	}
+    
     public BorderOffset borderOffset(Level level){
 
     	/*
@@ -111,6 +150,20 @@ public class Level implements Serializable, JSON {
     			}
 
     	return null;
+
+    }
+
+    public boolean isAdjacentTo(Level level){
+
+    	if(borderL != null && (
+   		   borderL[0] == level
+   		|| borderL[3] == level
+   		|| borderL[1] == level
+   		|| borderL[7] == level
+    	))
+    		return true;
+
+    	return false;
 
     }
 
@@ -137,22 +190,122 @@ public class Level implements Serializable, JSON {
 
     }
 
-    public void addPerson(Person newPerson){
+    /**
+     * Returns an iterator that iterates all the people in this level and the
+     * adjacent levels
+     * @return Iterator of nearby people
+     */
+    public Iterator<Person> nearbyPersonIterator(){
+    	
+    	MultiIterator<Person> iterator = new MultiIterator<Person>(5);
 
-    	ListIterator<Person> personIterator = peopleInLevel.listIterator();
-        while(personIterator.hasNext()) {
+    	iterator.addIterator(peopleInLevel.iterator());
 
-        	Person person = personIterator.next();
-            if (person.id == newPerson.id) {
-            	peopleInLevel.set(personIterator.previousIndex(), newPerson);
-                return;
-            }
+        if (borderL != null) {
+            if (borderL[0] != null)
+            	iterator.addIterator(borderL[0].peopleInLevel.iterator());
+            if (borderL[3] != null)
+            	iterator.addIterator(borderL[3].peopleInLevel.iterator());
+            if (borderL[1] != null)
+            	iterator.addIterator(borderL[1].peopleInLevel.iterator());
+            if (borderL[7] != null)
+            	iterator.addIterator(borderL[7].peopleInLevel.iterator());
         }
 
-        peopleInLevel.add(newPerson);
+        return iterator;
 
     }
 
+    /**
+     * Returns an iterator that iterates all the players in this level and the
+     * adjacent levels
+     * @return Iterator of nearby players
+     */
+    public Iterator<Player> nearbyPlayerIterator(){
+
+    	MultiIterator<Player> iterator = new MultiIterator<Player>(5);
+
+    	iterator.addIterator(playersInLevel.iterator());
+
+        if (borderL != null) {
+            if (borderL[0] != null)
+            	iterator.addIterator(borderL[0].playersInLevel.iterator());
+            if (borderL[3] != null)
+            	iterator.addIterator(borderL[3].playersInLevel.iterator());
+            if (borderL[1] != null)
+            	iterator.addIterator(borderL[1].playersInLevel.iterator());
+            if (borderL[7] != null)
+            	iterator.addIterator(borderL[7].playersInLevel.iterator());
+        }
+
+        return iterator;
+
+    }
+
+    /**
+     * Adds a person to the levels local list of people
+     * @param newPerson Person to add to list
+     */
+    public void addPerson(Person newPerson){
+
+    	int index = peopleInLevel.indexOf(newPerson);
+    	if(index != -1)
+    		peopleInLevel.set(index, newPerson);
+    	else
+    		peopleInLevel.add(newPerson);
+
+    }
+
+    /**
+     * Adds a player to the levels local list of players
+     * @param newPlayer Player to add to list
+     */
+    public void addPlayer(Player newPlayer){
+
+    	int index = playersInLevel.indexOf(newPlayer);
+    	if(index != -1)
+    		playersInLevel.set(index, newPlayer);
+    	else
+    		playersInLevel.add(newPlayer);
+
+    }
+
+    /**
+     * Removes a player from the level list if the player
+     * is in it
+     * @param toRemove Player to remove
+     */
+    public void removePlayer(Player toRemove){
+
+    	int index = playersInLevel.indexOf(toRemove);
+    	if(index != -1)
+    		playersInLevel.remove(index);
+
+    }
+
+    /**
+     * Swaps a player from this level to another level
+     * @param toSwap Player to swap
+     * @param levelToSwapTo Level to move player to
+     */
+    public void swapPlayer(Player toSwap, Level levelToSwapTo){
+
+    	int index = playersInLevel.indexOf(toSwap);
+
+    	/*
+    	 * If player is not in fog of war
+    	 */
+    	if(index != -1)
+    		playersInLevel.remove(index);
+
+    	/*
+    	 * If player is not going to fog of war
+    	 */
+    	if(levelToSwapTo != null)
+    		levelToSwapTo.addPlayer(toSwap);
+
+    }
+    
     private void readObject(ObjectInputStream ois)
             throws ClassNotFoundException, IOException {
         ois.defaultReadObject();

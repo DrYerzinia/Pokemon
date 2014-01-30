@@ -8,9 +8,11 @@ import java.util.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.PokemonServer.PlayerInstanceData;
 import com.dryerzinia.pokemon.net.msg.client.fight.FMTCSendAttackResult;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.Item;
+import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokeball;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
@@ -33,18 +35,9 @@ public class FMTSSelectedAttack extends ServerMessage {
 
     }
 
-    // TODO: Store player instance data in fight object so we have immediate
-    // access
-    private PokemonServer.PlayerInstanceData getOtherPlayer(String name) {
+    private PokemonServer.PlayerInstanceData getOtherPlayer(Player player) {
 
-        Iterator<PokemonServer.PlayerInstanceData> i = PokemonServer.pokes.players
-                .iterator();
-        while (i.hasNext()) {
-            PokemonServer.PlayerInstanceData pid = i.next();
-            if (pid.getPlayer().getName().equals(name))
-                return pid;
-        }
-        return null;
+    	return PokemonServer.players.get(player.getID());
 
     }
 
@@ -80,7 +73,7 @@ public class FMTSSelectedAttack extends ServerMessage {
 
             // Set Player Instance data
             challengerPlayer = p;
-            notChallengerPlayer = getOtherPlayer(f.currentPlayer.getName());
+            notChallengerPlayer = getOtherPlayer(f.currentPlayer);
 
             // Player to Player Fight : from the Enemy who is the Challenger set
             // move from int
@@ -99,7 +92,7 @@ public class FMTSSelectedAttack extends ServerMessage {
             // Set Player Instance data | if this is a wild encounter enemy will
             // have ID == -1
             if (f.enemyPlayer.id != -1)
-                challengerPlayer = getOtherPlayer(f.enemyPlayer.getName());
+                challengerPlayer = getOtherPlayer(f.enemyPlayer);
             notChallengerPlayer = p;
 
             // Message is from not challenger who is the Current, select his

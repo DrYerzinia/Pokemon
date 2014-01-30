@@ -1,6 +1,6 @@
 package com.dryerzinia.pokemon.obj;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.dryerzinia.pokemon.input.KeyboardInputController;
 import com.dryerzinia.pokemon.map.Level;
@@ -8,7 +8,7 @@ import com.dryerzinia.pokemon.map.Level;
 public class ClientState {
 
 	public static Player player;
-    public static ArrayList<Player> players;
+    public static ConcurrentHashMap<Integer, Player> players;
 
     private static KeyboardInputController keyboard;
 
@@ -18,7 +18,7 @@ public class ClientState {
 
     	loaded = false;
 
-		players = new ArrayList<Player>();
+		players = new ConcurrentHashMap<Integer, Player>();
 
 		keyboard = new KeyboardInputController();
 

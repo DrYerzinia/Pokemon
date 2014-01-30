@@ -46,12 +46,11 @@ public class GameView implements View {
 
 		}
 
-		// TODO update by map AREA!
-		for(Actor actor : GameState.people.values())
-			actor.update(deltaTime);
-
-		for(Player player : ClientState.players)
-			player.update(Direction.NONE, deltaTime);
+		/*
+		 * Runs update method on players and people in current level and
+		 * adjacent levels
+		 */
+		ClientState.getPlayerLevel().update(deltaTime);
 
 		/*
 		 * Process menu related input if no animations are running

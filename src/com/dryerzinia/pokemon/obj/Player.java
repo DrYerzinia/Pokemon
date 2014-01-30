@@ -82,7 +82,20 @@ public class Player implements Serializable {
         items = new ArrayList<Item>();
 
     }
-    
+
+    /**
+     * Returns true if the people have the same Unique Identifiers
+     */
+    @Override
+    public boolean equals(Object other){
+
+    	if(other == null) return false;
+    	if(other == this) return true;
+    	if(!(other instanceof Player)) return false;
+    	return id == ((Player)other).id;
+
+    }
+
     /**
      * Drives the animation of the player
      * 
@@ -91,7 +104,25 @@ public class Player implements Serializable {
      */
     public Pose update(Direction direction, int deltaTime) {
 
-    	return movement.update(direction, location, deltaTime);
+    	Level oldLevel = GameState.getMap().getLevel(location.getLevel());
+
+    	Pose newPose = movement.update(direction, location, deltaTime);
+
+    	Level newLevel = GameState.getMap().getLevel(location.getLevel());
+
+    	/*
+    	 * If we changed levels and are not the main character switch levels
+    	 */
+    	if(oldLevel != newLevel && this != ClientState.player){
+
+    		if(oldLevel != null)
+    			oldLevel.removePlayer(this);
+    		if(newLevel != null)
+    			newLevel.addPlayer(this);
+
+    	}
+
+    	return newPose;
 
     }
 
@@ -183,6 +214,10 @@ public class Player implements Serializable {
     	movement.addMovement(position);
     }
 
+    public void clearMovements(){
+    	movement.clearMovements();
+    }
+
     public String getName() {
         return name;
     }
@@ -197,13 +232,6 @@ public class Player implements Serializable {
 
     public String toString() {
         return name;
-    }
-
-    public boolean equals(Object o) {
-        Player p = (Player) o;
-        if (p.name.equals(name))
-            return true;
-        return false;
     }
 
     private void readObject(ObjectInputStream ois)

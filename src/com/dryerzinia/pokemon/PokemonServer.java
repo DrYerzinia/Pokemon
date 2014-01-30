@@ -11,9 +11,26 @@ In control window enable observer mode
 
  */
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.BindException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
@@ -73,7 +90,7 @@ public class PokemonServer {
 
     ServerSocket ssock;
 
-    public static ArrayList<PlayerInstanceData> players = new ArrayList<PlayerInstanceData>();
+    public static ConcurrentHashMap<Integer, PlayerInstanceData> players = new ConcurrentHashMap<Integer, PlayerInstanceData>();
 
     int playeridcount = 0;
 
@@ -140,7 +157,7 @@ public class PokemonServer {
      */
     public class SaveAllTask extends TimerTask {
     	public void run() {
-        	for (PlayerInstanceData pid : players)
+        	for (PlayerInstanceData pid : players.values())
         		MysqlConnect.savePlayerData(pid.getPlayer());
         }
     }
@@ -163,11 +180,9 @@ public class PokemonServer {
      */
     public synchronized void kickInactive() {
 
-    	Iterator<PlayerInstanceData> pidIterator = players.iterator();
+    	for(Entry<Integer, PlayerInstanceData> pidEntry : players.entrySet()) {
 
-    	while(pidIterator.hasNext()) {
-            
-    		PlayerInstanceData pid = pidIterator.next();
+    		PlayerInstanceData pid = pidEntry.getValue();
 
     		/* Players who have not send a message in the last 45 seconds
     		 * Are removed from the game, They should ping at least once
@@ -182,7 +197,8 @@ public class PokemonServer {
                 MysqlConnect.savePlayerData(pid.getPlayer());
 
                 // Remove PlayerInstanceData from server
-                pidIterator.remove();
+                players.remove(pidEntry.getKey());
+
                 // TODO Proper disconnect and killing of all threads
                 System.out.println("Player kicked!");
 
@@ -211,7 +227,7 @@ public class PokemonServer {
     public synchronized static void sendPlayerActorUpdate(Person person, boolean changed){
 
     	// TODO PER level search
-		for(PlayerInstanceData pid : players) {
+		for(PlayerInstanceData pid : players.values()) {
             if(VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(pid.getPlayer().getPose(), person.getPose()))
 				try {
 
@@ -234,7 +250,7 @@ public class PokemonServer {
      * @return
      */
     public synchronized static boolean isPlayer(int x, int y, int level) {
-       for(PlayerInstanceData pid : players) {
+       for(PlayerInstanceData pid : players.values()) {
             Player player = pid.getPlayer();
             if(player.getPose().getX() + 4 == x
             && player.getPose().getY() + 4 == y
@@ -595,7 +611,7 @@ public class PokemonServer {
      * @param pid PlayerInstanceData of new player to add to master list
      */
     public synchronized void addPlayer(PlayerInstanceData pid) {
-        players.add(pid);
+        players.put(pid.getPlayer().getID(), pid);
     }
 
     /**
@@ -630,9 +646,7 @@ public class PokemonServer {
                     int sp = s.indexOf(' ', 3);
                     String name = s.substring(3, sp);
                     String message = s.substring(sp, s.length());
-                    Iterator<PlayerInstanceData> i = players.iterator();
-                    while (i.hasNext()) {
-                        PlayerInstanceData pid = i.next();
+                    for(PlayerInstanceData pid : players.values()) {
                         Player p = pid.getPlayer();
                         if (p.name.equals(name)) {
                             pid.sendMessage(p2.name + " whispers: " + message);
@@ -648,9 +662,9 @@ public class PokemonServer {
                     String name = s.substring(3, s.length());
                     if (name.equals(p2.getName()))
                         break;
-                    Iterator<PlayerInstanceData> i = players.iterator();
-                    while (i.hasNext()) {
-                        PlayerInstanceData pid = i.next();
+
+                    for(PlayerInstanceData pid : players.values()) {
+
                         Player p = pid.getPlayer();
                         if (p.name.equals(name) && FIGHT_DISTANCE > distance(p, p2)){
 
@@ -703,10 +717,9 @@ public class PokemonServer {
 
     	} else {
 
-    		Iterator<PlayerInstanceData> i = players.iterator();
-            while(i.hasNext()) {
-                PlayerInstanceData pid = i.next();
-                Player p = pid.getPlayer();
+            for(PlayerInstanceData pid : players.values()) {
+
+            	Player p = pid.getPlayer();
                 if(p.id != p2.id && TALK_DISTANCE > distance(p, p2)){
                     try {
                         pid.sendMessage(p2.name + ": " + s);
@@ -726,7 +739,7 @@ public class PokemonServer {
      * @return
      */
     public synchronized boolean isLoggedIn(Player logged_in) {
-        for(PlayerInstanceData pid : players) {
+        for(PlayerInstanceData pid : players.values()) {
         	if(pid.getPlayer().equals(logged_in))
                 return true;
         }
@@ -760,10 +773,9 @@ public class PokemonServer {
          * Tell any near by players this one is gone and remove this players
          * Instance data from the list
          */
-        Iterator<PlayerInstanceData> pidIterator = players.iterator();
-        while(pidIterator.hasNext()){
+        for(Entry<Integer, PlayerInstanceData> pidEntry : players.entrySet()){
 
-        	PlayerInstanceData pid = pidIterator.next();
+        	PlayerInstanceData pid = pidEntry.getValue();
 
         	Player player = pid.getPlayer();
 
@@ -771,7 +783,7 @@ public class PokemonServer {
         	 * removing from the master list
         	 */
         	if(pid == toRemove)
-                pidIterator.remove();
+                players.remove(pidEntry.getKey());
 
         	/*
         	 * If this player was near the player to remove tell them he is in
@@ -789,15 +801,13 @@ public class PokemonServer {
      */
     public synchronized void removeNoSave(PlayerInstanceData pid) {
 
-    	Iterator<PlayerInstanceData> pid_iterator = players.iterator();
-
-    	while(pid_iterator.hasNext()) {
+    	for(Entry<Integer, PlayerInstanceData> pidEntry : players.entrySet()) {
         
-    		PlayerInstanceData pid2 = pid_iterator.next();
+    		PlayerInstanceData pid2 = pidEntry.getValue();
 
     		// Removes the PlayerInstanceData for the player
             if (pid == pid2) {
-                pid_iterator.remove();
+                players.remove(pidEntry.getKey());
                 break;
             }
 

@@ -12,6 +12,7 @@ import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.Player;
 
 public class SendActTalkingToServerMessage extends SendActServerMessage {
 
@@ -43,9 +44,9 @@ public class SendActTalkingToServerMessage extends SendActServerMessage {
 		person.dir = dir;
         person.onClick.active = b;
 
-        Iterator<PokemonServer.PlayerInstanceData> pidt = PokemonServer.players.iterator();
-        while (pidt.hasNext()) {
-            PokemonServer.PlayerInstanceData pid = pidt.next();
+        Iterator<Player> playerIterator = GameState.getMap().getLevel(person.level).nearbyPlayerIterator();
+        while(playerIterator.hasNext()) {
+            PokemonServer.PlayerInstanceData pid = PokemonServer.players.get(playerIterator.next().getID());
             if (pid != p)
                 pid.sendActor(person, Person.A_TALKING_TO);
         }

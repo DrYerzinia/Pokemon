@@ -65,6 +65,19 @@ public class Person extends Tile implements Actor {
 
     }
 
+    /**
+     * Returns true if the people have the same Unique Identifiers
+     */
+    @Override
+    public boolean equals(Object other){
+
+    	if(other == null) return false;
+    	if(other == this) return true;
+    	if(!(other instanceof Person)) return false;
+    	return id == ((Person)other).id;
+
+    }
+
     public void init(){
 
     	animationElapsedTime = 0;

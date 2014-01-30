@@ -468,5 +468,11 @@ public class MovementAnimator {
     	movements.add(position);
 
     }
-	
+
+    /**
+     * Empty's movement buffer
+     */
+    public void clearMovements(){
+    	movements.clear();
+    }
 }

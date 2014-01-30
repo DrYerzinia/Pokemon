@@ -6,6 +6,7 @@ import java.util.Iterator;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.net.msg.client.fight.FMTCSendNextPokemon;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
+import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.Fight;
 
 
@@ -19,18 +20,10 @@ public class FMTSSendNextPokemon extends ServerMessage {
 
     }
 
-    // TODO: Store player instance data in fight object so we have immediate
-    // access
-    private PokemonServer.PlayerInstanceData getOtherPlayer(String name) {
 
-        Iterator<PokemonServer.PlayerInstanceData> i = PokemonServer.pokes.players
-                .iterator();
-        while (i.hasNext()) {
-            PokemonServer.PlayerInstanceData pid = i.next();
-            if (pid.getPlayer().getName().equals(name))
-                return pid;
-        }
-        return null;
+    private PokemonServer.PlayerInstanceData getOtherPlayer(Player player) {
+
+    	return PokemonServer.players.get(player.getID());
 
     }
 
@@ -49,9 +42,9 @@ public class FMTSSendNextPokemon extends ServerMessage {
         // Players
         PokemonServer.PlayerInstanceData otherPlayer;
         if (p.isChallenger()) {
-            otherPlayer = getOtherPlayer(f.currentPlayer.getName());
+            otherPlayer = getOtherPlayer(f.currentPlayer);
         } else {
-            otherPlayer = getOtherPlayer(f.enemyPlayer.getName());
+            otherPlayer = getOtherPlayer(f.enemyPlayer);
         }
 
         // Challenger/Enemy

@@ -4,8 +4,10 @@ GetPlayerServerMessage.java
  */
 
 import java.io.*;
+import java.util.Iterator;
 
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
 import com.dryerzinia.pokemon.obj.GameState;
@@ -23,22 +25,33 @@ public class GetPlayerServerMessage extends ServerMessage {
             PokemonServer.PlayerInstanceData p) throws ClassNotFoundException,
             IOException {
 
-        p.sendPlayerUpdate(p.getPlayer(), true);
+        Player player = p.getPlayer();
+
+        /*
+    	 * Tell the client who they are
+    	 * add the players instance data to the master list
+    	 * add the player to the player list for the level they are in
+    	 */
+        p.sendPlayerUpdate(player, true);
         PokemonServer.pokes.addPlayer(p);
+        GameState.getMap().getLevel(player.getPose().getLevel()).addPlayer(p.getPlayer());
+
+        Level currentLevel = GameState.getMap().getLevel(player.getPose().getLevel());
 
         /*
          * Tell the client about nearby players and nearby players about client
          */
-        for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players) {
-        	 
-        	if(nearbyPID != p){
+        Iterator<Player> playerIterator = currentLevel.nearbyPlayerIterator();
+        while(playerIterator.hasNext()){
 
-        		Player nearbyPlayer = nearbyPID.getPlayer();
-        		Player player = p.getPlayer();
+        	Player nearbyPlayer = playerIterator.next();
+
+        	if(nearbyPlayer != player){
+
         		int distance = PokemonServer.distance(player, nearbyPlayer);
 
         		if(distance < PokemonServer.VISIBLE_DISTANCE){
-        			nearbyPID.writeClientMessage(new PlayerMovement(player.getID(), player.getPose()));
+        			PokemonServer.players.get(nearbyPlayer.getID()).writeClientMessage(new PlayerMovement(player.getID(), player.getPose()));
         			p.writeClientMessage(new PlayerMovement(nearbyPlayer.getID(), nearbyPlayer.getPose()));
         		}
 
@@ -49,7 +62,10 @@ public class GetPlayerServerMessage extends ServerMessage {
         /*
          * Tell the client about nearby people
          */
-        for(Person person : GameState.people.values()){
+        Iterator<Person> peopleIterator = currentLevel.nearbyPersonIterator();
+        while(peopleIterator.hasNext()){
+
+        	Person person = peopleIterator.next();
 
         	int distance = GameState.getMap().manhattanDistance(p.getPlayer().getPose(), person.getPose());
 

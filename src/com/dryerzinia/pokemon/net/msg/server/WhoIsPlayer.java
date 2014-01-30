@@ -20,11 +20,11 @@ public class WhoIsPlayer extends ServerMessage {
 	@Override
 	public void proccess(ObjectInputStream ois, PlayerInstanceData p) throws ClassNotFoundException, IOException {
 
-        for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players)
-        	if(nearbyPID.getPlayer().getID() == id){
-        		p.writeClientMessage(new PlayerInfo(nearbyPID.getPlayer(), false));
-        		return;
-        	}
+		PlayerInstanceData nearbyPID = PokemonServer.players.get(id);
+		if(nearbyPID != null)
+       		p.writeClientMessage(new PlayerInfo(nearbyPID.getPlayer(), false));
+		else
+			System.out.println("Client requested information on non-existent player.");
 
 
 	}

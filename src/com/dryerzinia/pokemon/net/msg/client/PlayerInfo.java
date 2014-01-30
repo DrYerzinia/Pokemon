@@ -9,6 +9,7 @@ import java.util.*;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class PlayerInfo extends ClientMessage {
@@ -44,23 +45,44 @@ public class PlayerInfo extends ClientMessage {
 
         } else {
 
-            boolean found = false;
-            Iterator<Player> i = ClientState.players.iterator();
-            while (i.hasNext()) {
-                Player foundPlayer = i.next();
-                if (receivedPlayer.id == foundPlayer.id) {
-                    if (receivedPlayer.getPose().getLevel() == -1) {
-                        i.remove();
-                    } else {
-                        foundPlayer.set(receivedPlayer);
-                        found = true;
-                    }
-                    break;
-                }
-            }
-            if (!found) {
-                receivedPlayer.loadImages();
-                ClientState.players.add(receivedPlayer);
+        	/*
+        	 * If its a -1 we remove player FOW
+        	 * TODO believe this is unused was for log offs but
+        	 * should just send a player movement update
+        	 */
+        	if(receivedPlayer.getPose().getLevel() == -1){
+        		ClientState.players.remove(receivedPlayer.getID());
+        		return;
+        	}
+
+        	/*
+        	 * If we did get a real level for this player to be in than we have
+        	 * to either set his new attributes (Probably  unused)
+        	 * or we load his images and add him to players list
+        	 */
+        	Player player = ClientState.players.get(receivedPlayer.getID());
+
+        	if(player != null){
+
+        		player.set(receivedPlayer);
+
+            	/*
+            	 * If there was a level change we have to swap him between level
+            	 * lists
+            	 */
+            	if(player.getPose().getLevel() != receivedPlayer.getPose().getLevel())
+            		GameState.getMap().getLevel(player.getPose().getLevel()).swapPlayer(receivedPlayer, GameState.getMap().getLevel(receivedPlayer.getPose().getLevel()));
+
+        	} else {
+
+            	receivedPlayer.loadImages();
+                ClientState.players.put(receivedPlayer.getID(), receivedPlayer);
+
+            	/*
+            	 * If he is new player also add him to per level player list
+            	 */
+                GameState.getMap().getLevel(receivedPlayer.getPose().getLevel()).addPlayer(receivedPlayer);
+
             }
 
         }

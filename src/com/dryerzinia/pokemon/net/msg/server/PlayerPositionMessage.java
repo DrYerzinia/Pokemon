@@ -2,9 +2,12 @@ package com.dryerzinia.pokemon.net.msg.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Iterator;
 
 import com.dryerzinia.pokemon.PokemonServer;
+import com.dryerzinia.pokemon.PokemonServer.PlayerInstanceData;
 import com.dryerzinia.pokemon.map.Direction;
+import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
@@ -24,40 +27,25 @@ public class PlayerPositionMessage extends ServerMessage {
 
 	}
 
-    public void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException {
+	private void sendPositionUpdates(PlayerInstanceData p, Player player, Level level, boolean levelChange){
 
-        Player player = p.getPlayer();
-
-        /*
-         * Check for level change to know if we need to remove our selves
-         * from people in that level
-         * TODO fix this to players who have us in there
-         * SEEN list we need to implement this
-         */
-        boolean levelChange = false;
-        if (player.getPose().getLevel() != playerPosition.getLevel())
-            levelChange = true;
-
-        /*
-         * Update servers copy of the players position
-         * TODO VALIDATE THIS MOVEMENT!
-         */
-        player.setPosition(playerPosition);
-
-        /*
+		/*
          * Update near-by players to our position
-         * TODO leve list search
          */
-        for(PokemonServer.PlayerInstanceData nearbyPID : PokemonServer.players) {
+        Iterator<Player> playerIterator = level.nearbyPlayerIterator();
+        while(playerIterator.hasNext()){
+
+        	Player nearbyPlayer = playerIterator.next();
 
         	/*
         	 * If the player is not SELF and
         	 * is nearby send a update to let them know he moved
         	 */
-        	if(p != nearbyPID) {
+        	if(player != nearbyPlayer) {
 
-            	Player nearbyPlayer = nearbyPID.getPlayer();
         		int distance = PokemonServer.distance(player, nearbyPlayer);
+
+        		PlayerInstanceData nearbyPID = PokemonServer.players.get(nearbyPlayer.getID());
 
         		/*
         		 * people who are only 2 tiles away from being on screen are updated
@@ -84,9 +72,11 @@ public class PlayerPositionMessage extends ServerMessage {
 
         /*
          * Actor fog of war
-         * TODO level list search
          */
-        for(Person person : GameState.people.values()){
+        Iterator<Person> peopleIterator = level.nearbyPersonIterator();
+        while(peopleIterator.hasNext()){
+
+        	Person person = peopleIterator.next();
 
         	int distance = GameState.getMap().manhattanDistance(player.getPose(), person.getPose());
 
@@ -103,6 +93,42 @@ public class PlayerPositionMessage extends ServerMessage {
     			p.writeClientMessage(new SendActMovedClientMessage(person.id, 0, 0, Direction.NONE, -1));
 
         }
+
+	}
+
+    public void proccess(ObjectInputStream ois, PokemonServer.PlayerInstanceData p) throws ClassNotFoundException, IOException {
+
+        Player player = p.getPlayer();
+        Level oldLevel = GameState.getMap().getLevel(player.getPose().getLevel());
+        Level currentLevel = null;
+
+        /*
+         * If there was a level change we will need to do a send for the whole
+         * visible radius not just the edge
+         */
+        boolean levelChange = false;
+        if (player.getPose().getLevel() != playerPosition.getLevel()){
+
+        	levelChange = true;
+
+        	/*
+        	 * If level changed swap player to new level
+        	 */
+        	currentLevel = GameState.getMap().getLevel(playerPosition.getLevel());
+        	oldLevel.swapPlayer(player, currentLevel);
+
+        }
+
+        /*
+         * Update servers copy of the players position
+         * TODO VALIDATE THIS MOVEMENT!
+         */
+        player.setPosition(playerPosition);
+
+        sendPositionUpdates(p, player, oldLevel, levelChange);
+
+        if(currentLevel != null)
+        	sendPositionUpdates(p, player, currentLevel, levelChange);
 
         /*
          * Check for random fights to send to the player

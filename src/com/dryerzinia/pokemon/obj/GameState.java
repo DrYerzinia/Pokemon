@@ -3,6 +3,7 @@ package com.dryerzinia.pokemon.obj;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -89,11 +90,12 @@ public class GameState {
 
             	person.initializeSecondaryReferences(map.getLevel(person.level).grid);
             	people.put(person.id, person);
+            	getMap().getLevel(person.level).addPerson(person);
 
             }
 
-        } catch (Exception x) {
-            x.printStackTrace();
+        } catch(IOException ioe){
+        	System.err.println("Failed to read actors: " + ioe.getMessage());
         }
 
 	}
