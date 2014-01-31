@@ -314,6 +314,8 @@ public class Move implements Serializable, DeepCopy, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
+    	JSONObject.defaultToObject(json, this);
+
 	}
     
 }

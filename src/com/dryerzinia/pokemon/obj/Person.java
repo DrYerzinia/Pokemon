@@ -1,6 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.awt.*;
 
@@ -302,7 +303,24 @@ public class Person extends Tile implements Actor {
             g = (GMenu) onClick.deepCopy();
         return new Person(new String(imgName), canBeSteppedOn, g, dir);
     }
-    
+
+    @Override
+    public void fromJSON(HashMap<String, Object> json){
+
+    	super.fromJSON(json);
+
+    	px = ((Float)json.get("px")).intValue(); 
+    	py = ((Float)json.get("py")).intValue();
+
+    	dir = Direction.getFromString((String) json.get("dir"));
+    	level = ((Float)json.get("level")).intValue();
+
+    	x = ((Float)json.get("x")).floatValue();
+    	y = ((Float)json.get("y")).floatValue();
+
+
+    }
+
 	@Override
 	public String toJSON() throws IllegalAccessException {
 

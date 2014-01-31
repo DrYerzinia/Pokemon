@@ -805,6 +805,8 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
+    	JSONObject.defaultToObject(json, this);
+
 		// TODO If base exists in HashMap GRAB IT!
 		Pokemon.BaseStats bs = (Pokemon.BaseStats) json.get("pokeBase");
 

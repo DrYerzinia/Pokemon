@@ -127,8 +127,23 @@ public class TrainerPerson extends Person implements Actor {
         return new TrainerPerson(new String(imgName), canBeSteppedOn, onClick,
                 dir, x, y, viewDist);
     }
+
+    public void fromJSON(HashMap<String, Object> json){
+
+    	super.fromJSON(json);
+
+    	face = Direction.getFromString((String) json.get("face"));
+    	x = ((Float) json.get("x")).intValue();
+    	y = ((Float) json.get("y")).intValue();
+
+    	con = ((Float) json.get("con")).intValue();
+    	viewDist = ((Float) json.get("viewDist")).intValue();
+
+    	hasBeenFought = ((Boolean) json.get("hasBeenFought")).booleanValue();
+
+	}
     
-	@Override
+    @Override
 	public String toJSON() throws IllegalAccessException {
 
 		return JSONObject.defaultToJSON(this);

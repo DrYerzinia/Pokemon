@@ -1,5 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 
+import java.util.HashMap;
+
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
@@ -116,6 +118,18 @@ public class WanderingPerson extends Person implements Actor {
             g = (GMenu) onClick.deepCopy();
         return new WanderingPerson(new String(imgName), canBeSteppedOn, g, dir,
                 w, h, rx, ry, x, y, this.g);
+    }
+
+    public void fromJSON(HashMap<String, Object> json){
+
+    	super.fromJSON(json);
+
+        w = ((Float) json.get("w")).intValue();
+        h = ((Float) json.get("h")).intValue();;
+        rx = ((Float) json.get("rx")).intValue();
+        ry = ((Float) json.get("ry")).intValue();
+        con = ((Float) json.get("con")).intValue();
+
     }
 
 	@Override

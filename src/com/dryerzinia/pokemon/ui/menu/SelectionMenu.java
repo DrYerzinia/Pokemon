@@ -1,9 +1,15 @@
 package com.dryerzinia.pokemon.ui.menu;
-import java.awt.*;
-import java.util.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import com.dryerzinia.pokemon.PokemonGame;
-import com.dryerzinia.pokemon.util.JSONArray;
+import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.ui.Overlay;
@@ -240,8 +246,16 @@ public class SelectionMenu extends GMenu {
 	}
 
 	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
+    public void fromJSON(HashMap<String, Object> json){
+
+		super.fromJSON(json);
+
+	    widthM = ((Float) json.get("widthM")).intValue();
+
+    	Object[] submenusArray = (Object[]) json.get("submenus");
+    	submenus = new GMenu[submenusArray.length];
+        System.arraycopy(submenusArray, 0, submenus, 0, submenusArray.length);
+
 	}
 
 }

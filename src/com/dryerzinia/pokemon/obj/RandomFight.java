@@ -1,4 +1,5 @@
 package com.dryerzinia.pokemon.obj;
+
 import java.io.*;
 import java.awt.*;
 
@@ -8,7 +9,6 @@ import com.dryerzinia.pokemon.ui.editor.Sub;
 import com.dryerzinia.pokemon.ui.editor.SubListener;
 import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
-import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 
 import java.awt.event.*;
@@ -83,9 +83,21 @@ public class RandomFight implements Serializable, DeepCopy, JSON {
 
     }
 
-    @Override
+	@Override
     public void fromJSON(HashMap<String, Object> json){
-    	// TODO Auto-generated method stub
+
+    	Object[] pokemonArray = (Object[]) json.get("pokemon");
+    	pokemon = new Pokemon[pokemonArray.length];
+        System.arraycopy(pokemonArray, 0, pokemon, 0, pokemonArray.length);
+
+        Object[] chanceArray = (Object[]) json.get("chance");
+        chance = new int[chanceArray.length];
+        for(int i = 0; i < chanceArray.length; i++)
+        	if(chanceArray[i] != null)
+        		chance[i] = ((Float) chanceArray[i]).intValue();
+
+        total = ((Float) json.get("total")).intValue();
+
     }
 
     public Object deepCopy() {

@@ -1,21 +1,23 @@
 package com.dryerzinia.pokemon.map;
 
-import java.io.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Ledge;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
-import com.dryerzinia.pokemon.obj.Tile;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -33,6 +35,7 @@ public class Level implements Serializable, JSON {
     public transient boolean midmove = false;
     public transient boolean canMove = true;
     public transient Level borderL[] = new Level[9];
+
     public int borders[] = new int[9];
     public int borderoffset[] = new int[9];
     public int id;
@@ -338,7 +341,24 @@ public class Level implements Serializable, JSON {
 
 	}
 
+	@Override
     public void fromJSON(HashMap<String, Object> json){
+
+		grid = (Grid) json.get("grid");
+
+        Object[] bordersArray = (Object[]) json.get("borders");
+	    borders = new int[9];
+        for(int i = 0; i < bordersArray.length; i++)
+        	if(bordersArray[i] != null)
+        		borders[i] = ((Float) bordersArray[i]).intValue();
+
+        Object[] borderoffsetArray = (Object[]) json.get("borderoffset");
+	    borderoffset = new int[9];
+        for(int i = 0; i < bordersArray.length; i++)
+        	if(borderoffsetArray[i] != null)
+        		borderoffset[i] = ((Float) borderoffsetArray[i]).intValue();
+
+	    id = ((Float) json.get("id")).intValue();
 
     	grid.initLevelReference(this);
 

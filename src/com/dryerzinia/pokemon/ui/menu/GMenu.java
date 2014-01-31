@@ -279,9 +279,17 @@ public class GMenu implements Serializable, DeepCopy, JSON {
 	}
 
 	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
-		
+    public void fromJSON(HashMap<String, Object> json){
+
+	    message = (String) json.get("message");
+
+	    x = ((Float) json.get("x")).intValue();
+	    y = ((Float) json.get("y")).intValue();
+	    w = ((Float) json.get("w")).intValue();
+	    h = ((Float) json.get("h")).intValue();
+
+	    nextmenu = (GMenu) json.get("nextmenu");
+	
 	}
     
 }

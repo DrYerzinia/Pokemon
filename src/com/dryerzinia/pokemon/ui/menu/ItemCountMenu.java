@@ -6,7 +6,9 @@ import com.dryerzinia.pokemon.util.JSONObject;
 
 public class ItemCountMenu extends GMenu {
 
-    int index;
+	private static final long serialVersionUID = 3982078572621853775L;
+
+	int index;
     int price;
     int count;
 
@@ -54,8 +56,14 @@ public class ItemCountMenu extends GMenu {
 	}
 
 	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
+    public void fromJSON(HashMap<String, Object> json){
+
+		super.fromJSON(json);
+
+	    index = ((Float) json.get("index")).intValue();
+	    price = ((Float) json.get("price")).intValue();
+	    count = ((Float) json.get("count")).intValue();
+
 	}
     
 }

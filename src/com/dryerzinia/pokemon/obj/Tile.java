@@ -169,7 +169,27 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
 
     public void fromJSON(HashMap<String, Object> json){
 
-    	loadImage();
+        imgName = (String) json.get("imgName");
+
+        canBeSteppedOn = ((Boolean)json.get("canBeSteppedOn")).booleanValue();
+
+        id = ((Float)json.get("id")).intValue();
+
+        pixelOffsetX = ((Float)json.get("pixelOffsetX")).intValue();
+        pixelOffsetY = ((Float)json.get("pixelOffsetY")).intValue();
+
+        changeToLevel = ((Float)json.get("changeToLevel")).intValue();
+
+        leaveDirection = Direction.getFromString((String) json.get("leaveDirection"));
+        exitDir =  Direction.getFromString((String) json.get("exitDir"));
+        xnew = ((Float)json.get("xnew")).intValue();
+        ynew = ((Float)json.get("ynew")).intValue();
+
+        onClick = (GMenu) json.get("onClick");
+
+        rf = (RandomFight) json.get("rf");
+
+        loadImage();
 
     }
     

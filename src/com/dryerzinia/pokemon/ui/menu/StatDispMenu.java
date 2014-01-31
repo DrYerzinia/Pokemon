@@ -1,5 +1,8 @@
 package com.dryerzinia.pokemon.ui.menu;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.HashMap;
 
 import com.dryerzinia.pokemon.obj.Pokemon;
@@ -7,7 +10,9 @@ import com.dryerzinia.pokemon.util.JSONObject;
 
 public class StatDispMenu extends GMenu {
 
-    Pokemon p;
+	private static final long serialVersionUID = -4065400138662710575L;
+
+	private transient Pokemon p;
 
     public StatDispMenu(Pokemon p) {
         this.p = p;
@@ -42,8 +47,10 @@ public class StatDispMenu extends GMenu {
 	}
 
 	@Override
-	public void fromJSON(HashMap<String, Object> json) {
-		// TODO Auto-generated method stub
+    public void fromJSON(HashMap<String, Object> json){
+
+		super.fromJSON(json);
+
 	}
 
 }

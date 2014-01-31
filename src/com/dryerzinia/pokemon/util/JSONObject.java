@@ -170,6 +170,83 @@ public class JSONObject {
 
 	}
 
+	public static void defaultToObject(HashMap<String, Object> properties, Object object){
+
+    	try {
+
+    		Class<?> c = object.getClass();
+
+    		boolean has_superclass = true;
+    		
+    		while(has_superclass){
+    		
+    			Field[] fields = c.getDeclaredFields();
+
+    			for(Field field : fields){
+    				Object param = properties.get(field.getName());
+
+    				boolean is_transient = Modifier.isTransient(field.getModifiers());
+
+    				if(param != null && !is_transient){
+
+    					// Need to get into protected stuff
+    					field.setAccessible(true);
+
+    					Class<?> type = field.getType();
+
+    					if(type == int.class)
+    						field.setInt(object, ((Float)param).intValue());
+
+    					else if(type == float.class)
+    						field.setFloat(object, ((Float)param).floatValue());
+
+    					else if(type == boolean.class)
+    						field.setBoolean(object, ((Boolean)param).booleanValue());
+
+    					else if(type.isEnum())
+    						field.set(object, type.getMethod("getFromString", String.class).invoke(null, (String) param));
+
+    					else if(type.isArray()){
+
+    						Class<?> componentType = type.getComponentType();
+
+							Object[] params = (Object[])param;
+
+							if(componentType == int.class){
+
+    							int[] ints = new int[params.length];
+
+    							for(int i = 0; i < params.length; i++)
+    								ints[i] = ((Float)params[i]).intValue();
+
+    							field.set(object, ints);
+
+							} else {
+
+    							Object arr = Array.newInstance(componentType, params.length);
+    							for(int i = 0; i < params.length; i++)
+    								Array.set(arr, i, params[i]);
+    							field.set(object, arr);
+
+    						}
+    					
+    					} else
+    						field.set(object, type.cast(param));
+    				}
+    			}
+    			
+    			c = c.getSuperclass();
+
+    			if(c == Object.class) has_superclass = false;
+
+    		}
+    		
+    	} catch(Exception x){
+    		x.printStackTrace();
+    	}
+
+	}
+
 	/**
 	 * Convert Object to JSON
 	 * @param Object to convert to JSON
@@ -278,6 +355,7 @@ public class JSONObject {
 	 * @param JSON to be converted into an object
 	 * @return Object that was represented by JSON
 	 */
+	@SuppressWarnings("unchecked")
 	public static Object JSONToObject(StringStream json){
 
     	HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -332,89 +410,36 @@ public class JSONObject {
     	}
 
     	String className = (String) parameters.get("class");
-    	
+
     	if(className == null)
     		return parameters;
 
-    	try {
+		try {
 
-    		Class<?> c = Class.forName(className);
-    		Object o = c.newInstance();
+			Class<? extends JSON> objectClass;
+			objectClass = (Class<? extends JSON>) Class.forName(className);
 
-    		boolean has_superclass = true;
-    		
-    		while(has_superclass){
-    		
-    			Field[] fields = c.getDeclaredFields();
+			JSON obj = objectClass.newInstance();
 
-    			for(Field field : fields){
-    				Object param = parameters.get(field.getName());
+			obj.fromJSON(parameters);
+    	
+    		return obj;
 
-    				boolean is_transient = Modifier.isTransient(field.getModifiers());
+		} catch (ClassNotFoundException e) {
 
-    				if(param != null && !is_transient){
+			System.err.println("Could not find class specified by JSON: " + e.getMessage());
 
-    					// Need to get into protected stuff
-    					field.setAccessible(true);
+		} catch (InstantiationException e) {
 
-    					Class<?> type = field.getType();
+			System.err.println("Could not Instantiate new object from JSON: " + e.getMessage());
 
-    					if(type == int.class)
-    						field.setInt(o, ((Float)param).intValue());
+		} catch (IllegalAccessException e) {
 
-    					else if(type == float.class)
-    						field.setFloat(o, ((Float)param).floatValue());
+			System.err.println("JSONObject access disallowed: " + e.getMessage());
 
-    					else if(type == boolean.class)
-    						field.setBoolean(o, ((Boolean)param).booleanValue());
+		}
 
-    					else if(type.isEnum())
-    						field.set(o, type.getMethod("getFromString", String.class).invoke(null, (String) param));
-
-    					else if(type.isArray()){
-
-    						Class<?> componentType = type.getComponentType();
-
-							Object[] params = (Object[])param;
-
-							if(componentType == int.class){
-
-    							int[] ints = new int[params.length];
-
-    							for(int i = 0; i < params.length; i++)
-    								ints[i] = ((Float)params[i]).intValue();
-
-    							field.set(o, ints);
-
-							} else {
-
-    							Object arr = Array.newInstance(componentType, params.length);
-    							for(int i = 0; i < params.length; i++)
-    								Array.set(arr, i, params[i]);
-    							field.set(o, arr);
-
-    						}
-    					
-    					} else
-    						field.set(o, type.cast(param));
-    				}
-    			}
-    			
-    			c = c.getSuperclass();
-
-    			if(c == Object.class) has_superclass = false;
-
-    		}
-
-    		((JSON)o).fromJSON(parameters);
-
-    		return o;
-    		
-    	} catch(Exception x){
-    		x.printStackTrace();
-    	}
-
-    	return null;
+		return parameters;
 
     }
 /*

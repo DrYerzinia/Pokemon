@@ -8,7 +8,9 @@ import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class AttackSelectionMenu extends SelectionMenu {
 
-    private Pokemon p;
+	private static final long serialVersionUID = -8415693588346396803L;
+
+	private transient Pokemon p;
 
     public AttackSelectionMenu(Pokemon p, int x, int y, int w, int h) {
 
@@ -196,4 +198,5 @@ public class AttackSelectionMenu extends SelectionMenu {
         else if (selection < (h - 2) * 2 + 1)
             selection++;
     }
+
 }
