@@ -128,8 +128,8 @@ public class Player implements Serializable {
 
     public void draw(Graphics graphics) {
 
-    	img = movement.animationImage(sprite, location.facing());
-        graphics.drawImage(img, 4 * 16, 4 * 16 - CHARACTER_OFFSET, null);
+    	movement.draw(location, sprite, true, graphics);
+
 
     }
 

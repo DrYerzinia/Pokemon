@@ -1,5 +1,6 @@
 package com.dryerzinia.pokemon.obj;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
 
@@ -7,6 +8,7 @@ import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Point;
 import com.dryerzinia.pokemon.map.Pose;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 /**
  * Handles all animation of Player and Person objects and updating there
@@ -19,6 +21,9 @@ import com.dryerzinia.pokemon.map.Pose;
  */
 public class MovementAnimator {
 
+	private static final int SHADOW_OFFSET = 4;
+	private static Image shadow;
+	
 	/*
 	 * Possible animation states for players and persons
 	 * They can Jump down off of ledges
@@ -41,7 +46,7 @@ public class MovementAnimator {
     private static final int LAZY_STEP_TIME = 666;
     private static final int FAST_STEP_TIME = 250;
     private static final int ROTATION_TIME	= 0; // TODO figure this out
-    private static final int JUMP_TIME		= 0; // TODO figure this out
+    private static final int JUMP_TIME		= 500; // TODO figure this out
 
     /*
      * When movement is not being driven from the keyboard the character
@@ -80,6 +85,11 @@ public class MovementAnimator {
      */
     private boolean isLazy;
 
+    @SuppressWarnings("unused")
+	private MovementAnimator(){
+    	throw new UnsupportedOperationException("MovementAnimator() constructor is not allowed!");
+    }
+
     /**
      * Creates a MovmentAnimator to manage a characters motion
      * 
@@ -87,6 +97,9 @@ public class MovementAnimator {
      * fast ones 250ms
      */
     public MovementAnimator(boolean isLazy){
+
+    	if(shadow == null)
+    		shadow = ResourceLoader.getSprite("shadow.png");
 
     	this.isLazy = isLazy;
 
@@ -136,6 +149,17 @@ public class MovementAnimator {
     			position.setDirection(direction);
     			return position.copy();
     		}
+
+    		/*
+    		 * If we are not turning we could possible be jumping
+    		 */
+    		Point nextLocation = nextTile(position);
+    		boolean isLedge = GameState.getMap().getLevel(position.getLevel()).isLedge(nextLocation.getX(), nextLocation.getY());
+    		if(isLedge){
+    			state = JUMPING;
+    			stepTime = JUMP_TIME;
+    		} else
+    			state = STEPPING;
 
     		/*
     		 * If we are same direction as before we start a movement animation
@@ -242,12 +266,22 @@ public class MovementAnimator {
     	if(levelChange != null && levelChange.rightDirection(position.facing())){
 
     		/*
-    		 * If we are the clients player we change positions immediatly
+    		 * If we are the clients player we change positions immediately
     		 */
     		if(newPosition == null)
     			position.set(levelChange.getNewPosition());
     		canStep = true;
 
+    	}
+
+    	/*
+    	 * We can jump over unsteppable tiles
+    	 * Also we have to move 2 squares to jump so we double
+    	 * deltaTime to double distance traveled
+    	 */
+    	if(state == JUMPING){
+    		canStep = true;
+    		deltaTime *= 2;
     	}
 
     	if(canStep){
@@ -328,10 +362,12 @@ public class MovementAnimator {
 			/*
 			 * If we have no where to go we end the animation
 			 */
-   			if(direction == Direction.NONE)
-    			elapsedTime = 0;
+   			if(direction == Direction.NONE){
 
-    		else if(!movements.isEmpty()){
+   				elapsedTime = 0;
+   				state = NORMAL;
+
+   			} else if(!movements.isEmpty()){
 
 				newPosition = movements.remove();
 	    		position.setDirection(newPosition.facing());
@@ -351,6 +387,7 @@ public class MovementAnimator {
 			 * that way
 			 */
     		else {
+
     			elapsedTime -= stepTime;
     			position.setDirection(direction);
     			animationMove(position, elapsedTime);
@@ -402,6 +439,28 @@ public class MovementAnimator {
     	}
 
     	return null;
+
+    }
+
+    /*
+     * Draws the character in the current animation state
+     */
+    public void draw(Pose pose, Image[] sprites, boolean isMainCharacter, Graphics graphics){
+
+    	Image img = animationImage(sprites, pose.facing());
+
+		int offset = 0;
+
+		if(state == JUMPING)
+			offset = (int) (Math.sin(elapsedTime/stepTime*Math.PI)*16);
+
+    	if(isMainCharacter){
+    		if(state == JUMPING)
+    			graphics.drawImage(shadow, 4 * 16, 4 * 16 + SHADOW_OFFSET, null);
+			graphics.drawImage(img, 4 * 16, 4 * 16 - Player.CHARACTER_OFFSET - offset, null);
+    	}
+
+    	// TODO not main characters
 
     }
 

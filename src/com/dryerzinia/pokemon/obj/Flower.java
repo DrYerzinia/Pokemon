@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 public class Flower extends Tile {
 
+	private static final long serialVersionUID = -5927606477512395929L;
+
 	@Override
     public void draw(float x, float y, int xo, int yo, Graphics g) {
 

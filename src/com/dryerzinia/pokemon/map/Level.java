@@ -10,10 +10,12 @@ import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
+import com.dryerzinia.pokemon.obj.Ledge;
 import com.dryerzinia.pokemon.obj.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
+import com.dryerzinia.pokemon.obj.Tile;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -188,6 +190,19 @@ public class Level implements Serializable, JSON {
 
     	return true;
 
+    }
+
+    /**
+     * Checks if the tile is a ledge
+     * @param x X position of tile
+     * @param y Y position of tile
+     * @return True if the tile is a ledge
+     */
+    public boolean isLedge(int x, int y){
+    	for(Tile tile : grid.grid[x][y])
+    		if(tile instanceof Ledge)
+    			return true;
+    	return false;
     }
 
     /**

@@ -1,6 +1,4 @@
 package com.dryerzinia.pokemon.obj;
-import java.awt.*;
-import java.util.HashMap;
 
 import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;

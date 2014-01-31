@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 public class Water extends Tile {
 
+	private static final long serialVersionUID = 2585536972543470396L;
+
 	@Override
     public void draw(float x, float y, int xo, int yo, Graphics g) {
 
