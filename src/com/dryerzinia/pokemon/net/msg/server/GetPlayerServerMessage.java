@@ -46,7 +46,8 @@ public class GetPlayerServerMessage extends ServerMessage {
 
         	Player nearbyPlayer = playerIterator.next();
 
-        	if(nearbyPlayer != player){
+        	// TODO look at other messages and make sure to change != to ! .equals
+        	if(!nearbyPlayer.equals(player)){
 
         		int distance = PokemonServer.distance(player, nearbyPlayer);
 

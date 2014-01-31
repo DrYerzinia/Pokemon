@@ -764,6 +764,11 @@ public class PokemonServer {
         	loggedIn = true;
 
         /*
+         * Remove the player from the level list he is in
+         */
+        GameState.getMap().getLevel(playerToRemove.getPose().getLevel()).removePlayer(playerToRemove);
+
+        /*
          * Save player if they where logged in
          */
         if(loggedIn)
@@ -772,6 +777,8 @@ public class PokemonServer {
         /*
          * Tell any near by players this one is gone and remove this players
          * Instance data from the list
+         * TODO don't iterate WHOLE LIST LOCALS ONLY!
+         * TODO every once in a while the client should remove nowhere land players
          */
         for(Entry<Integer, PlayerInstanceData> pidEntry : players.entrySet()){
 
