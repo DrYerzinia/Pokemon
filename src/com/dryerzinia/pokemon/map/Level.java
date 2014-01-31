@@ -199,10 +199,9 @@ public class Level implements Serializable, JSON {
      * @return True if the tile is a ledge
      */
     public boolean isLedge(int x, int y){
-    	for(Tile tile : grid.grid[x][y])
-    		if(tile instanceof Ledge)
-    			return true;
-    	return false;
+
+    	return grid.isLedge(x, y);
+
     }
 
     /**

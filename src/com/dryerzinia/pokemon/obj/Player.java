@@ -136,8 +136,7 @@ public class Player implements Serializable {
 
     public void draw(float x, float y, Graphics graphics) {
 
-    	img = movement.animationImage(sprite, location.facing());
-        graphics.drawImage(img, (int) ((getPose().getX() - x) * 16), (int)((getPose().getY() - y) * 16) - CHARACTER_OFFSET, null);
+    	movement.draw(location, sprite, false, graphics);
 
     }
 

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.Ledge;
 import com.dryerzinia.pokemon.obj.LevelChange;
 import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.obj.Tile;
@@ -106,15 +107,41 @@ public class Grid implements Serializable, JSON {
 
     }
 
-    public boolean canStepOn(int x, int y) {
-        if (getWidth() <= x || getHeight() <= y || x < 0 || y < 0)
+    public boolean inBounds(int x, int y){
+
+    	if (getWidth() <= x || getHeight() <= y || x < 0 || y < 0)
             return false;
-        for (int i = 0; i < grid[x][y].size(); i++)
-            if (!grid[x][y].get(i).canBeSteppedOn)
-                return false;
-        return true;
+
+    	return true;
+
     }
 
+    public boolean canStepOn(int x, int y) {
+
+    	if(!inBounds(x, y))
+    		return false;
+
+        for(Tile tile : grid[x][y])
+            if (!tile.canBeSteppedOn)
+                return false;
+
+        return true;
+
+    }
+
+    public boolean isLedge(int x, int y){
+
+    	if(!inBounds(x, y))
+    		return false;
+
+    	for(Tile tile : grid[x][y])
+    		if(tile instanceof Ledge)
+    			return true;
+
+    	return false;
+
+    }
+    
     public GMenu hasMenu(int x, int y) {
         if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
             return null;

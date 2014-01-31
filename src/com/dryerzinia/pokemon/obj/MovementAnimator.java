@@ -21,9 +21,10 @@ import com.dryerzinia.pokemon.util.ResourceLoader;
  */
 public class MovementAnimator {
 
+	private static final Direction DOWNHILL = Direction.DOWN;
 	private static final int SHADOW_OFFSET = 4;
 	private static Image shadow;
-	
+
 	/*
 	 * Possible animation states for players and persons
 	 * They can Jump down off of ledges
@@ -46,7 +47,7 @@ public class MovementAnimator {
     private static final int LAZY_STEP_TIME = 666;
     private static final int FAST_STEP_TIME = 250;
     private static final int ROTATION_TIME	= 0; // TODO figure this out
-    private static final int JUMP_TIME		= 500; // TODO figure this out
+    private static final int JUMP_TIME		= 500;
 
     /*
      * When movement is not being driven from the keyboard the character
@@ -126,7 +127,8 @@ public class MovementAnimator {
     	 * If there is an animation going we finish it
     	 */
     	if(elapsedTime != 0){
-    		return continueAnimation(direction, position, deltaTime);
+    		continueAnimation(direction, position, deltaTime);
+    		return null;
     	}
 
     	/*
@@ -150,16 +152,32 @@ public class MovementAnimator {
     			return position.copy();
     		}
 
+    		setState(position, nextTile(position), false);
+
     		/*
-    		 * If we are not turning we could possible be jumping
+    		 * Figure out where we are going
     		 */
-    		Point nextLocation = nextTile(position);
-    		boolean isLedge = GameState.getMap().getLevel(position.getLevel()).isLedge(nextLocation.getX(), nextLocation.getY());
-    		if(isLedge){
-    			state = JUMPING;
-    			stepTime = JUMP_TIME;
-    		} else
-    			state = STEPPING;
+    		Pose pose = ClientState.player.getPose();
+    		Pose newPose = null;
+    		if(state == STEPPING){
+
+    			Point newPoint = nextTile(pose);
+
+    			Level level = GameState.getMap().getLevel(pose.getLevel());
+    	    	boolean canStep = level.canStepOn(newPoint.getX(), newPoint.getY());
+    	    	LevelChange levelChange = level.grid.changeLevel(newPoint.getX(), newPoint.getY());    			
+
+    	    	if(canStep || levelChange != null)
+    	    		newPose = new Pose(newPoint.getX(), newPoint.getY(), pose.getLevel(), direction);
+    	    	else
+    	    		newPose = pose.copy();
+
+    		} else if(state == JUMPING){
+    			Point newPoint = nextTile(pose);
+    			newPose = new Pose(newPoint.getX(), newPoint.getY(), pose.getLevel(), direction);
+    			newPoint = nextTile(newPose);
+    			newPose = new Pose(newPoint.getX(), newPoint.getY(), pose.getLevel(), direction);
+    		}
 
     		/*
     		 * If we are same direction as before we start a movement animation
@@ -167,6 +185,11 @@ public class MovementAnimator {
     		 * move by deltaTime over time step
     		 */
     		continueAnimation(direction, position, deltaTime);
+
+    		/*
+    		 * Tell the server where we are going
+    		 */
+    		return newPose;
 
     	}
 
@@ -188,10 +211,13 @@ public class MovementAnimator {
     		}
 
     		boolean directionChange = position.facing() != newPosition.facing();
+
     		/*
     		 * Turn the character in new direction specified by movement
     		 */
     		position.setDirection(newPosition.facing());
+
+        	boolean sameSpot = (Math.round(position.getX()) == Math.round(newPosition.getX()) &&  Math.round(position.getY()) == Math.round(newPosition.getY()));
 
     		/*
     		 * See where character is going
@@ -218,8 +244,9 @@ public class MovementAnimator {
             		levelChanged = true;
         	}
 
-        	boolean sameSpot = (Math.round(position.getX()) != Math.round(newPosition.getX()) ||  Math.round(position.getY()) != Math.round(newPosition.getY()));
         	boolean canStepNew = level.canStepOn(futurePoint.getX(), futurePoint.getY());
+
+        	boolean overrideCanStep = setState(position, nextTile(position), sameSpot);
 
         	/*
         	 * If we are in different spot move
@@ -229,7 +256,7 @@ public class MovementAnimator {
         	 * or if it is a level change and we are in same position it was
         	 * just a turn
         	 */
-    		if(sameSpot || !canStepNew && !(levelChanged && directionChange)){
+    		if(!sameSpot || !(canStepNew || directionChange || overrideCanStep) && !(levelChanged && directionChange)){
 
     			elapsedTime += deltaTime;
     			animationMove(position, deltaTime);
@@ -238,6 +265,28 @@ public class MovementAnimator {
     	}
 
     	return null;
+
+	}
+
+	private boolean setState(Pose position, Point nextCoordinate, boolean sameSpot){
+
+		/*
+		 * If we are not turning we could possible be jumping
+		 */
+		boolean isLedge = GameState.getMap().getLevel(position.getLevel()).isLedge(nextCoordinate.getX(), nextCoordinate.getY());
+
+		if(isLedge && position.facing() == DOWNHILL && !sameSpot){
+
+			state = JUMPING;
+			stepTime = JUMP_TIME;
+
+			return true;
+
+		}
+
+		state = STEPPING;
+
+		return false;
 
 	}
 
@@ -322,7 +371,7 @@ public class MovementAnimator {
      * @param deltaTime Change in time in milliseconds
      * @return new position of character to send to server if its The PLAYER
      */
-    private Pose continueAnimation(Direction direction, Pose position, int deltaTime){
+    private void continueAnimation(Direction direction, Pose position, int deltaTime){
 
     	/*
     	 * Increment elapsed time
@@ -353,12 +402,6 @@ public class MovementAnimator {
    				newPosition = null;
    			}
 
-   			/*
-   			 * Copy position right after we finish moving to return to the
-   			 * server at end of block
-   			 */
-   			Pose updated = position.copy();
-
 			/*
 			 * If we have no where to go we end the animation
 			 */
@@ -374,10 +417,13 @@ public class MovementAnimator {
 
 	    		if(position.getX() != newPosition.getX() || position.getY() != newPosition.getY()){
 
-	    			elapsedTime -= stepTime;
-	    			animationMove(position, elapsedTime);
+	    			deltaTime = (int) (elapsedTime - stepTime);
+	    			elapsedTime = 0;
+
+	    			update(direction, position, elapsedTime);
 
 	    		}
+
 
     		}
 
@@ -388,16 +434,17 @@ public class MovementAnimator {
 			 */
     		else {
 
-    			elapsedTime -= stepTime;
     			position.setDirection(direction);
-    			animationMove(position, elapsedTime);
+
+    			deltaTime = (int) (elapsedTime - stepTime);
+    			elapsedTime = 0;
+    			
+    			/*
+    			 * Continue with next update
+    			 */
+    			update(direction, position, elapsedTime);
 
     		}
-
-   			/*
-   			 * Tell the server where we are
-   			 */
-    		return updated;
 
     	}
 
@@ -407,10 +454,6 @@ public class MovementAnimator {
     	else
     		animationMove(position, deltaTime);
 
-    	/*
-    	 * Tell the server we havent finsished moving
-    	 */
-    	return null;
 
     }
 
@@ -455,12 +498,37 @@ public class MovementAnimator {
 			offset = (int) (Math.sin(elapsedTime/stepTime*Math.PI)*16);
 
     	if(isMainCharacter){
+
     		if(state == JUMPING)
     			graphics.drawImage(shadow, 4 * 16, 4 * 16 + SHADOW_OFFSET, null);
-			graphics.drawImage(img, 4 * 16, 4 * 16 - Player.CHARACTER_OFFSET - offset, null);
+
+    		graphics.drawImage(img, 4 * 16, 4 * 16 - Player.CHARACTER_OFFSET - offset, null);
+
     	}
 
-    	// TODO not main characters
+    	else {
+
+    		Pose mainCharPose = ClientState.player.getPose();
+
+    		if(state == JUMPING)
+    			graphics.drawImage(
+    					shadow,
+    					(int) ((pose.getX() - mainCharPose.getX() + 4) * 16),
+    					(int) ((pose.getY() - mainCharPose.getY() + 4) * 16) + SHADOW_OFFSET,
+    					null
+    				);
+
+    		/*
+    		 * + 4 is main character offset
+    		 */
+    		graphics.drawImage(
+    				img,
+    				(int) ((pose.getX() - mainCharPose.getX() + 4) * 16),
+    				(int) ((pose.getY() - mainCharPose.getY() + 4) * 16) - Player.CHARACTER_OFFSET - offset,
+    				null
+    			);
+
+    	}
 
     }
 
