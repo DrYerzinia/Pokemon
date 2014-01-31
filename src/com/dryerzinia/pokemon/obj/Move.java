@@ -25,7 +25,7 @@ public class Move implements Serializable, DeepCopy, JSON {
      * Master list of standard moves for when pokemon learn them
      */
     public static HashMap<String, Move> baseMoves;
-    
+
     public transient Image animation[]; // TODO: add animations sprites and code
 
     public int effmod;
@@ -314,7 +314,18 @@ public class Move implements Serializable, DeepCopy, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
-    	JSONObject.defaultToObject(json, this);
+	    effmod = ((Float) json.get("effmod")).intValue();
+
+	    name = (String) json.get("name");
+	    description = (String) json.get("description");
+
+	    effect = (String) json.get("effect");
+	    type = (String) json.get("type");
+
+	    currentpp = ((Float) json.get("currentpp")).intValue();
+	    pp = ((Float) json.get("pp")).intValue();
+	    dmg = ((Float) json.get("dmg")).intValue();
+	    accuracy = ((Float) json.get("accuracy")).intValue();
 
 	}
     

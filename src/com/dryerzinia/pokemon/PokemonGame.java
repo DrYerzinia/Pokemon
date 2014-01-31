@@ -447,7 +447,6 @@ public class PokemonGame extends Applet {
 
     public static void main(String[] args) {
 
-
         JFrame frame = new JFrame("Pokemon");
 
         frame.setSize(UI.APP_WIDTH * UI.scale + 10, UI.APP_HEIGHT * UI.scale + UI.CHAT_HEIGHT + 30);

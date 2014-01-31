@@ -805,21 +805,52 @@ public class Pokemon implements Serializable, DeepCopy, JSON {
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
-    	JSONObject.defaultToObject(json, this);
+	    nickName = (String) json.get("nickName");
 
-		// TODO If base exists in HashMap GRAB IT!
+	    Species = (String) json.get("Species");
+
+	    level = ((Float) json.get("level")).intValue();
+	    currentHP = ((Float) json.get("currentHP")).intValue();
+	    hpSE = ((Float) json.get("hpSE")).intValue();
+	    attackSE = ((Float) json.get("attackSE")).intValue();
+	    defenseSE = ((Float) json.get("defenseSE")).intValue();
+	    speedSE = ((Float) json.get("speedSE")).intValue();
+	    specialSE = ((Float) json.get("specialSE")).intValue();
+
+	    idNo = ((Float) json.get("idNo")).intValue();
+	    EXP = ((Float) json.get("EXP")).intValue();
+
+	    status = (String) json.get("status");
+
+    	Object[] movesArray = (Object[]) json.get("pokemon");
+		moves = new Move[4];
+    	if(movesArray != null){
+    		System.arraycopy(movesArray, 0, moves, 0, movesArray.length);
+    	}
+
+		/*
+		 * If base exists in HashMap
+		 */
 		Pokemon.BaseStats bs = (Pokemon.BaseStats) json.get("pokeBase");
 
 		if(bs != null){
 
 			pokeBase = bs;
 
-			// If this object has a pokeBase reference this pokemon must be
-			// a base Pokemon we reference from for stat information so we
-			// add it to basePokemon list in the Global PokemonGame object
+			/* 
+			 * If this object has a pokeBase reference this pokemon must be
+			 * a base Pokemon we reference from for stat information so we
+			 * add it to basePokemon list in the Global PokemonGame object
+			 */
 			basePokemon.put(Species, this);
 
-		} else getBase();
+		}
+		
+		/*
+		 * If base is not in the json we get it from master list
+		 */
+		else
+			getBase();
 
 		loadImg();
 
