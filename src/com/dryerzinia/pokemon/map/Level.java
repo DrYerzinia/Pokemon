@@ -22,6 +22,7 @@ import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.MultiIterator;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Level implements Serializable, JSON {
 
@@ -40,6 +41,8 @@ public class Level implements Serializable, JSON {
     public int borderoffset[] = new int[9];
     public int id;
 
+    private int colorProfile[];
+
     public Level() {
     }
 
@@ -49,6 +52,15 @@ public class Level implements Serializable, JSON {
 
     	for (int i = 0; i < 9; i++)
             borders[i] = -1;
+    }
+
+    public void notifyChangedTo(){
+
+    	System.out.println("Level: " + id);
+
+    	ResourceLoader.setColorProfile(colorProfile);
+    	ResourceLoader.changeColorProfile();
+
     }
 
     /**
@@ -361,6 +373,12 @@ public class Level implements Serializable, JSON {
 	    id = ((Float) json.get("id")).intValue();
 
     	grid.initLevelReference(this);
+
+        Object[] colorProfileArray = (Object[]) json.get("colorProfile");
+        colorProfile = new int[4];
+        for(int i = 0; i < colorProfileArray.length; i++)
+        	if(colorProfileArray[i] != null)
+        		colorProfile[i] = ((Float) colorProfileArray[i]).intValue();
 
     }
     

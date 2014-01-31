@@ -8,18 +8,34 @@ package com.dryerzinia.pokemon.util;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.imageio.ImageIO;
 
 public final class ResourceLoader {
 
 	/*
+	 * Default color profiles
+	 * TODO Change to ENUM
+	 */
+	public static final int GREEN[] = {128, 248, 32, 255};
+
+	/*
+	 * Default colorProfile Green
+	 */
+	private static int colorProfile[] = GREEN;
+
+	/*
 	 * Sprite map for caching images so we don't load duplicates
 	 */
-    private static HashMap<String, Image> sprites;
+    private static ConcurrentHashMap<String, BufferedImage> sprites;
 
     /*
      * If we are headless or a server we don't need to load any images
@@ -57,7 +73,7 @@ public final class ResourceLoader {
     	/*
     	 * Create Map to store cached images so we don't have multiple copies of same image
     	 */
-    	sprites = new HashMap<String, Image>();
+    	sprites = new ConcurrentHashMap<String, BufferedImage>();
 
     }
 
@@ -71,7 +87,7 @@ public final class ResourceLoader {
      * @param filename Path to image file to load relative to the root
      * directory of the code
      */
-    private static Image loadImage(String image_file_path) {
+    private static BufferedImage loadImage(String imageFilePath) {
 
     	/*
     	 * Don't load any images if we are headless
@@ -83,20 +99,23 @@ public final class ResourceLoader {
             URL url = null;
 
             if(in_a_jar)
-                url = new URL(path_to_jar + "!/" + image_file_path);
+                url = new URL(path_to_jar + "!/" + imageFilePath);
         	else
-        		url = ResourceLoader.class.getClassLoader().getResource(image_file_path);
+        		url = ResourceLoader.class.getClassLoader().getResource(imageFilePath);
 
             if(url == null)
             	return null;
 
-            return Toolkit.getDefaultToolkit().getImage(url);
+            return ImageIO.read(url);
 
         } catch (MalformedURLException e) {
 
         	System.err.println("Bad image URL: " + e.getMessage());
 
-        }
+        } catch (IOException e) {
+
+			System.err.println("IO Error reading image " + imageFilePath + ": " + e.getMessage());
+		}
 
         return null;
 
@@ -111,7 +130,7 @@ public final class ResourceLoader {
     	/*
     	 * Check the Cache for the image
     	 */
-    	Image image = sprites.get(filename);
+    	BufferedImage image = sprites.get(filename);
 
     	/*
     	 * If its not in the catch lets load it
@@ -123,9 +142,11 @@ public final class ResourceLoader {
     		 */
     		image = loadImage("sprites/" + filename);
     		/*
-    		 * Add the loaded image to the cache
+    		 * Add the loaded image to the cache if we
+    		 * found it
     		 */
-            sprites.put(filename, image);
+    		if(image != null)
+    			sprites.put(filename, image);
 
     	}
 
@@ -133,6 +154,39 @@ public final class ResourceLoader {
     	 * Return the loaded image or null if it was not found
     	 */
         return image;
+    }
+
+    public static void setColorProfile(int[] newColorProfile){
+
+    	colorProfile = newColorProfile;
+
+    }
+
+    public static void changeColorProfile(){
+
+    	int pixleColor[] = new int[4];
+
+    	for(BufferedImage img : sprites.values()){
+
+    		if(img.getHeight() == 16 && img.getWidth() == 16){
+		    		
+		    	for(int x = 0; x < 16; x++){
+		    		for(int y = 0; y < 16; y++){
+	
+		    			img.getRaster().getPixel(x, y, pixleColor);
+		    			if(
+		    					pixleColor[3] != 0
+		  					&& !(pixleColor[0] ==  24 && pixleColor[1] ==  24 && pixleColor[2] == 24)
+		  					&& !(pixleColor[0] == 248 && pixleColor[1] == 248 && pixleColor[2] == 248)
+		  					&& !(pixleColor[0] ==  88 && pixleColor[1] == 184 && pixleColor[2] == 248)
+		  				){
+	
+		    				img.getRaster().setPixel(x, y, colorProfile);
+		    			}
+		    		}
+		    	}
+    		}
+    	}
     }
 
     /**

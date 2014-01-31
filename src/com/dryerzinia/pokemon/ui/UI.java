@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.dryerzinia.pokemon.ui.views.View;
+import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class UI {
 

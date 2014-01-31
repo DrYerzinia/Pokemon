@@ -1,6 +1,7 @@
 package com.dryerzinia.pokemon.obj;
 import java.util.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.map.Direction;
@@ -113,12 +114,24 @@ public class Player implements Serializable {
     	/*
     	 * If we changed levels and are not the main character switch levels
     	 */
-    	if(oldLevel != newLevel && this != ClientState.player){
+    	if(oldLevel != newLevel){
 
-    		if(oldLevel != null)
-    			oldLevel.removePlayer(this);
-    		if(newLevel != null)
-    			newLevel.addPlayer(this);
+    		if(this != ClientState.player){
+
+	    		if(oldLevel != null)
+	    			oldLevel.removePlayer(this);
+	    		if(newLevel != null)
+	    			newLevel.addPlayer(this);
+
+    		}
+
+    		/*
+    		 * If we are the main character tell the leve we chagned
+    		 */
+    		else {
+    			if(newLevel != null)
+    				newLevel.notifyChangedTo();
+    		}
 
     	}
 
@@ -129,7 +142,6 @@ public class Player implements Serializable {
     public void draw(Graphics graphics) {
 
     	movement.draw(location, sprite, true, graphics);
-
 
     }
 
