@@ -141,12 +141,15 @@ public final class ResourceLoader {
     		 * Load the sprite from the sprites folder
     		 */
     		image = loadImage("sprites/" + filename);
+
     		/*
     		 * Add the loaded image to the cache if we
     		 * found it
     		 */
-    		if(image != null)
+    		if(image != null){
+    			changeImageColorProfile(image);
     			sprites.put(filename, image);
+    		}
 
     	}
 
@@ -162,31 +165,36 @@ public final class ResourceLoader {
 
     }
 
+    public static void changeImageColorProfile(BufferedImage img){
+
+    	int pixelColor[] = new int[4];
+
+    	if(img.getHeight() == 16 && img.getWidth() == 16){
+    		
+	    	for(int x = 0; x < 16; x++){
+	    		for(int y = 0; y < 16; y++){
+
+	    			img.getRaster().getPixel(x, y, pixelColor);
+	    			if(
+	    					pixelColor[3] != 0
+	  					&& !(pixelColor[0] ==  24 && pixelColor[1] ==  24 && pixelColor[2] == 24)
+	  					&& !(pixelColor[0] == 248 && pixelColor[1] == 248 && pixelColor[2] == 248)
+	  					&& !(pixelColor[0] ==  88 && pixelColor[1] == 184 && pixelColor[2] == 248)
+	  				){
+
+	    				img.getRaster().setPixel(x, y, colorProfile);
+	    			}
+	    		}
+	    	}
+		}
+
+    }
+
     public static void changeColorProfile(){
 
-    	int pixleColor[] = new int[4];
+    	for(BufferedImage img : sprites.values())
+    		changeImageColorProfile(img);
 
-    	for(BufferedImage img : sprites.values()){
-
-    		if(img.getHeight() == 16 && img.getWidth() == 16){
-		    		
-		    	for(int x = 0; x < 16; x++){
-		    		for(int y = 0; y < 16; y++){
-	
-		    			img.getRaster().getPixel(x, y, pixleColor);
-		    			if(
-		    					pixleColor[3] != 0
-		  					&& !(pixleColor[0] ==  24 && pixleColor[1] ==  24 && pixleColor[2] == 24)
-		  					&& !(pixleColor[0] == 248 && pixleColor[1] == 248 && pixleColor[2] == 248)
-		  					&& !(pixleColor[0] ==  88 && pixleColor[1] == 184 && pixleColor[2] == 248)
-		  				){
-	
-		    				img.getRaster().setPixel(x, y, colorProfile);
-		    			}
-		    		}
-		    	}
-    		}
-    	}
     }
 
     /**
