@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import com.dryerzinia.pokemon.util.ResourceLoader;
-import com.dryerzinia.pokemon.util.StringStore;
+import com.dryerzinia.pokemon.util.string.StringStore;
 import com.dryerzinia.pokemon.input.InputController;
 import com.dryerzinia.pokemon.obj.ClientState;
 

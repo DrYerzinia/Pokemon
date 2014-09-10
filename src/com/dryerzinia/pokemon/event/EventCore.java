@@ -3,7 +3,7 @@ package com.dryerzinia.pokemon.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dryerzinia.pokemon.util.StringStore;
+import com.dryerzinia.pokemon.util.string.StringStore;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 
@@ -25,7 +25,7 @@ public class EventCore {
 		events.add(helixAns);
 		events.add(helixQuestion);
 
-		Event namesHouse = new TextEvent(-1, StringStore.getString(6, ClientState.LOCALE));
+		Event namesHouse = new TextEvent(-1, StringStore.getString(0, ClientState.LOCALE));
 		events.add(namesHouse);
 
 	}	

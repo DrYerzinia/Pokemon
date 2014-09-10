@@ -24,6 +24,7 @@ import com.dryerzinia.pokemon.ui.views.GameView;
 import com.dryerzinia.pokemon.ui.views.Login;
 import com.dryerzinia.pokemon.ui.views.View;
 import com.dryerzinia.pokemon.util.WindowEventHandler;
+import com.dryerzinia.pokemon.util.string.StringStore;
 
 public class PokemonGame extends Applet {
 
@@ -42,6 +43,8 @@ public class PokemonGame extends Applet {
     }
 
     public static void gameInit(Container container) {
+
+    	StringStore.loadStringsFromJSON();
 
         GameState.init();
         ClientState.init();

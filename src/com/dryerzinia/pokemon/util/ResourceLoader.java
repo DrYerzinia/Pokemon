@@ -11,8 +11,10 @@ import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+
+import com.dryerzinia.pokemon.PokemonGame;
 
 public final class ResourceLoader {
 
@@ -235,11 +239,25 @@ public final class ResourceLoader {
      */
     public static String getJSON(String filename){
 
-    	Scanner scanner = new Scanner(ResourceLoader.class.getResource(filename).getPath());
-    	String json = scanner.next();
-    	scanner.close();
-    	return json;
+    	try(BufferedReader jsonReader = new BufferedReader(new InputStreamReader(
+                ResourceLoader.class.getClassLoader().getResourceAsStream(filename)));){
     	
+    		StringBuilder json = new StringBuilder();
+    		String line;
+
+    		while((line = jsonReader.readLine()) != null){
+    			json.append(line);
+    			json.append("\n");
+			}
+
+        	return json.toString();
+
+        } catch(IOException ioe){
+        	System.err.println("Unable to read Strings file: " + ioe.getMessage());
+        }
+
+    	return null;
+
     }
 
     /**

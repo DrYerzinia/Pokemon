@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.dryerzinia.pokemon.input.InputController;
 import com.dryerzinia.pokemon.input.KeyboardInputController;
 import com.dryerzinia.pokemon.map.Level;
-import com.dryerzinia.pokemon.util.StringStore.Locale;
+import com.dryerzinia.pokemon.util.string.StringStore.Locale;
 
 public class ClientState {
 

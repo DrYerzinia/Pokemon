@@ -1,0 +1,32 @@
+[
+	{
+		"id": 0,
+		"en": "NAME's house",
+		"es": "Casa de NAME"
+	},
+	{
+		"id": 1,
+		"en": "You want the HELIX FOSSIL?",
+		"es": "¿Quieres el Fósil Hélix?"
+	},
+	{
+		"id": 2,
+		"en": "YOU got the HELIX FOSSIL!",
+		"es": "¡Has conseguido el Fósil Hélix!"
+	},
+	{
+		"id": 3,
+		"en": "All right. Then this is mine!",
+		"es": "Vale. ¡Pues esto es mío!"
+	},
+	{
+		"id": 4,
+		"en": "YES",
+		"es": "Sí"
+	},
+	{
+		"id": 5,
+		"en": "NO",
+		"es": "No"
+	}
+]
