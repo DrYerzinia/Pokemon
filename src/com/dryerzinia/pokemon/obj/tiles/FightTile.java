@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 
 public class FightTile extends Tile {
 

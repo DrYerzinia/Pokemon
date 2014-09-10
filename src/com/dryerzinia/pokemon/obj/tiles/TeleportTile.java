@@ -1,4 +1,6 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
+
+import com.dryerzinia.pokemon.obj.LevelChange;
 
 public class TeleportTile extends Tile {
 

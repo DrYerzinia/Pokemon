@@ -5,7 +5,7 @@ import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.obj.RandomFight;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.obj.RandomFight.Edit;
 import com.dryerzinia.pokemon.ui.menu.EditMenu;
 import com.dryerzinia.pokemon.ui.menu.GMenu;

@@ -4,10 +4,10 @@ import java.awt.*;
 import java.util.*;
 
 import com.dryerzinia.pokemon.obj.ClientState;
-import com.dryerzinia.pokemon.obj.Ledge;
 import com.dryerzinia.pokemon.obj.LevelChange;
 import com.dryerzinia.pokemon.obj.RandomFight;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Ledge;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSON;
 

@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 
 import java.io.*;
 import java.util.HashMap;
@@ -11,6 +11,9 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.Player;
 
 public class Person extends Tile implements Actor {
 

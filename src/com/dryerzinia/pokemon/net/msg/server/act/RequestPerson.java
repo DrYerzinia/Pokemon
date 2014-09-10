@@ -9,7 +9,7 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.client.act.SendPerson;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 
 public class RequestPerson extends ServerMessage {
 

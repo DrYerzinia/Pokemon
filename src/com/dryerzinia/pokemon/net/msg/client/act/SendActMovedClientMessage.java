@@ -13,8 +13,8 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.act.RequestPerson;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Person;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 
 public class SendActMovedClientMessage extends SendActClientMessage {
 

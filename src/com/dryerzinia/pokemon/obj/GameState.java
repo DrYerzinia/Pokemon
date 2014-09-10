@@ -15,6 +15,7 @@ import com.dryerzinia.pokemon.map.Map;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.StringStream;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 
 public class GameState {
 
@@ -32,7 +33,7 @@ public class GameState {
 
         map = new Map();
 
-    	map.load("save.json");
+    	map.load("Tiles.json", "Levels.json");
 
     	people = new ConcurrentHashMap<Integer, Person> (peopleExpected, 0.75f, threadsForPeople);
 
@@ -76,10 +77,18 @@ public class GameState {
 		if(people == null)
 			new ConcurrentHashMap<Integer, Person> (peopleExpected, 0.75f, threadsForPeople);
 
-		try(BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+		try(BufferedReader jsonReader = new BufferedReader(new InputStreamReader(
                 PokemonGame.class.getClassLoader().getResourceAsStream(filename)));){
 
-			String json = json_reader.readLine();
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
+
+			while((line = jsonReader.readLine()) != null ){
+				stringBuilder.append(line);
+				stringBuilder.append("\n");
+			}
+
+			String json = stringBuilder.toString();
 
 			Object[] actors = JSONObject.JSONToArray(new StringStream(json));
 

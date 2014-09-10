@@ -9,7 +9,7 @@ package com.dryerzinia.pokemon.ui.editor;
 import javax.swing.*;
 
 import com.dryerzinia.pokemon.PokemonGame;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 
 import java.awt.event.*;
 import java.util.*;

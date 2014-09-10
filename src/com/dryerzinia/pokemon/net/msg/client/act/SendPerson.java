@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 
 public class SendPerson extends ClientMessage {
 

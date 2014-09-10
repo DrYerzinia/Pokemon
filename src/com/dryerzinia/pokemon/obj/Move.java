@@ -277,10 +277,18 @@ public class Move implements Serializable, DeepCopy, JSON {
 
     public static void readMoveBase(){
     	
-    	try (BufferedReader json_reader = new BufferedReader(new InputStreamReader(
+    	try (BufferedReader jsonReader = new BufferedReader(new InputStreamReader(
                 PokemonGame.class.getClassLoader().getResourceAsStream("MoveBase.json")))) {
     		
-    		String json = json_reader.readLine();
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
+
+			while((line = jsonReader.readLine()) != null ){
+				stringBuilder.append(line);
+				stringBuilder.append("\n");
+			}
+
+			String json = stringBuilder.toString();
 
     		baseMoves = new HashMap<String, Move>();
 

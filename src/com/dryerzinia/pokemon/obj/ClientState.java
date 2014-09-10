@@ -2,15 +2,19 @@ package com.dryerzinia.pokemon.obj;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.dryerzinia.pokemon.input.InputController;
 import com.dryerzinia.pokemon.input.KeyboardInputController;
 import com.dryerzinia.pokemon.map.Level;
+import com.dryerzinia.pokemon.util.StringStore.Locale;
 
 public class ClientState {
 
 	public static Player player;
     public static ConcurrentHashMap<Integer, Player> players;
 
-    private static KeyboardInputController keyboard;
+    public static InputController inputDevice;
+
+    public static final Locale LOCALE = Locale.EN;
 
     private static boolean loaded;
 
@@ -20,7 +24,7 @@ public class ClientState {
 
 		players = new ConcurrentHashMap<Integer, Player>();
 
-		keyboard = new KeyboardInputController();
+		inputDevice = new KeyboardInputController();
 
 	}
 
@@ -35,12 +39,6 @@ public class ClientState {
     public static Level getPlayerLevel(){
 
     	return GameState.getMap().getLevel(player.getPose().getLevel());
-
-    }
-
-    public static KeyboardInputController getKeyboard(){
-
-    	return keyboard;
 
     }
 

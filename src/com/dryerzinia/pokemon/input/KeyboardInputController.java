@@ -21,6 +21,11 @@ public class KeyboardInputController implements InputController, KeyListener {
 	private boolean leftPressed;
 	private boolean rightPressed;
 
+	private boolean aPressed;
+	private boolean bPressed;
+	private boolean startPressed;
+	private boolean selectPressed;
+
 	/*
 	 * Button listeners to fire button events to
 	 */
@@ -44,6 +49,29 @@ public class KeyboardInputController implements InputController, KeyListener {
 
 		return onlyPressed;
 
+	}
+
+	@Override
+	public boolean isButtonDown(Button b) {
+		switch(b){
+			case A:
+				return aPressed;
+			case B:
+				return bPressed;
+			case START:
+				return startPressed;
+			case SELECT:
+				return selectPressed;
+			case UP:
+				return upPressed;
+			case DOWN:
+				return downPressed;
+			case LEFT:
+				return leftPressed;
+			case RIGHT:
+				return rightPressed;
+		}
+		return false;
 	}
 
 	@Override
@@ -113,14 +141,17 @@ public class KeyboardInputController implements InputController, KeyListener {
         }
 
         if(c == KeyEvent.VK_Z)
+        	aPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.A));
 
         if(c == KeyEvent.VK_X)
+        	bPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.B));
 
         if(c == KeyEvent.VK_ENTER)
+        	startPressed = true;
         	for(ButtonListener buttonListener : buttonListeners)
         		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.START));
 
@@ -144,6 +175,15 @@ public class KeyboardInputController implements InputController, KeyListener {
 
         if(c == KeyEvent.VK_DOWN)
             downPressed = false;
+
+        if(c == KeyEvent.VK_Z)
+        	aPressed = false;
+
+        if(c == KeyEvent.VK_X)
+        	bPressed = false;
+
+        if(c == KeyEvent.VK_ENTER)
+        	startPressed = false;
 
         updateOnlyPressed();
 

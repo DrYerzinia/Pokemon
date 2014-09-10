@@ -7,7 +7,7 @@ import java.util.*;
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;
 import com.dryerzinia.pokemon.util.JSONObject;

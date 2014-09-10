@@ -311,6 +311,7 @@ public class JSONObject {
 
     		flts.add(new Float(json.readUntil(" \n\t,]")));
 
+    		json.skipWhitespace();
     		if(json.peek() == ']') break;
     		json.ignore();
     		json.skipWhitespace();

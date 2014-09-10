@@ -8,7 +8,7 @@ import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Move;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.obj.Pokemon;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 
 import java.awt.event.*;
 import java.util.*;

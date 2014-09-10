@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 
 import java.awt.Graphics;
 

@@ -1,4 +1,5 @@
 package com.dryerzinia.pokemon.obj;
+
 import java.util.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;

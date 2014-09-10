@@ -1,10 +1,11 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 import java.io.*;
 import java.util.HashMap;
 import java.awt.*;
 
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
+import com.dryerzinia.pokemon.obj.RandomFight;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.DeepCopy;
 import com.dryerzinia.pokemon.util.JSON;

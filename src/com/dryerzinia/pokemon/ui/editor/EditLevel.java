@@ -5,7 +5,7 @@ import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 
 import java.awt.event.*;
 import java.util.*;

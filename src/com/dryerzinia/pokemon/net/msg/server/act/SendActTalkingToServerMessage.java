@@ -11,7 +11,7 @@ import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class SendActTalkingToServerMessage extends SendActServerMessage {

@@ -8,7 +8,7 @@ import java.io.*;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 
 public class SendActTalkingToClientMessage extends SendActClientMessage {
 

@@ -50,7 +50,7 @@ import com.dryerzinia.pokemon.net.msg.client.fight.SendFightClientMessage;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.util.MysqlConnect;
@@ -136,7 +136,7 @@ public class PokemonServer {
         GameState.init();
 
         // Load Actors
-        GameState.loadActors("actors.json");
+        GameState.loadActors("Actors.json");
 
         System.out.println("Game World Instace Created");
 

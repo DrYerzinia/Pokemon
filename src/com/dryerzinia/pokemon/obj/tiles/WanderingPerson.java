@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 
 import java.util.HashMap;
 
@@ -7,6 +7,7 @@ import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.obj.Actor;
 
 public class WanderingPerson extends Person implements Actor {
 

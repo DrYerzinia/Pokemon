@@ -6,6 +6,8 @@
 
 package com.dryerzinia.pokemon.util;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -16,10 +18,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 public final class ResourceLoader {
+
+	private static final Logger LOGGER =			
+			Logger.getLogger(ResourceLoader.class.getName());
 
 	/*
 	 * Default color profiles
@@ -36,6 +42,8 @@ public final class ResourceLoader {
 	 * Sprite map for caching images so we don't load duplicates
 	 */
     private static ConcurrentHashMap<String, BufferedImage> sprites;
+
+	private static HashMap<String, Font> fonts = new HashMap<String, Font>();
 
     /*
      * If we are headless or a server we don't need to load any images
@@ -158,6 +166,30 @@ public final class ResourceLoader {
     	 */
         return image;
     }
+
+	/**
+	 * @param filename name of the font including the TTF extension.
+	 * @return the font from the jar or cache if it's been loaded.
+	 */
+	public static Font getFont(String filename) {
+		Font font = fonts.get(filename);
+		if (font == null) {
+			LOGGER.info("Font " + filename + " not cached; retrieving...\n");
+			try {
+				font = Font.createFont(Font.TRUETYPE_FONT, ResourceLoader.class
+						.getResourceAsStream("/fonts/" + filename));
+				fonts.put(filename, font);
+			} catch (IOException | FontFormatException e) {
+				LOGGER.warning("Error loading custom font " + filename + ": "
+						+ e.getMessage() + "\n");
+			} 
+		} else {
+			LOGGER.info("Retrieving cached font: " + filename + "\n");
+		}
+		return font;
+	}
+
+	//
 
     public static void setColorProfile(int[] newColorProfile){
 

@@ -11,7 +11,7 @@ import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.net.msg.client.PlayerMovement;
 import com.dryerzinia.pokemon.net.msg.client.act.SendActMovedClientMessage;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class GetPlayerServerMessage extends ServerMessage {

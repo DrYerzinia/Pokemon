@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.obj.GameState;
-import com.dryerzinia.pokemon.obj.Person;
-import com.dryerzinia.pokemon.obj.Tile;
+import com.dryerzinia.pokemon.obj.tiles.Person;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.ui.editor.UltimateEdit;
 import com.dryerzinia.pokemon.util.JSONArray;
 import com.dryerzinia.pokemon.util.JSONObject;
@@ -91,32 +91,55 @@ public class Map {
      * TODO we need to remove actor locations so we can get them
      * from the server and actors don't "JUMP" when you move into a level
      */
-    public void load(String filename) {
+    public void load(String tileFilename, String levelFilename) {
 
         masterTileSet = new ArrayList<Tile>();
         levels = new ArrayList<Level>();
 
-        System.out.println("Loading game from: " + filename);
+        System.out.println("Loading game from: " + tileFilename);
 
-        try(BufferedReader json_reader = new BufferedReader(new InputStreamReader(
-                PokemonGame.class.getClassLoader().getResourceAsStream(filename)));){
+		try(BufferedReader jsonReader = new BufferedReader(new InputStreamReader(
+                PokemonGame.class.getClassLoader().getResourceAsStream(tileFilename)));){
 
-			String json_1 = json_reader.readLine();
-			String json_2 = json_reader.readLine();
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
 
-			Object[] loadedTiles = JSONObject.JSONToArray(new StringStream(json_1));
-			Object[] loadedLevels = JSONObject.JSONToArray(new StringStream(json_2));
+			while((line = jsonReader.readLine()) != null ){
+				stringBuilder.append(line);
+				stringBuilder.append("\n");
+			}
 
-            for(int i = 0; i < loadedTiles.length; i++)
+			String json = stringBuilder.toString();
+
+			Object[] loadedTiles = JSONObject.JSONToArray(new StringStream(json));
+
+			for(int i = 0; i < loadedTiles.length; i++)
             	masterTileSet.add((Tile)loadedTiles[i]);
 
-            for(int i = 0; i < loadedLevels.length; i++)
+        } catch(IOException ioe){
+        	System.err.println("Unable to read Tile file: " + ioe.getMessage());
+        }
+
+		try(BufferedReader jsonReader = new BufferedReader(new InputStreamReader(
+                PokemonGame.class.getClassLoader().getResourceAsStream(levelFilename)));){
+
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
+
+			while((line = jsonReader.readLine()) != null ){
+				stringBuilder.append(line);
+				stringBuilder.append("\n");
+			}
+
+			String json = stringBuilder.toString();
+
+			Object[] loadedLevels = JSONObject.JSONToArray(new StringStream(json));
+
+			for(int i = 0; i < loadedLevels.length; i++)
                 levels.add((Level)loadedLevels[i]);
 
-        } catch (IOException ioe) {
-
-        	System.err.println("Unable to read Map file: " + ioe.getMessage());
-
+        } catch(IOException ioe){
+        	System.err.println("Unable to read Level file: " + ioe.getMessage());
         }
 
         for(Level level : levels) {

@@ -27,7 +27,7 @@ import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.Item;
-import com.dryerzinia.pokemon.obj.Person;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.views.Login;
 

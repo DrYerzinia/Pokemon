@@ -1,4 +1,4 @@
-package com.dryerzinia.pokemon.obj;
+package com.dryerzinia.pokemon.obj.tiles;
 import java.awt.*;
 import java.util.HashMap;
 
@@ -12,6 +12,9 @@ import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.GameState;
 
 public class TrainerPerson extends Person implements Actor {
 
