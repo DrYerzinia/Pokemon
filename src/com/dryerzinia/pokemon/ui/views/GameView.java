@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.dryerzinia.pokemon.input.ButtonEvent;
+import com.dryerzinia.pokemon.input.ButtonListener;
 import com.dryerzinia.pokemon.input.KeyboardInputController;
 import com.dryerzinia.pokemon.input.InputController;
+import com.dryerzinia.pokemon.input.InputController.Button;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
@@ -21,7 +24,7 @@ import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.menu.MenuStack;
 
-public class GameView implements View {
+public class GameView implements View, ButtonListener {
 
 	public GameView(){
 		//
@@ -38,7 +41,18 @@ public class GameView implements View {
 
 		if(!ClientState.isLoaded()) return;
 
-		Pose updated = ClientState.player.update(ClientState.inputDevice.direction(), deltaTime);
+		/*
+		 * Runs update method on players and people in current level and
+		 * adjacent levels
+		 */
+		ClientState.getPlayerLevel().update(deltaTime);
+
+		Direction dir = Direction.NONE;
+
+		if(MenuStack.isEmpty())
+			dir = ClientState.inputDevice.direction();
+
+		Pose updated = ClientState.player.update(dir, deltaTime);
 
 		if(updated != null){
 
@@ -49,49 +63,6 @@ public class GameView implements View {
 				Client.writeServerMessage(new PlayerPositionMessage(updated));
     		} catch (IOException e) {
 				System.out.println("Failed to update server on our position: " + e.getMessage());
-			}
-
-		}
-
-		/*
-		 * Runs update method on players and people in current level and
-		 * adjacent levels
-		 */
-		ClientState.getPlayerLevel().update(deltaTime);
-
-		if(MenuStack.isEmpty() && ClientState.inputDevice.isButtonDown(InputController.Button.A)){
-
-			Direction dir = ClientState.player.getPose().facing();
-			int px = Math.round(ClientState.player.getPose().getX());
-			int py = Math.round(ClientState.player.getPose().getY());
-			ArrayList<Tile> tiles = null;
-
-			switch(dir){
-				case UP:
-					tiles = ClientState.getPlayerLevel().grid.grid[px][py - 1];
-					break;
-				case DOWN:
-					tiles = ClientState.getPlayerLevel().grid.grid[px][py + 1];
-					break;
-				case LEFT:
-					tiles = ClientState.getPlayerLevel().grid.grid[px - 1][py];
-					break;
-				case RIGHT:
-					tiles = ClientState.getPlayerLevel().grid.grid[px + 1][py];
-					break;
-			}
-
-			if(tiles != null){
-				Iterator<Tile> it = tiles.iterator();
-				while(it.hasNext()){
-
-					Tile t = it.next();
-					if(t instanceof OnClickTile){
-						((OnClickTile) t).click();
-						break;
-					}
-
-				}
 			}
 
 		}
@@ -131,6 +102,15 @@ public class GameView implements View {
 			return (KeyListener) ClientState.inputDevice;
 
 		return null;
+
+	}
+
+	@Override
+	public void buttonDown(ButtonEvent e) {
+
+		if(MenuStack.isEmpty() && e.which() == Button.A){
+			ClientState.player.click();
+		}
 
 	}
 

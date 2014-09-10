@@ -11,6 +11,8 @@ import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
+import com.dryerzinia.pokemon.obj.tiles.OnClickTile;
+import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
@@ -259,5 +261,44 @@ public class Player implements Serializable {
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
     }
+
+	public void click() {
+
+    	Direction dir = ClientState.player.getPose().facing();
+		int px = Math.round(ClientState.player.getPose().getX());
+		int py = Math.round(ClientState.player.getPose().getY());
+		ArrayList<Tile> tiles = null;
+
+		switch(dir){
+			case UP:
+				tiles = ClientState.getPlayerLevel().grid.grid[px][py - 1];
+				break;
+			case DOWN:
+				tiles = ClientState.getPlayerLevel().grid.grid[px][py + 1];
+				break;
+			case LEFT:
+				tiles = ClientState.getPlayerLevel().grid.grid[px - 1][py];
+				break;
+			case RIGHT:
+				tiles = ClientState.getPlayerLevel().grid.grid[px + 1][py];
+				break;
+			default:
+				break;
+		}
+
+		if(tiles != null){
+			Iterator<Tile> it = tiles.iterator();
+			while(it.hasNext()){
+
+				Tile t = it.next();
+				if(t instanceof OnClickTile){
+					((OnClickTile) t).click();
+					break;
+				}
+
+			}
+		}
+
+	}
 
 }

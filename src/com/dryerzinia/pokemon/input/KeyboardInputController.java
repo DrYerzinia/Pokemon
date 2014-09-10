@@ -26,6 +26,15 @@ public class KeyboardInputController implements InputController, KeyListener {
 	private boolean startPressed;
 	private boolean selectPressed;
 
+	private int aKey		= KeyEvent.VK_Z;
+	private int bKey		= KeyEvent.VK_X;
+	private int selectKey	= KeyEvent.VK_BACK_SPACE;
+	private int startKey	= KeyEvent.VK_ENTER;
+	private int upKey		= KeyEvent.VK_UP;
+	private int downKey		= KeyEvent.VK_DOWN;
+	private int leftKey		= KeyEvent.VK_LEFT;
+	private int rightKey	= KeyEvent.VK_RIGHT;
+
 	/*
 	 * Button listeners to fire button events to
 	 */
@@ -116,44 +125,41 @@ public class KeyboardInputController implements InputController, KeyListener {
 
         int c = e.getKeyCode();
 
-        if(c == KeyEvent.VK_UP){
-        	upPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.UP));
+        if(c == upKey){
+           	upPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners){
+           		buttonListener.buttonDown(new ButtonEvent(Button.UP));
+           	}
+        } else if(c == leftKey){
+           	leftPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners){
+           		buttonListener.buttonDown(new ButtonEvent(Button.LEFT));
+       		}
+        } else if(c == rightKey){
+           	rightPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.RIGHT));
+        } else if(c == downKey){
+           	downPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.DOWN));
+        } else if(c == aKey){
+           	aPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.A));
+        } else if(c == bKey){
+           	bPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.B));
+        } else if(c == startKey){
+           	startPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.START));
+        } else if(c == selectKey){
+           	selectPressed = true;
+           	for(ButtonListener buttonListener : buttonListeners)
+           		buttonListener.buttonDown(new ButtonEvent(Button.SELECT));
         }
-
-        if(c == KeyEvent.VK_LEFT){
-        	leftPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.LEFT));
-        }
-
-        if(c == KeyEvent.VK_RIGHT){
-        	rightPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.RIGHT));
-        }
-
-        if(c == KeyEvent.VK_DOWN){
-        	downPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.DOWN));
-        }
-
-        if(c == KeyEvent.VK_Z)
-        	aPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.A));
-
-        if(c == KeyEvent.VK_X)
-        	bPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.B));
-
-        if(c == KeyEvent.VK_ENTER)
-        	startPressed = true;
-        	for(ButtonListener buttonListener : buttonListeners)
-        		buttonListener.buttonDown(new ButtonEvent(ButtonEvent.START));
 
         updateOnlyPressed();
 
@@ -164,26 +170,29 @@ public class KeyboardInputController implements InputController, KeyListener {
 
         int c = e.getKeyCode();
 
-        if(c == KeyEvent.VK_UP)
+        if(c == upKey)
             upPressed = false;
 
-        if(c == KeyEvent.VK_LEFT)
+        else if(c == leftKey)
             leftPressed = false;
 
-        if(c == KeyEvent.VK_RIGHT)
+        else if(c == rightKey)
             rightPressed = false;
 
-        if(c == KeyEvent.VK_DOWN)
+        else if(c == downKey)
             downPressed = false;
 
-        if(c == KeyEvent.VK_Z)
+        else if(c == aKey)
         	aPressed = false;
 
-        if(c == KeyEvent.VK_X)
+        else if(c == bKey)
         	bPressed = false;
 
-        if(c == KeyEvent.VK_ENTER)
+        else if(c == startKey)
         	startPressed = false;
+
+        else if(c == selectKey)
+        	selectPressed = false;
 
         updateOnlyPressed();
 
