@@ -1,23 +1,33 @@
 package com.dryerzinia.pokemon.event;
 
+import java.util.HashMap;
+
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.ui.menu.MenuStack;
 import com.dryerzinia.pokemon.ui.menu.TextMenu;
 import com.dryerzinia.pokemon.ui.menu.TextMenuListener;
 import com.dryerzinia.pokemon.ui.menu.TextMenuState;
 import com.dryerzinia.pokemon.ui.menu.YesNoMenu;
 import com.dryerzinia.pokemon.ui.menu.YesNoMenuListener;
-
 import com.dryerzinia.pokemon.ui.menu.YesNoMenu.Selection;
+import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.string.StringStore;
 
 
-public class YesNoQuestionEvent implements Event, 
-	TextMenuListener, YesNoMenuListener {
-	private String questionText;
+public class YesNoQuestionEvent extends Event 
+	implements TextMenuListener, YesNoMenuListener {
+
+	private int questionTextID;
 	private int yesEventChain, noEventChain;
-	
-	public YesNoQuestionEvent(String questionText,
+
+	public YesNoQuestionEvent(){}
+
+	public YesNoQuestionEvent(int id, int questionTextID,
 			int yesEventChain, int noEventChain) {
-		this.questionText = questionText;
+
+		this.id = id;
+
+		this.questionTextID = questionTextID;
 		this.yesEventChain = yesEventChain;
 		this.noEventChain = noEventChain;
 	}
@@ -26,7 +36,7 @@ public class YesNoQuestionEvent implements Event,
 	@Override
 	public void fire() {
 		// create a new TextMenu showing the question and push it to the stack
-		TextMenu textMenu = new TextMenu(questionText);
+		TextMenu textMenu = new TextMenu(StringStore.getString(questionTextID, ClientState.LOCALE));
 		textMenu.registerListener(this);
 		MenuStack.push(textMenu);
 	}
@@ -61,6 +71,26 @@ public class YesNoQuestionEvent implements Event,
 	@Override
 	public String toString() {
 		return "YesNoQuestionEvent";
+	}
+
+
+	@Override
+	public String toJSON() throws IllegalAccessException {
+
+		return JSONObject.defaultToJSON(this);
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+
+		super.fromJSON(json);
+
+		questionTextID = ((Float) json.get("questionTextID")).intValue();
+
+		yesEventChain = ((Float) json.get("yesEventChain")).intValue();
+		noEventChain = ((Float) json.get("noEventChain")).intValue();
+
 	}
 
 }

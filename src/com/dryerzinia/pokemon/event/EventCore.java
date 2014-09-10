@@ -1,34 +1,15 @@
 package com.dryerzinia.pokemon.event;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.dryerzinia.pokemon.util.string.StringStore;
-import com.dryerzinia.pokemon.obj.ClientState;
-import com.dryerzinia.pokemon.obj.Item;
+import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.ResourceLoader;
+import com.dryerzinia.pokemon.util.StringStream;
 
 public class EventCore {
-	private static List<Event> events = new ArrayList<Event>();
-	
-	static 
-	{
-		Event helixItem = new ItemEvent(StringStore.getString(2, ClientState.LOCALE),
-				new Item("Helix Fossil", "A fancy helix thing", "Awesome", 0), 1);
-		Event helixAns = new TextEvent(-1, StringStore.getString(3, ClientState.LOCALE));
-		
-		Event helixQuestion = new YesNoQuestionEvent(
-				StringStore.getString(1, ClientState.LOCALE),
-				0, // yes chain starts with get item
-				-1 // no chain is null and just ends
-				);
-		events.add(helixItem);
-		events.add(helixAns);
-		events.add(helixQuestion);
 
-		Event namesHouse = new TextEvent(-1, StringStore.getString(0, ClientState.LOCALE));
-		events.add(namesHouse);
-
-	}	
+	private static Map<Integer, Event> events = new HashMap<Integer, Event>();
 
 	private EventCore() {
 		// no instantiation
@@ -40,5 +21,20 @@ public class EventCore {
 			events.get(id).fire();
 		}
 	}
-	
+
+	public static void loadEventsFromJSON(){
+
+		String json = ResourceLoader.getJSON("Events.json");
+
+		Object[] ev = JSONObject.JSONToArray(new StringStream(json));
+
+		for(int i = 0; i < ev.length; i++){
+
+			Event event = (Event) ev[i];
+			events.put(event.getID(), event);
+
+		}
+
+	}
+
 }

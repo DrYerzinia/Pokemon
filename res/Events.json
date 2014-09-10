@@ -1,0 +1,38 @@
+[
+	{
+		"class":"com.dryerzinia.pokemon.event.ItemEvent",
+		"item":{
+			"class":"com.dryerzinia.pokemon.obj.Item",
+			"name":"Helix Fossil",
+			"description":"A fancy helix thing",
+			"use":"Awesome",
+			"number":0
+		},
+		"textID":2,
+		"nextEvent":1,
+		"soundPlayed":false,
+		"textFinished":false,
+		"id":0
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.TextEvent",
+		"textID":3,
+		"nextEvent":-1,
+		"complete":false,
+		"id":1
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.YesNoQuestionEvent",
+		"questionTextID":1,
+		"yesEventChain":0,
+		"noEventChain":-1,
+		"id":2
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.TextEvent",
+		"textID":0,
+		"nextEvent":-1,
+		"complete":false,
+		"id":3
+	}
+]

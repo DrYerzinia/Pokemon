@@ -1,29 +1,45 @@
 package com.dryerzinia.pokemon.event;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.dryerzinia.pokemon.obj.ClientState;
+import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.ui.menu.MenuStack;
 import com.dryerzinia.pokemon.ui.menu.TextMenu;
 import com.dryerzinia.pokemon.ui.menu.TextMenuListener;
 import com.dryerzinia.pokemon.ui.menu.TextMenuState;
+import com.dryerzinia.pokemon.util.JSONObject;
+import com.dryerzinia.pokemon.util.string.StringStore;
 
-public class TextEvent implements Event, TextMenuListener {
-	private List<String> lines;
+public class TextEvent extends Event implements TextMenuListener {
+
+	private int textID;
+
 	private int nextEvent;
 	private boolean complete;
-	
-	public TextEvent(int nextEvent, String... text) {
-		lines = new ArrayList<String>();
-		for (String line : text)
-			lines.add(line);
+
+	public TextEvent(){}
+
+	public TextEvent(int id, int nextEvent, int textID) {
+
+		this.id = id;
+
+		this.textID = textID;
 		this.nextEvent = nextEvent;
 	}
 	
 	@Override
 	public void fire() {
+
+		String text = StringStore.getString(textID, ClientState.LOCALE);
+
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add(text);
+
 		TextMenu menu = new TextMenu(lines);
+
 		menu.registerListener(this);
 		MenuStack.push(menu);
 	}
@@ -46,5 +62,24 @@ public class TextEvent implements Event, TextMenuListener {
 			MenuStack.pop();
 			EventCore.fireEvent(nextEvent);
 		}
+	}
+
+	@Override
+	public String toJSON() throws IllegalAccessException {
+
+		return JSONObject.defaultToJSON(this);
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+
+		super.fromJSON(json);
+
+		textID = ((Float) json.get("textID")).intValue();
+		nextEvent = ((Float) json.get("nextEvent")).intValue();
+
+		complete = ((Boolean) json.get("complete"));
+
 	}
 }

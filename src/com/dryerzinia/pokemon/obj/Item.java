@@ -1,11 +1,16 @@
 package com.dryerzinia.pokemon.obj;
+
 import java.awt.Image;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
-public class Item implements Serializable {
+import com.dryerzinia.pokemon.util.JSON;
+import com.dryerzinia.pokemon.util.JSONObject;
+
+public class Item implements JSON, Serializable {
 
     static final long serialVersionUID = -6980864752241593937L;
 
@@ -75,5 +80,18 @@ public class Item implements Serializable {
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
     }
+
+	@Override
+	public String toJSON() throws IllegalAccessException {
+
+		return JSONObject.defaultToJSON(this);
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

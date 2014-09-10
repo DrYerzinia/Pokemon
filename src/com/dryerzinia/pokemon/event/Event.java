@@ -1,6 +1,24 @@
 package com.dryerzinia.pokemon.event;
 
-public interface Event {
+import java.util.HashMap;
 
-	public void fire();
+import com.dryerzinia.pokemon.util.JSON;
+
+public abstract class Event implements JSON {
+
+	public int id;
+
+	public abstract void fire();
+
+	public int getID(){
+		return id;
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+
+		id = ((Float) json.get("id")).intValue();
+
+	}
+
 }

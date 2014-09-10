@@ -16,6 +16,7 @@ import java.util.Timer;
 
 import javax.swing.*;
 
+import com.dryerzinia.pokemon.event.EventCore;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.Pokemon;
@@ -45,6 +46,7 @@ public class PokemonGame extends Applet {
     public static void gameInit(Container container) {
 
     	StringStore.loadStringsFromJSON();
+    	EventCore.loadEventsFromJSON();
 
         GameState.init();
         ClientState.init();
