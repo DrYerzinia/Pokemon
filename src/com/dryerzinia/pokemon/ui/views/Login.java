@@ -1,26 +1,28 @@
 package com.dryerzinia.pokemon.ui.views;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.Client;
-import com.dryerzinia.pokemon.obj.ClientState;
-import com.dryerzinia.pokemon.ui.Overlay;
 import com.dryerzinia.pokemon.ui.UI;
-import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
-import com.dryerzinia.pokemon.util.StringStream;
 
 public class Login implements View, KeyListener {
+	private static final Logger LOG =
+			Logger.getLogger(Login.class.getName());
+
 
 	public static final byte NORMAL = 0;
 	public static final byte ATTEMPT_LOGIN = 1;
@@ -213,37 +215,33 @@ public class Login implements View, KeyListener {
     }
 
     public static void writeSettingsData(File f) {
-
-    	try (BufferedWriter json_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)))) {
-
-        	json_writer.write("{\"username\":\"" + Login.username + "\",\"password\":\"" + Login.password + "\",\"location\":\"" + Login.location + "\"}");
-        	json_writer.flush();
-        	json_writer.close();
-
-    	} catch (IOException ioe) {
-
-    		System.out.println("Error: Failed to write settings data!");
-
-    	}
-    }
+    	try {
+	    	Properties properties = new Properties();
+	    	properties.setProperty("username", username);
+	    	properties.setProperty("password", password);
+	    	properties.setProperty("location", location);
+	    	OutputStream out = new FileOutputStream(f);
+	    	properties.store(out, "User related settings");
+	    	
+	    } catch (FileNotFoundException e) {
+	    	LOG.warning("File " + f.toString() + " was not found!");
+	    } catch (IOException e) {
+	    	LOG.warning("Failed to write user properties file!");
+	    }
+	}
 
     public static void readSettingsData(File f) {
-
-    	try (BufferedReader json_reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
-        	
-        	String json = json_reader.readLine();
-
-        	@SuppressWarnings("unchecked")
-			HashMap<String, Object> json_obj = (HashMap<String, Object>) JSONObject.JSONToObject(new StringStream(json));
-
-        	Login.username = (String) json_obj.get("username");
-            Login.password = (String) json_obj.get("password");
-            Login.location = (String) json_obj.get("location");
-
-        } catch (IOException ioe) {
-
-        	System.out.println("Failed to read settings data.");
-
+    	Properties properties = new Properties();
+    	try (InputStream in = new FileInputStream(f)) {
+    		
+    		properties.load(in);
+    		username = properties.getProperty("username");
+    		password = properties.getProperty("password");
+    		location = properties.getProperty("location");
+    		
+    	} catch (IOException e) {
+    		LOG.warning("Failed to read user properties file: " 
+    				+ e.getMessage());
         }
     }
 
@@ -252,7 +250,7 @@ public class Login implements View, KeyListener {
     	String fs = System.getProperty("file.separator");
 
     	return new File(System.getProperty("user.home") + fs + ".pokemonData"
-                + fs + "defaultSettings");
+                + fs + "user.properties");
     }
 
 	@Override
