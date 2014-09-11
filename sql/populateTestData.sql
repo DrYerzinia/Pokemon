@@ -23,6 +23,6 @@ INSERT INTO `PokemonMoves` VALUES(4, 'Pound', 'Pound', 'None', 'Normal', 20, 20,
 
 -- PokemonUsers table test data
 
-INSERT INTO `PokemonUsers` VALUES(1, 'DrYerzinia', 'DrYerzinia', NULL, -3, -1, 1, 1, 'Char', 2, 2, 1, 10000);
+INSERT INTO `PokemonUsers` VALUES(1, 'DrYerzinia', 'DrYerzinia', NULL, 3, 3, 1, 1, 'Char', 2, 2, 1, 10000);
 INSERT INTO `PokemonUsers` VALUES(2, 'Abbey', 'Abbey', NULL, 0, 0, 23, 2, 'Mom', -1, -1, 23, 10000);
 INSERT INTO `PokemonUsers` VALUES(3, 'Laura', 'Laura', NULL, 21, 18, 16, 3, 'Lady1', 2, 2, 1, 10000);
