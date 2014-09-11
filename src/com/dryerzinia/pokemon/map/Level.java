@@ -197,13 +197,17 @@ public class Level implements Serializable, JSON {
 
     }
 
-    public boolean canStepOn(int x, int y){
+    public boolean canStepOn(int x, int y, boolean isPlayer){
 
     	if(!grid.canStepOn(x, y)) return false;
 
-    	for(Person person : peopleInLevel)
-    		if(((int)person.x) == x && ((int)person.y) == y)
-    			return false;
+    	if(isPlayer){
+    		for(Person person : peopleInLevel){
+    			if(((int)person.x) == x && ((int)person.y) == y){
+    				return false;
+    			}
+    		}
+    	}
 
     	return true;
 

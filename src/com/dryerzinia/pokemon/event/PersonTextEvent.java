@@ -19,16 +19,20 @@ public class PersonTextEvent extends TextEvent {
 	public void fire() {
 
 		Person person = GameState.people.get(actorID);
-		oldDirection = person.dir;
+		oldDirection = person.getPose().facing();
+
+		Direction newDirection = Direction.NONE;
 
 		if(ClientState.player.getPose().getX() > person.x)
-			person.dir = Direction.RIGHT;
+			newDirection = Direction.RIGHT;
 		else if(ClientState.player.getPose().getX() < person.x)
-			person.dir = Direction.LEFT;
+			newDirection = Direction.LEFT;
 		else if(ClientState.player.getPose().getY() > person.y)
-			person.dir = Direction.DOWN;
+			newDirection = Direction.DOWN;
 		else if(ClientState.player.getPose().getY() < person.y)
-			person.dir = Direction.UP;
+			newDirection = Direction.UP;
+
+		person.getPose().changeDirection(newDirection);
 
 		person.animationEnabled = false;
 
@@ -43,7 +47,7 @@ public class PersonTextEvent extends TextEvent {
 		if(complete){
 
 			Person person = GameState.people.get(actorID);
-			person.dir = oldDirection;
+			person.getPose().changeDirection(oldDirection);
 
 			person.animationEnabled = true;
 

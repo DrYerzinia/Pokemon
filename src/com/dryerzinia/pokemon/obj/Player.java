@@ -2,17 +2,12 @@ package com.dryerzinia.pokemon.obj;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*; // Serializable
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Pose;
-import com.dryerzinia.pokemon.net.Client;
-import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.obj.tiles.OnClick;
-import com.dryerzinia.pokemon.obj.tiles.OnClickTile;
 import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.util.Database;
@@ -146,14 +141,14 @@ public class Player implements Serializable {
 
     public void draw(Graphics graphics) {
 
-    	movement.draw(location, sprite, true, graphics);
+    	movement.draw(location, sprite, graphics);
 
     }
 
 
     public void draw(float x, float y, Graphics graphics) {
 
-    	movement.draw(location, sprite, false, graphics);
+    	movement.draw(location, sprite, graphics);
 
     }
 
@@ -174,7 +169,7 @@ public class Player implements Serializable {
         sprite[8] = ResourceLoader.getSprite(imgName + "U2.png");
         sprite[9] = ResourceLoader.getSprite(imgName + "D2.png");
 
-        movement = new MovementAnimator(false);
+        movement = new MovementAnimator(false, false);
 
     }
 
@@ -197,6 +192,12 @@ public class Player implements Serializable {
     public void goToLastPokemonCenter(){
 
     	location.set(lastPokemonCenter);
+
+    }
+
+    public void setMainCharacter(){
+
+    	movement.setMainCharacter();
 
     }
 

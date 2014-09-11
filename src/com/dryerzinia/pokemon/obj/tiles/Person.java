@@ -2,7 +2,6 @@ package com.dryerzinia.pokemon.obj.tiles;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.awt.*;
 
 import com.dryerzinia.pokemon.event.EventCore;
@@ -12,7 +11,7 @@ import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.obj.Actor;
-import com.dryerzinia.pokemon.obj.Player;
+import com.dryerzinia.pokemon.obj.MovementAnimator;
 
 public class Person extends Tile implements Actor, OnClick {
 
@@ -23,8 +22,6 @@ public class Person extends Tile implements Actor, OnClick {
 
 	public static final GMenu ALREADY_ACTIVE_MENU = new GMenu("He's talking to \nsomeone else...", null, 0, 6, 10, 3);
 
-	public static final float ANIMATION_TIME_STEP = 666; // 2/3 of a second
-
 	protected transient Image sprite[];
 	protected int px = -1, py = -1;
 
@@ -34,15 +31,9 @@ public class Person extends Tile implements Actor, OnClick {
 	public int level;
 
 	public float x, y;
-	/*
-	 * Animation variables
-	 * movements keeps a list of the positions we need to move to received
-	 *  from the server
-	 * animationElapsedTime keeps track of how far into the animation we are
-	 */
-	protected transient LinkedList<Pose> movements;
-	protected transient Pose newPosition;
-	protected transient int animationElapsedTime;
+
+	protected transient MovementAnimator movement;
+	protected transient Pose location;
 
 	protected transient Direction directionBeforeTalk;
 	protected transient boolean wasTalking = false;
@@ -64,7 +55,6 @@ public class Person extends Tile implements Actor, OnClick {
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
 
-        loadImage();
         init();
 
     }
@@ -84,10 +74,12 @@ public class Person extends Tile implements Actor, OnClick {
 
     public void init(){
 
-    	animationElapsedTime = 0;
     	animationEnabled = true;
 
-    	movements = new LinkedList<Pose>();
+    	loadImage();
+
+    	// Setup pose
+    	location = new Pose(x, y, level, dir);
 
     }
     
@@ -108,6 +100,8 @@ public class Person extends Tile implements Actor, OnClick {
         sprite[8] = ResourceLoader.getSprite(imgName + "U2.png");
         sprite[9] = ResourceLoader.getSprite(imgName + "D2.png");
 
+        movement = new MovementAnimator(true, false);
+
     }
 
     public void deactivate() {
@@ -115,57 +109,16 @@ public class Person extends Tile implements Actor, OnClick {
         py = -1;
     }
 
-    protected void setImage(int x, int y) {
-
-    	if(     animationElapsedTime < ANIMATION_TIME_STEP*0.15
-    	 ||     animationElapsedTime > ANIMATION_TIME_STEP*0.85
-    	 || (   animationElapsedTime > ANIMATION_TIME_STEP*0.45
-    	     && animationElapsedTime < ANIMATION_TIME_STEP*0.55
-    		))
-    		img = sprite[dir.getValue()];
-
-    	else if(animationElapsedTime < ANIMATION_TIME_STEP*0.45){
-
-    			img = sprite[dir.getValue()+4];
-
-    	} else if(animationElapsedTime > ANIMATION_TIME_STEP*0.55){
-
-    		if(dir == Direction.UP || dir == Direction.DOWN)
-    			img = sprite[dir.getValue()+8];
-    		else
-    			img = sprite[dir.getValue()+4];
-
-    	}
-
-    }
-
     public Pose getPose(){
-    	return new Pose(x, y, level, dir);
+    	return location;
     }
 
     @Override
     public void draw(float x, float y, int xo, int yo, Graphics graphics) {
 
-    	setImage((int)x, (int)y);
-    	graphics.drawImage(img, (int)(x*16), (int)(y*16) - Player.CHARACTER_OFFSET, null);
+    	movement.draw(location, sprite, graphics);
 
     }
-
-    private void animationMove(int deltaTime){
-
-    	if(dir == Direction.UP)
-    		y -= deltaTime/ANIMATION_TIME_STEP;
-
-    	if(dir == Direction.DOWN)
-    		y += deltaTime/ANIMATION_TIME_STEP;
-
-    	if(dir == Direction.LEFT)
-    		x -= deltaTime/ANIMATION_TIME_STEP;
-
-    	if(dir == Direction.RIGHT)
-    		x += deltaTime/ANIMATION_TIME_STEP;
-
-    };
 
     /*
      * Updates animation variables
@@ -175,54 +128,13 @@ public class Person extends Tile implements Actor, OnClick {
 
 		if(!animationEnabled) return;
 
-    	/*
-    	 * If we are doing an animation we continue it
-    	 */
-    	if(animationElapsedTime > 0){
+		movement.update(Direction.NONE, location, deltaTime);
 
-    		animationElapsedTime += deltaTime;
+    	// TODO make person entirely pose based
+    	this.x = location.getX();
+    	this.y = location.getY();
+    	this.dir = location.facing();
 
-	    	if(animationElapsedTime > ANIMATION_TIME_STEP){
-
-	   			animationMove((int)(deltaTime-(animationElapsedTime-ANIMATION_TIME_STEP)));
-	    		x = newPosition.getX();
-	    		y = newPosition.getY();
-
-	    		// Start next movement
-	    		if(!movements.isEmpty()){
-
-	    				newPosition = movements.remove();
-	    	    		dir = newPosition.facing();
-
-	    	    		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
-
-	    	    			animationElapsedTime += deltaTime;
-	    	    			animationMove((int)(deltaTime-(animationElapsedTime-ANIMATION_TIME_STEP)));
-
-	    	    		}
-
-	    		} else animationElapsedTime = 0;
-
-	    	} else animationMove(deltaTime);
-
-    	}
-
-    	/*
-    	 * If there are movements we need to animate we start there animations
-    	 */
-    	else if(!movements.isEmpty()){
-
-    		newPosition = movements.remove();
-
-    		dir = newPosition.facing();
-
-    		if(((int)this.x) != newPosition.getX() || ((int)this.y) != newPosition.getY()){
-
-    			animationElapsedTime += deltaTime;
-    			animationMove(deltaTime);
-
-    		}
-    	}
     }
 
     @Override
@@ -232,7 +144,7 @@ public class Person extends Tile implements Actor, OnClick {
 
     public void addMovement(Pose position){
 
-    	movements.add(position);
+    	movement.addMovement(position);
 
     }
 
@@ -268,6 +180,8 @@ public class Person extends Tile implements Actor, OnClick {
     	onClickEventID = ((Float)json.get("onClickEventID")).intValue();
 
     	animationEnabled = true;
+
+    	init();
 
     }
 

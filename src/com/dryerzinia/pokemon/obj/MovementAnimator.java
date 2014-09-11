@@ -86,6 +86,11 @@ public class MovementAnimator {
      */
     private boolean isLazy;
 
+    /*
+     * Is this movment animator for the player
+     */
+    private boolean isPlayer;
+
     @SuppressWarnings("unused")
 	private MovementAnimator(){
     	throw new UnsupportedOperationException("MovementAnimator() constructor is not allowed!");
@@ -97,12 +102,13 @@ public class MovementAnimator {
      * @param isLazy Does the character take long lazy steps 666ms or short
      * fast ones 250ms
      */
-    public MovementAnimator(boolean isLazy){
+    public MovementAnimator(boolean isLazy, boolean isPlayer){
 
     	if(shadow == null)
     		shadow = ResourceLoader.getSprite("shadow.png");
 
     	this.isLazy = isLazy;
+    	this.isPlayer = isPlayer;
 
     	movements = new LinkedList<Pose>();
 
@@ -164,7 +170,7 @@ public class MovementAnimator {
     			Point newPoint = nextTile(pose);
 
     			Level level = GameState.getMap().getLevel(pose.getLevel());
-    	    	boolean canStep = level.canStepOn(newPoint.getX(), newPoint.getY());
+    	    	boolean canStep = level.canStepOn(newPoint.getX(), newPoint.getY(), isPlayer);
     	    	LevelChange levelChange = level.grid.changeLevel(newPoint.getX(), newPoint.getY());    			
 
     	    	if(canStep || levelChange != null)
@@ -199,7 +205,7 @@ public class MovementAnimator {
     	else if(!movements.isEmpty()){
 
     		newPosition = movements.remove();
-
+    		System.out.println(newPosition);
     		/*
     		 * If we get a new position where character is facing
     		 * Direction.NONE that means player is in fog of war so we need to
@@ -244,7 +250,7 @@ public class MovementAnimator {
             		levelChanged = true;
         	}
 
-        	boolean canStepNew = level.canStepOn(futurePoint.getX(), futurePoint.getY());
+        	boolean canStepNew = level.canStepOn(futurePoint.getX(), futurePoint.getY(), isPlayer);
 
         	boolean overrideCanStep = setState(position, nextTile(position), sameSpot);
 
@@ -306,7 +312,8 @@ public class MovementAnimator {
     	Point futurePoint = nextTile(position);
 
     	Level level = GameState.getMap().getLevel(position.getLevel());
-    	boolean canStep = level.canStepOn(futurePoint.getX(), futurePoint.getY());
+
+    	boolean canStep = level.canStepOn(futurePoint.getX(), futurePoint.getY(), isPlayer);
     	LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
 
     	/*
@@ -488,7 +495,7 @@ public class MovementAnimator {
     /*
      * Draws the character in the current animation state
      */
-    public void draw(Pose pose, Image[] sprites, boolean isMainCharacter, Graphics graphics){
+    public void draw(Pose pose, Image[] sprites, Graphics graphics){
 
     	Image img = animationImage(sprites, pose.facing());
 
@@ -497,7 +504,7 @@ public class MovementAnimator {
 		if(state == JUMPING)
 			offset = (int) (Math.sin(elapsedTime/stepTime*Math.PI)*16);
 
-    	if(isMainCharacter){
+    	if(isPlayer){
 
     		if(state == JUMPING)
     			graphics.drawImage(shadow, 4 * 16, 4 * 16 + SHADOW_OFFSET, null);
@@ -602,4 +609,9 @@ public class MovementAnimator {
     public void clearMovements(){
     	movements.clear();
     }
+
+    public void setMainCharacter(){
+    	isPlayer = true;
+    }
+
 }

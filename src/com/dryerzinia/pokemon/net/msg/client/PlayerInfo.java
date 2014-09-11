@@ -39,7 +39,8 @@ public class PlayerInfo extends ClientMessage {
         if (isSelf) {
 
             ClientState.player = receivedPlayer;
-            ClientState.player.loadImages();
+            receivedPlayer.loadImages();
+            receivedPlayer.setMainCharacter();
 
             ClientState.getPlayerLevel().notifyChangedTo();
 
