@@ -13,7 +13,7 @@ import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
 import com.dryerzinia.pokemon.obj.tiles.OnClickTile;
 import com.dryerzinia.pokemon.obj.tiles.Tile;
-import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.Database;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Player implements Serializable {
@@ -48,13 +48,13 @@ public class Player implements Serializable {
 
     public transient Image img; // Character large back image for game
 
-    public transient MysqlConnect.PokemonContainer poke; // Container for
+    public transient Database.PokemonContainer poke; // Container for
                                                          // players pokemon
     public transient ArrayList<Item> items; // Container for players items
 
     public Player() {
 
-        poke = new MysqlConnect.PokemonContainer();
+        poke = new Database.PokemonContainer();
         items = new ArrayList<Item>();
 
     }
@@ -67,7 +67,7 @@ public class Player implements Serializable {
 
         this.name = name;
 
-        poke = new MysqlConnect.PokemonContainer();
+        poke = new Database.PokemonContainer();
         items = new ArrayList<Item>();
 
     }
@@ -82,7 +82,7 @@ public class Player implements Serializable {
         this.name = name;
         this.imgName = imgName;
 
-        poke = new MysqlConnect.PokemonContainer();
+        poke = new Database.PokemonContainer();
         items = new ArrayList<Item>();
 
     }
@@ -188,7 +188,7 @@ public class Player implements Serializable {
         return poke.getFirstOut();
     }
 
-    public MysqlConnect.PokemonContainer getPokemonContainer() {
+    public Database.PokemonContainer getPokemonContainer() {
         return poke;
     }
 
@@ -240,7 +240,7 @@ public class Player implements Serializable {
         return money;
     }
 
-    public void setPokemon(MysqlConnect.PokemonContainer poke) {
+    public void setPokemon(Database.PokemonContainer poke) {
         this.poke = poke;
     }
 
@@ -252,7 +252,7 @@ public class Player implements Serializable {
             throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
 
-        poke = new MysqlConnect.PokemonContainer();
+        poke = new Database.PokemonContainer();
         items = new ArrayList<Item>();
         
         // TODO: Validate loaded object

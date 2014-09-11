@@ -10,7 +10,7 @@ import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
-import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.Database;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
