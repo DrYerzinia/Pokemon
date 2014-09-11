@@ -53,7 +53,7 @@ import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Player;
 import com.dryerzinia.pokemon.ui.Fight;
-import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.Database;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class PokemonServer {
@@ -103,22 +103,10 @@ public class PokemonServer {
      * @param args
      */
     public static void main(String args[]) {
-        boolean localized = false;
-        // TODO better argument parsing
-        if (args.length > 0 && args[0].equals("local"))
-            localized = true;
-        new PokemonServer(localized);
+        new PokemonServer();
     }
     
-    public PokemonServer(boolean localized) {
-
-        MysqlConnect.localized = localized;
-
-        MysqlConnect.username = "pokemon";
-        MysqlConnect.password = "UhSz6NKQVhN7ByWuzRug";
-        MysqlConnect.dbname = "Pokemon";
-        MysqlConnect.server = "localhost";
-        MysqlConnect.port = 3306;
+    public PokemonServer() {
         
         oos2 = new ArrayList<ObjectOutputStream>();
 
@@ -158,7 +146,7 @@ public class PokemonServer {
     public class SaveAllTask extends TimerTask {
     	public void run() {
         	for (PlayerInstanceData pid : players.values())
-        		MysqlConnect.savePlayerData(pid.getPlayer());
+        		Database.savePlayerData(pid.getPlayer());
         }
     }
     
@@ -194,7 +182,7 @@ public class PokemonServer {
             	System.out.println("Player " + pid.getPlayer().getName()
                         + " not responsive");
                 
-                MysqlConnect.savePlayerData(pid.getPlayer());
+                Database.savePlayerData(pid.getPlayer());
 
                 // Remove PlayerInstanceData from server
                 players.remove(pidEntry.getKey());
@@ -772,7 +760,7 @@ public class PokemonServer {
          * Save player if they where logged in
          */
         if(loggedIn)
-        	MysqlConnect.savePlayerData(playerToRemove);
+        	Database.savePlayerData(playerToRemove);
 
         /*
          * Tell any near by players this one is gone and remove this players

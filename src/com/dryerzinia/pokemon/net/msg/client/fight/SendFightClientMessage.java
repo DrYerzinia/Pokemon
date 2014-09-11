@@ -10,8 +10,8 @@ import com.dryerzinia.pokemon.net.msg.client.ClientMessage;
 import com.dryerzinia.pokemon.obj.Pokemon;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.ui.UI;
-import com.dryerzinia.pokemon.util.MysqlConnect;
-import com.dryerzinia.pokemon.util.MysqlConnect.PokemonContainer;
+import com.dryerzinia.pokemon.util.Database;
+import com.dryerzinia.pokemon.util.Database.PokemonContainer;
 
 public class SendFightClientMessage extends ClientMessage {
 
@@ -35,7 +35,7 @@ public class SendFightClientMessage extends ClientMessage {
         if (receivedFight.enemyPlayer.id != -1) {
 
             // Set up unknown Pokemon and enemy in enemyPlayer belt
-            receivedFight.enemyPlayer.poke = new MysqlConnect.PokemonContainer(); // Create
+            receivedFight.enemyPlayer.poke = new Database.PokemonContainer(); // Create
                                                                                   // container
                                                                                   // for
                                                                                   // player

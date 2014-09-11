@@ -10,7 +10,7 @@ import com.dryerzinia.pokemon.net.msg.client.AlreadyLoggedInMessage;
 import com.dryerzinia.pokemon.net.msg.client.BadPasswordMessage;
 import com.dryerzinia.pokemon.net.msg.client.LoginSuccessMessage;
 import com.dryerzinia.pokemon.obj.Player;
-import com.dryerzinia.pokemon.util.MysqlConnect;
+import com.dryerzinia.pokemon.util.Database;
 
 public class SMLogin extends ServerMessage {
 
@@ -47,7 +47,7 @@ public class SMLogin extends ServerMessage {
 
         System.out.println("Login Attempt: " + username + ":" + password);
 
-        Player loginResult = MysqlConnect.login(username, password);
+        Player loginResult = Database.logIn(username, password);
         if (loginResult == null) {
 
         	System.out.println("Error: Credentials do not exist in Database!");
@@ -64,8 +64,8 @@ public class SMLogin extends ServerMessage {
             pid.setLoggedIn(true);
 
             player.set(loginResult);
-            player.poke = MysqlConnect.getCharacterPokemon(player.getID());
-            player.items = MysqlConnect.getCharacterItems(player.getID());
+            player.poke = Database.getCharacterPokemon(player.getID());
+            player.items = Database.getCharacterItems(player.getID());
             
         }
 
