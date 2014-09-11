@@ -71,13 +71,13 @@ public class EditTile extends JFrame {
             }
         });
         c.add(layer);
-        if (sector.get(editnum).onClick != null)
-            editMenu = new JButton("Edit Menu");
-        else
-            editMenu = new JButton("Add Menu");
+      //  if (sector.get(editnum).onClick != null)
+      //      editMenu = new JButton("Edit Menu");
+      //  else
+      //      editMenu = new JButton("Add Menu");
         GMenu gg = null;
-        if (sector.get(editnum).onClick != null)
-            gg = (GMenu) sector.get(editnum).onClick.deepCopy();
+        //if (sector.get(editnum).onClick != null)
+        //    gg = (GMenu) sector.get(editnum).onClick.deepCopy();
         if (gg == null)
             gg = new GMenu("", 0, 6, 10, 3);
         final GMenu g = gg;
@@ -167,8 +167,8 @@ public class EditTile extends JFrame {
             t.pixelOffsetX = Integer.parseInt(poxtf.getText());
             t.pixelOffsetY = Integer.parseInt(poytf.getText());
 
-            if (editg != null && !editg.message.equals(""))
-                t.onClick = editg;
+            //if (editg != null && !editg.message.equals(""))
+            //    t.onClick = editg;
             sector.add(curlay, t);
             t.loadImage();
         } else if (n == 1) {
@@ -184,8 +184,8 @@ public class EditTile extends JFrame {
             t.pixelOffsetX = Integer.parseInt(poxtf.getText());
             t.pixelOffsetY = Integer.parseInt(poytf.getText());
 
-            if (editg != null && !editg.message.equals(""))
-                t.onClick = editg;
+            //if (editg != null && !editg.message.equals(""))
+            //    t.onClick = editg;
             t.id = mtiles.size();
             mtiles.add(t);
             sector.add(curlay, t);

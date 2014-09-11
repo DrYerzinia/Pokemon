@@ -73,14 +73,6 @@ public class YesNoQuestionEvent extends Event
 		return "YesNoQuestionEvent";
 	}
 
-
-	@Override
-	public String toJSON() throws IllegalAccessException {
-
-		return JSONObject.defaultToJSON(this);
-
-	}
-
 	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 

@@ -3,6 +3,7 @@ package com.dryerzinia.pokemon.event;
 import java.util.HashMap;
 
 import com.dryerzinia.pokemon.util.JSON;
+import com.dryerzinia.pokemon.util.JSONObject;
 
 public abstract class Event implements JSON {
 
@@ -12,6 +13,13 @@ public abstract class Event implements JSON {
 
 	public int getID(){
 		return id;
+	}
+
+	@Override
+	public String toJSON() throws IllegalAccessException {
+
+		return JSONObject.defaultToJSON(this);
+
 	}
 
 	@Override

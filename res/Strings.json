@@ -28,5 +28,317 @@
 		"id": 5,
 		"en": "NO",
 		"es": "No"
+	},
+	{
+		"id": 6,
+		"en": "NAME is\nplaying the SNES!\n...Okay!\nIt\cs time to go!"
+	},
+	{
+		"id": 7,
+		"en": "Crammed full of\nPOKeMON books!"
+	},
+	{
+		"id": 8,
+		"en": "There\cs a movie\n on TV. Four boys\n are walking on\nrailroad tracks.\n\nI better go too."
+	},
+	{
+		"id": 9,
+		"en": "BLUE\cs house"
+	},
+	{
+		"id": 10,
+		"en": "PALLET TOWN\nShades of your\njourney await!"
+	},
+	{
+		"id": 11,
+		"en": "OAK POKeMON\nRESEARCH LAB"
+	},
+	{
+		"id": 12,
+		"en": "Push START to\nopen the MENU!"
+	},
+	{
+		"id": 13,
+		"en": "The SAVE option is\non the MENU\nscreen."
+	},
+	{
+		"id": 14,
+		"en": "There\cs an e-mail\nmessage here!\n\n...\n\nCalling all\nPOKeMON trainers!\n\nThe elite trainers\nof POKeMON LEAGUE\nare ready to take\non all comers!\n\nBring your best\nPOKeMON and see\nhow you rate as a\ntrainer!\n\nPOKeMON LEAGUE HQ\nINDIGO PLATEAU\n\nPS: PROF.OAK,\nplease visit us!\n..."
+	},
+	{
+		"id": 15,
+		"en": "It\cs encyclopedia-\nlike, but the\npages are blank!"
+	},
+	{
+		"id": 16,
+		"en": "That\cs a POKe\nBALL. There\cs a\nPOKeMON inside!"
+	},
+	{
+		"id": 17,
+		"en": "ROUTE 1\nPALLET TOWN -\nVIRIDIAN CITY"
+	},
+	{
+		"id": 18,
+		"en": "TRAINER TIPS\n\nThe battle moves\nof POKeMON are\nlimited by their\nPOWER POINTs, PP.\n\nTo replenish PP,\nrest your tired\nPOKeMON at a\nPOKeMON CENTER!"
+	},
+	{
+		"id": 19,
+		"en": "TRAINER TIPS\n\nCatch POKeMON\nand expand your\ncollection!\n\nThe more you have,\nthe easier it is\nto fight!"
+	},
+	{
+		"id": 20,
+		"en": "VIRIDIAN CITY\nPOKeMON GYM"
+	},
+	{
+		"id": 21,
+		"en": "VIRIDIAN CITY\nThe Eternally\nGreen Paradise"
+	},
+	{
+		"id": 22,
+		"en": "Wow! Tons of\nPOKeMON stuff!"
+	},
+	{
+		"id": 23,
+		"en": "ROUTE 3\nMT.MOON AHEAD"
+	},
+	{
+		"id": 24,
+		"en": "Beware! ZUBAT is\na bloodsucker!"
+	},
+	{
+		"id": 25,
+		"en": "Name turned on\nthe PC."
+	},
+	{
+		"id": 26,
+		"en": "Widthdraw"
+	},
+	{
+		"id": 27,
+		"en": "Deposit"
+	},
+	{
+		"id": 28,
+		"en": "Release"
+	},
+	{
+		"id": 29,
+		"en": "See Ya!"
+	},
+	{
+		"id": 30,
+		"en": "BILL\cs PC"
+	},
+	{
+		"id": 31,
+		"en": "NAME\cs PC"
+	},
+	{
+		"id": 32,
+		"en": "PROF. OAK\cs PC"
+	},
+	{
+		"id": 33,
+		"en": "LOG OFF"
+	},
+	{
+		"id": 34,
+		"en": "MOM: Right.\nAll boys leave\nhome someday.\nIt said so on TV.\n\nPROF. OAK, next\ndoor, is looking\nfor you."
+	},
+	{
+		"id": 35,
+		"en": "I\cm raising\nPOKeMON too!\n\nWhen they get\nstrong, they can\nprotect me!"
+	},
+	{
+		"id": 36,
+		"en": "Technology is\nincredible!\n\nYou can now store\nand recall items\nand POKEMON as\ndata via PC!"
+	},
+	{
+		"id": 37,
+		"en": "Hi NAME!\nBLUE is out at\nGrandpa\cs lab."
+	},
+	{
+		"id": 38,
+		"en": "OAK: You should\ntalk to it and\nsee how it feels."
+	},
+	{
+		"id": 39,
+		"en": "PROF. OAK is the\nauthority on\nPOKeMON!\n\nMany POKeMON\ntrainers hold him\nin high regard!"
+	},
+	{
+		"id": 40,
+		"en": "I study POKeMON as\nPROF.OAK\cs AIDE."
+	},
+	{
+		"id": 41,
+		"en": "Once a POKeMON\nlearns FLASH, you\ncan get through\nROCK TUNNEL."
+	},
+	{
+		"id": 42,
+		"en": "Hi! I work at a POKéMON MART.\n\nIt's a convenient shop, so please visit us in VIRIDIAN CITY.\n\nI know, I'll give you a sample! Here you go!"
+	},
+	{
+		"id": 43,
+		"en": "Name got\nPOTION!"
+	},
+	{
+		"id": 44,
+		"en": "We also carry POKé BALLS for catching POKéMON!"
+	},
+	{
+		"id": 45,
+		"en": "See those ledges\nalong the road?\n\nIt\cs a bit scary,\nbut you can jump\nfrom them.\n\nYou can get back to PALLET TOWN\nquicker that way."
+	},
+	{
+		"id": 46,
+		"en": "Yawn!\nI must have dozed\noff in the sun.\n\nI had this dream\nabout a DROWZEE\neating my dream.\nWhat\cs this?\nWhere did this TM\ncome from?\n\nThis is spooky!\nHere, you can\nhave this TM."
+	},
+	{
+		"id": 47,
+		"en": "Those POKeBALLs\nat your waist!\nYou have POKeMON!\n\nIt\cs great that\nyou can carry and\nuse POKeMON any-\ntime, anywhere!"
+	},
+	{
+		"id": 48,
+		"en": "You want to know\nabout the 2 kinds\nof caterpillar\nPOKeMON?"
+	},
+	{
+		"id": 49,
+		"en": "When I go shop in\nPEWTER CITY, I\nhave to take the\nwinding trail in\nVIRIDIAN FOREST."
+	},
+	{
+		"id": 50,
+		"en": "Hmm? You want me\nto show you how\nto catch POKeMON\nagain?"
+	},
+	{
+		"id": 51,
+		"en": "The Gym Leader\nis not in..."
+	},
+	{
+		"id": 52,
+		"en": "You can use that\nPC in the corner.\n\nThe receptionist\ntold me. So kind!"
+	},
+	{
+		"id": 53,
+		"en": "You dont have\na link cable..."
+	},
+	{
+		"id": 54,
+		"en": "There\cs a POKeMON\nCENTER in every\ntown ahead.\n\nThey donct charge\nany money either!"
+	},
+	{
+		"id": 55,
+		"en": "The shop finally\nhas some POTIONs\nin stock."
+	},
+	{
+		"id": 56,
+		"en": "This shop sells a\nlot of PARLYSZ\nHEALs."
+	},
+	{
+		"id": 57,
+		"en": "Okay!\n\nBe sure to read\nthe blackboard\ncarefully!"
+	},
+	{
+		"id": 58,
+		"en": "Whew! I\cm trying\nto memorize all\nmy notes."
+	},
+	{
+		"id": 59,
+		"en": "Sis says POKeMON\nwill become tame\nif you treat them\nnicely."
+	},
+	{
+		"id": 60,
+		"en": "Coming up with\nnicknames is fun,\nbut hard.\n\nSimple names are\n the easiest to\nremember."
+	},
+	{
+		"id": 61,
+		"en": "My Daddy loves\nPOKeMON too."
+	},
+	{
+		"id": 62,
+		"en": "SPEARY: Tetweet!"
+	},
+	{
+		"id": 63,
+		"en": "The HM FLASH\nlights even the\ndarkest dungeons."
+	},
+	{
+		"id": 64,
+		"en": "A fainted POKeMON\ncan\ct fight. But,\nit can still use\nmoves like CUT!"
+	},
+	{
+		"id": 65,
+		"en": "Want to trade\nfor a MR MIME?"
+	},
+	{
+		"id": 66,
+		"en": "Are you going to\nVIRIDIAN FOREST?\nBe careful, it\cs\na natural maze!"
+	},
+	{
+		"id": 67,
+		"en": "You have to roam\nfar to get new\nkinds of POKeMON.\n\nLook for other\ntypes outside of\nVIRIDIAN FOREST."
+	},
+	{
+		"id": 68,
+		"en": "Many POKeMON live\nonly in forests\nand caves.\n	\nYou need to look\neverywhere to get\ndifferent kinds!"
+	},
+	{
+		"id": 69,
+		"en": "Have you noticed\nthe bushes on the\nroadsize?\n\nThey can be cut\ndown by a special\nPOKeMON move."
+	},
+	{
+		"id": 70,
+		"en": "There arenct many\nserious POKeMON\ntrainers here!\n	\nTheycre all like\nBUG CATCHERs,\nbut PEWTER GYM\cs\nBROCK is totally\ninto it!"
+	},
+	{
+		"id": 71,
+		"en": "Psssst!\nDo you know what\nI\cm doing?"
+	},
+	{
+		"id": 72,
+		"en": "Did you check out\nthe MUSEUM?"
+	},
+	{
+		"id": 73,
+		"en": "It\cs rumored that\nCLEFAIRYs came\nfrom the moon!\n\nThey appeared\nafter MOON STONE\nfell on MT.MOON."
+	},
+	{
+		"id": 74,
+		"en": "POKeMON learn new\ntechniques as\nthey grow!\n\nBut, some moves\nmust be taught by\nthe trainer!"
+	},
+	{
+		"id": 75,
+		"en": "POkeMON become\neasier to catch\nwhen they are\nhurt or asleep!\n\nBut, it\cs not a sure\nthing!"
+	},
+	{
+		"id": 76,
+		"en": "Our POKeMON\cs an\noutsider, so it\cs\nhard to handle.\n	\nAn outsider is a\nPOKeMON that you\nget in a trade.\n\nIt grows fast, but\nit may ignore an\nunskilled trainer\nin battle!\n\nIf only we had\nsome BADGEs..."
+	},
+	{
+		"id": 77,
+		"en": "NIDORAN sit!"
+	},
+	{
+		"id": 78,
+		"en": "NIDORAN: Bowbow!"
+	},
+	{
+		"id": 79,
+		"en": "POKeMON CENTERS\nare wonderful!\n\nThey heal POKeMON\ncompletely.\n\nEven conditions\nlike sleep, burn,\npoison and others\nare cured."
+	},
+	{
+		"id": 80,
+		"en": "Im on the phone\ndamnit!"
+	},
+	{
+		"id": 81,
+		"en": "Good things can\nhappen if you\nraise POKeMON\ndiligently, even\nthe weak ones!"
+	},
+	{
+		"id": 82,
+		"en": "A shady old man\ngot me to buy\nthis really weird\nfish POKeMON!\n\nIt\cs totally weak\nand it cost $500!"
+	},
+	{
+		"id": 83,
+		"en": "JIGGLYPUFF:	Puu\npupuu!"
 	}
 ]

@@ -9,14 +9,15 @@ package com.dryerzinia.pokemon.ui.menu;
 import java.awt.Canvas;
 import java.awt.FontMetrics;
 
-import com.dryerzinia.pokemon.util.ResourceLoader;
-
 public class LineSplitter {
-	private static final int MAXWIDTH = 235;
+	private static final int MAXWIDTH = 140;
+	private static final int SPACEWIDTH;
 	private static FontMetrics metrics;
+
 	static {
 		Canvas c = new Canvas();
 		metrics = c.getFontMetrics(Menu.menuFont);
+		SPACEWIDTH = metrics.stringWidth(" ");
 	}
 	
 	private LineSplitter() {
@@ -26,14 +27,23 @@ public class LineSplitter {
 	public static RevealingTextGroup split(String text) {
 		RevealingTextGroup splitLines = new RevealingTextGroup();
 		String remainingText = text;
-		
+
 		while (!"".equals(remainingText)) {
 			String result = "";
 			int currentWidth = 0;
 			
 			while (!"".equals(remainingText) && currentWidth <= MAXWIDTH) {
 				String nextWord;
-				int wordBoundary = remainingText.indexOf(" ");
+
+				int newLineBoundary = remainingText.indexOf('\n');
+				int wordBoundary = remainingText.indexOf(' ');
+
+				if(newLineBoundary != -1 && (newLineBoundary < wordBoundary || wordBoundary == -1)){
+					result += remainingText.substring(0, newLineBoundary);
+					remainingText = remainingText.substring(newLineBoundary + 1, remainingText.length());
+					break;
+				}
+
 				if (wordBoundary < 0)
 					nextWord = remainingText;
 				else
@@ -47,7 +57,7 @@ public class LineSplitter {
 					else
 						remainingText = remainingText.substring(wordBoundary + 1);
 					
-					currentWidth += wordWidth;
+					currentWidth += wordWidth + SPACEWIDTH;
 				} else
 					break;
 			}

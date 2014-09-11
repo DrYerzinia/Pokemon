@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
-import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.obj.Item;

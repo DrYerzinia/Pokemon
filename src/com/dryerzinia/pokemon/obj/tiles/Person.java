@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.awt.*;
 
+import com.dryerzinia.pokemon.event.EventCore;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
@@ -15,7 +16,7 @@ import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 
-public class Person extends Tile implements Actor {
+public class Person extends Tile implements Actor, OnClick {
 
 	static final long serialVersionUID = -47859827707060573L;
 
@@ -28,6 +29,8 @@ public class Person extends Tile implements Actor {
 
 	protected transient Image sprite[];
 	protected int px = -1, py = -1;
+
+	private int onClickEventID;
 
 	public Direction dir;
 	public int level;
@@ -47,22 +50,21 @@ public class Person extends Tile implements Actor {
 	protected transient boolean wasTalking = false;
 	protected transient boolean wasTalkingToYou = false;
 
+	public transient boolean animationEnabled = true;;
+
     public Person() {
 
     	init();
 
     }
 
-    public Person(String imgName, boolean cbso, GMenu onClick, Direction dir) {
+    public Person(String imgName, boolean cbso, Direction dir) {
 
     	this.imgName = imgName;
         this.dir = dir;
         pixelOffsetX = 0;
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
-        this.onClick = onClick;
-
-        onClick.container = this;
 
         loadImage();
         init();
@@ -114,21 +116,6 @@ public class Person extends Tile implements Actor {
         py = -1;
     }
 
-    public GMenu getMenu(int x, int y) {
-        if (!onClick.active) {
-            px = x;
-            py = y;
-            onClick.active = true;
-            wasTalkingToYou = true;
-            setImage(x - (int)ClientState.player.getPose().getX(), y - (int)ClientState.player.getPose().getY());
-            Client.writeActor(this, A_TALKING_TO);
-            return onClick;
-        } else {
-            return ALREADY_ACTIVE_MENU;
-        }
-
-    }
-
     protected void setImage(int x, int y) {
 
     	if(     animationElapsedTime < ANIMATION_TIME_STEP*0.15
@@ -151,48 +138,6 @@ public class Person extends Tile implements Actor {
 
     	}
 
-    	/*
-    	 * TODO Fix talking to crap
-    	 */
-    	/*
-        try {
-            if ((onClick != null && !onClick.active) || onClick == null) {
-                if (wasTalking && wasTalkingToYou) {
-                    dir = directionBeforeTalk;
-                    wasTalkingToYou = false;
-                    Client.writeActor(this, A_TALKING_TO);
-                }
-                img = sprite[dir.getValue()];
-                directionBeforeTalk = dir;
-                wasTalking = false;
-            } else if (!wasTalkingToYou) {
-                img = sprite[dir.getValue()];
-                wasTalking = true;
-            } else if (x <= 3) {
-                wasTalking = true;
-                dir = Direction.RIGHT;
-                img = sprite[3];
-            } else if (x >= 5) {
-                wasTalking = true;
-                dir = Direction.LEFT;
-                img = sprite[2];
-            } else if (y <= 3) {
-                wasTalking = true;
-                dir = Direction.DOWN;
-                img = sprite[1];
-            } else if (y >= 5) {
-                wasTalking = true;
-                dir = Direction.UP;
-                img = sprite[0];
-            }
-        } catch (NullPointerException npe) {
-            if (sprite == null) {
-                System.out.println("Sprites not loaded!");
-                if (imgName != null && !imgName.equals(""))
-                    loadImage();
-            }
-        }
-        */
     }
 
     public Pose getPose(){
@@ -228,6 +173,8 @@ public class Person extends Tile implements Actor {
      */
     @Override
     public void update(int deltaTime){
+
+		if(!animationEnabled) return;
 
     	/*
     	 * If we are doing an animation we continue it
@@ -301,10 +248,8 @@ public class Person extends Tile implements Actor {
     }
 
     public Object deepCopy() {
-        GMenu g = null;
-        if (onClick != null)
-            g = (GMenu) onClick.deepCopy();
-        return new Person(new String(imgName), canBeSteppedOn, g, dir);
+
+        return new Person(new String(imgName), canBeSteppedOn, dir);
     }
 
     @Override
@@ -321,6 +266,7 @@ public class Person extends Tile implements Actor {
     	x = ((Float)json.get("x")).floatValue();
     	y = ((Float)json.get("y")).floatValue();
 
+    	onClickEventID = ((Float)json.get("onClickEventID")).intValue();
 
     }
 
@@ -328,6 +274,13 @@ public class Person extends Tile implements Actor {
 	public String toJSON() throws IllegalAccessException {
 
 		return JSONObject.defaultToJSON(this);
+
+	}
+
+	@Override
+	public void click() {
+
+		EventCore.fireEvent(onClickEventID);
 
 	}
 }

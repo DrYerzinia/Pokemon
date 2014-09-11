@@ -19,7 +19,7 @@ public class ItemEvent extends Event
 	private Item item;
 	private int textID;
 	private int nextEvent;
-	private boolean soundPlayed, textFinished;
+	private transient boolean soundPlayed, textFinished;
 	
 	public ItemEvent(){}
 
@@ -72,13 +72,6 @@ public class ItemEvent extends Event
 	}
 
 	@Override
-	public String toJSON() throws IllegalAccessException {
-
-		return JSONObject.defaultToJSON(this);
-
-	}
-
-	@Override
 	public void fromJSON(HashMap<String, Object> json) {
 
 		super.fromJSON(json);
@@ -87,8 +80,9 @@ public class ItemEvent extends Event
 
 		textID = ((Float) json.get("textID")).intValue();
 		nextEvent = ((Float) json.get("nextEvent")).intValue();
-		soundPlayed = ((Boolean) json.get("soundPlayed"));
-		textFinished = ((Boolean) json.get("textFinished"));
+
+		soundPlayed = false;
+		textFinished = false;
 
 	}
 

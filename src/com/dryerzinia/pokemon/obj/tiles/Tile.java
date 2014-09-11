@@ -33,8 +33,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
     public int xnew = -1;
     public int ynew = -1;
 
-    public GMenu onClick;
-
     public RandomFight rf;
 
     public Tile() {
@@ -50,7 +48,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
         loadImage();
-        onClick = null;
     }
 
     public Tile(String imgName, boolean cbso, RandomFight rf) {
@@ -59,7 +56,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
         loadImage();
-        onClick = null;
         this.rf = rf;
     }
 
@@ -69,25 +65,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         pixelOffsetY = py;
         canBeSteppedOn = cbso;
         loadImage();
-        onClick = null;
-    }
-
-    public Tile(String imgName, boolean cbso, GMenu onClick) {
-        this.imgName = imgName;
-        pixelOffsetX = 0;
-        pixelOffsetY = 0;
-        canBeSteppedOn = cbso;
-        loadImage();
-        this.onClick = onClick;
-    }
-
-    public Tile(int px, int py, String imgName, boolean cbso, GMenu onClick) {
-        this.imgName = imgName;
-        pixelOffsetX = px;
-        pixelOffsetY = py;
-        canBeSteppedOn = cbso;
-        loadImage();
-        this.onClick = onClick;
     }
 
     public Tile(String imgName, boolean cbso, int ctl, Direction ld, int xnew,
@@ -101,11 +78,11 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         leaveDirection = ld;
         this.xnew = xnew;
         this.ynew = ynew;
-        onClick = null;
     }
 
+
     public Tile(String imgName, boolean cbso, int ctl, Direction ld, int xnew,
-            int ynew, Direction ed) {
+            int ynew, Direction exitDir) {
         this.imgName = imgName;
         pixelOffsetX = 0;
         pixelOffsetY = 0;
@@ -115,13 +92,7 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         leaveDirection = ld;
         this.xnew = xnew;
         this.ynew = ynew;
-        exitDir = ed;
-        onClick = null;
-    }
-
-    public GMenu getMenu(int x, int y) {
-        onClick.active = true;
-        return onClick;
+        this.exitDir = exitDir;
     }
 
     public void draw(float x, float y, int xo, int yo, Graphics g) {
@@ -186,8 +157,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         xnew = ((Float)json.get("xnew")).intValue();
         ynew = ((Float)json.get("ynew")).intValue();
 
-        onClick = (GMenu) json.get("onClick");
-
         rf = (RandomFight) json.get("rf");
 
         loadImage();
@@ -202,8 +171,6 @@ public class Tile implements Serializable, ReferenceInit, DeepCopy, JSON {
         Tile t = new Tile(new String(imgName), canBeSteppedOn, changeToLevel,
                 leaveDirection, xnew, ynew, exitDir);
 
-        if (onClick != null)
-            t.onClick = (GMenu) onClick.deepCopy();
 
         t.id = -1;
 

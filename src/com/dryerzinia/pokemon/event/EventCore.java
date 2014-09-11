@@ -17,6 +17,7 @@ public class EventCore {
 	
 	public static void fireEvent(int id) {
 		if (id >= 0) {
+			System.out.println("Firing " + id);
 			System.out.println("Firing " + events.get(id));
 			events.get(id).fire();
 		}

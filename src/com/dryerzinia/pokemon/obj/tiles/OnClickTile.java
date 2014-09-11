@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.dryerzinia.pokemon.event.EventCore;
 import com.dryerzinia.pokemon.util.JSONObject;
 
-public class OnClickTile extends Tile {
+public class OnClickTile extends Tile implements OnClick {
 
 	private static final long serialVersionUID = 3535350761004531440L;
 
@@ -20,6 +20,7 @@ public class OnClickTile extends Tile {
 
 	}
 
+	@Override
 	public void click(){
 
 		EventCore.fireEvent(onClickEventID);

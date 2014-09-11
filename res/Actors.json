@@ -17,16 +17,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"MOM: Right.\nAll boys leave\nhome someday.\nIt said so on TV.\n	\nPROF. OAK, next\ndoor, is looking\nfor you.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":24
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -51,16 +43,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"I\cm raising\nPOKeMON too!\n	\nWhen they get\nstrong, they can\nprotect me!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":25
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -85,16 +69,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Technology is\nincredible!\n	\nYou can now store\nand recall items\nand POKEMON as\ndata via PC!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":26
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -114,16 +90,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Hi NAME!\nBLUE is out at\nGrandpa\cs lab.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":27
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -143,16 +111,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"OAK: You should\ntalk to it and\nsee how it feels.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":28
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -177,16 +137,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"PROF. OAK is the\nauthority on\nPOKeMON!\n	\nMany POKeMON\ntrainers hold him\nin high regard!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":29
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -211,16 +163,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"I study POKeMON as\nPROF.OAK\cs AIDE.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":30
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -245,43 +189,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"I study POKeMON as\nPROF.OAK\cs AIDE.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
-	},
-	{
-		"class":"com.dryerzinia.pokemon.obj.tiles.TrainerPerson",
-		"face":"LEFT",
-		"x":14,
-		"y":5,
-		"con":0,
-		"viewDist":5,
-		"hasBeenFought":false,
-		"px":-1,
-		"py":-1,
-		"dir":"LEFT",
-		"level":6,
-		"x":14.0,
-		"y":5.0,
-		"imgName":"Oak",
-		"canBeSteppedOn":false,
-		"id":205,
-		"pixelOffsetX":0,
-		"pixelOffsetY":0,
-		"changeToLevel":-1,
-		"leaveDirection":"NONE",
-		"exitDir":"NONE",
-		"xnew":-1,
-		"ynew":-1,
-		"onClick":null,
-		"rf":null
+		"rf":null,
+		"onClickEventID":31
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -306,16 +215,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Once a POKeMON\nlearns FLASH, you\ncan get through\nROCK TUNNEL.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":32
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -340,16 +241,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Someday I will\ngive you a\npotion...",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":36
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -374,16 +267,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"See those ledges\nalong the road?\n	\nIt\cs a bit scary,\nbut you can jump\nfrom them.\n	\nYou can get back to PALLET TOWN\nquicker that way.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":37
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -403,16 +288,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Yawn!\nI must have dozed\noff in the sun.\n	\nI had this dream\nabout a DROWZEE\neating my dream.\nWhat\cs this?\nWhere did this TM\ncome from?\n	\nThis is spooky!\nHere, you can\nhave this TM.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":38
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -437,16 +314,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Those POKeBALLs\nat your waist!\nYou have POKeMON!\n	\nIt\cs great that\nyou can carry and\nuse POKeMON any-\ntime, anywhere!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":39
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -471,16 +340,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"You want to know\nabout the 2 kinds\nof caterpillar\nPOKeMON?",
-			"x":0,
-			"y":0,
-			"w":0,
-			"h":0,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":40
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -500,16 +361,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"When I go shop in\nPEWTER CITY, I\nhave to take the\nwinding trail in\nVIRIDIAN FOREST.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":41
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -534,16 +387,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Hmm? You want me\nto show you how\nto catch POKeMON\nagain?",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":42
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -563,16 +408,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"The Gym Leader\nis not in...",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":43
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -597,16 +434,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"You can use that\nPC in the corner.\n	\nThe receptionist\ntold me. So kind!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":44
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -626,16 +455,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"You dont have\na link cable...",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":45
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -655,16 +476,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"There\cs a POKeMON\nCENTER in every\ntown ahead.\n	\nThey donct charge\nany money either!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":46
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -684,16 +497,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"The shop finally\nhas some POTIONs\nin stock.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":47
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -718,16 +523,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"This shop sells a\nlot of PARLYSZ\nHEALs.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":48
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -747,16 +544,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Okay!\n \n	\nBe sure to read\nthe blackboard\ncarefully!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":49
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -776,16 +565,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Whew! Icm trying\nto memorize all\nmy notes.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":50
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -805,16 +586,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Sis says POKeMON\nwill become tame\nif you treat them\nnicely.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":51
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -834,16 +607,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Coming up with\nnicknames is fun,\nbut hard.\n	\nSimple names are\n the easiest to\nremember.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":52
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -868,16 +633,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"My Daddy loves\nPOKeMON too.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":53
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -902,16 +659,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"SPEARY: Tetweet!\n ",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":54
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -931,16 +680,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"The HM FLASH\nlights even the\ndarkest dungeons.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":55
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -960,16 +701,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"A fainted POKeMON\ncanct fight. But,\nit can still use\nmoves like CUT!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":56
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -989,16 +722,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Want to trade\nfor a MR MIME?",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":57
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1018,16 +743,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Are you going to\nVIRIDIAN FOREST?\nBe careful, it\cs\na natural maze!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":58
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -1052,16 +769,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"You have to roam\nfar to get new\nkinds of POKeMON.\n	\nLook for other\ntypes outside of\nVIRIDIAN FOREST.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":59
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1081,16 +790,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Many POKeMON live\nonly in forests\nand caves.\n	\nYou need to look\neverywhere to get\ndifferent kinds!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":60
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1110,16 +811,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Have you noticed\nthe bushes on the\nroadsize?\n	\nThey can be cut\ndown by a special\nPOKeMON move.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":61
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1139,16 +832,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"There arenct many\nserious POKeMON\ntrainers here!\n	\nTheycre all like\nBUG CATCHERs,\nbut PEWTER GYM\cs\nBROCK is totally\ninto it!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":62
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -1173,16 +858,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Psssst!\nDo you know what\nIcm doing?",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":63
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1202,16 +879,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Did you check out\nthe MUSEUM?",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":64
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1231,16 +900,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"It\cs rumored that\nCLEFAIRYs came\nfrom the moon!\n	\nThey appeared\nafter MOON STONE\nfell on MT.MOON.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":65
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1260,16 +921,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"POKeMON learn new\ntechniques as\nthey grow!\n	\nBut, some moves\nmust be taught by\nthe trainer!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":66
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1289,16 +942,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"POkeMON become\neasier to catch\nwhen they are\nhurt or asleep!\n	\nBut, it\cs not a sure\nthing!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":67
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1318,16 +963,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Our POKeMON\cs an\noutsider, so it\cs\nhard to handle.\n	\nAn outsider is a\nPOKeMON that you\nget in a trade.\n	\nIt grows fast, but\nit may ignore an\nunskilled trainer\nin battle!\n	\nIf only we had\nsome BADGEs...",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":68
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1347,16 +984,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"NIDORAN sit!\n ",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":69
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1376,16 +1005,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"NIDORAN: Bowbow!\n ",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":70
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1405,16 +1026,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"POkKeMON CENTERS\nare wonderful!\n	\nThey heal POKeMON\ncompletely.\n	\nEven conditions\nlike sleep, burn,\npoison and others\nare cured.",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":71
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1434,16 +1047,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Im on the phone\ndamnit!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":72
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1463,16 +1068,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"Good things can\nhappen if you\nraise POKeMON\ndiligently, even\nthe weak ones!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":73
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.WanderingPerson",
@@ -1497,16 +1094,8 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"A shady old man\ngot me to buy\nthis really weird\nfish POKeMON!\n	\nIt\cs totally weak\nand it cost $500!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":74
 	},
 	{
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
@@ -1526,15 +1115,7 @@
 		"exitDir":"NONE",
 		"xnew":-1,
 		"ynew":-1,
-		"onClick":{
-			"class":"com.dryerzinia.pokemon.ui.menu.GMenu",
-			"message":"JIGGLYPUFF:	Puu\npupuu!",
-			"x":0,
-			"y":6,
-			"w":10,
-			"h":3,
-			"nextmenu":null
-		},
-		"rf":null
+		"rf":null,
+		"onClickEventID":75
 	}
 ]

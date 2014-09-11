@@ -2,7 +2,7 @@ package com.dryerzinia.pokemon.net.msg.client.act;
 /*
 SendActTalkingToClientMessage.java
  */
-
+// TODO FIX
 import java.io.*;
 
 import com.dryerzinia.pokemon.map.Direction;
@@ -30,7 +30,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
         Person person = GameState.people.get(id);
 
         person.dir = position.facing();
-        person.onClick.active = b;
+        //person.onClick.active = b;
 
     }
 

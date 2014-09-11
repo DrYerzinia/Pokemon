@@ -141,15 +141,6 @@ public class Grid implements Serializable, JSON {
     	return false;
 
     }
-    
-    public GMenu hasMenu(int x, int y) {
-        if (grid.length <= x || grid[0].length <= y || x < 0 || y < 0)
-            return null;
-        for (int i = 0; i < grid[x][y].size(); i++)
-            if (grid[x][y].get(i).onClick != null)
-                return grid[x][y].get(i).getMenu(x, y);
-        return null;
-    }
 
     public LevelChange changeLevel(int x, int y) {
 

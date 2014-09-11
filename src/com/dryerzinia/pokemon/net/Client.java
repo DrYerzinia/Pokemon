@@ -462,7 +462,7 @@ public final class Client {
     		 * Inform server that the client has started
     		 * talking to a Actor
     		 */
-    		if (activity == Person.A_TALKING_TO)
+    		/*if (activity == Person.A_TALKING_TO)
             	streamToServer.writeObject(
             		new SendActTalkingToServerMessage(
             			person.id,
@@ -473,7 +473,7 @@ public final class Client {
                         person.onClick.getActive()
                     )
             	);
-
+*/// TODO fix
             streamToServer.flush();
             streamToServer.reset();
 

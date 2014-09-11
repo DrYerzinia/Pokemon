@@ -227,7 +227,7 @@ public class Level implements Serializable, JSON {
      * @return Iterator of nearby people
      */
     public Iterator<Person> nearbyPersonIterator(){
-    	
+
     	MultiIterator<Person> iterator = new MultiIterator<Person>(5);
 
     	iterator.addIterator(peopleInLevel.iterator());

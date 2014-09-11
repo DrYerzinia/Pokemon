@@ -11,7 +11,9 @@ import com.dryerzinia.pokemon.map.Level;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.net.msg.server.PlayerPositionMessage;
+import com.dryerzinia.pokemon.obj.tiles.OnClick;
 import com.dryerzinia.pokemon.obj.tiles.OnClickTile;
+import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.tiles.Tile;
 import com.dryerzinia.pokemon.util.MysqlConnect;
 import com.dryerzinia.pokemon.util.ResourceLoader;
@@ -271,31 +273,42 @@ public class Player implements Serializable {
 
 		switch(dir){
 			case UP:
-				tiles = ClientState.getPlayerLevel().grid.grid[px][py - 1];
+				py--;
 				break;
 			case DOWN:
-				tiles = ClientState.getPlayerLevel().grid.grid[px][py + 1];
+				py++;
 				break;
 			case LEFT:
-				tiles = ClientState.getPlayerLevel().grid.grid[px - 1][py];
+				px--;
 				break;
 			case RIGHT:
-				tiles = ClientState.getPlayerLevel().grid.grid[px + 1][py];
+				px++;
 				break;
 			default:
 				break;
 		}
+
+		tiles = ClientState.getPlayerLevel().grid.grid[px][py];
 
 		if(tiles != null){
 			Iterator<Tile> it = tiles.iterator();
 			while(it.hasNext()){
 
 				Tile t = it.next();
-				if(t instanceof OnClickTile){
-					((OnClickTile) t).click();
+				if(t instanceof OnClick){
+					((OnClick) t).click();
 					break;
 				}
 
+			}
+		}
+
+		Iterator<Person> people = ClientState.getPlayerLevel().nearbyPersonIterator();
+		while(people.hasNext()){
+			Person person = people.next();
+			if(person.x == px && person.y == py && person.level == ClientState.getPlayerLevel().id){
+				person.click();
+				break;
 			}
 		}
 

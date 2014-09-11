@@ -22,13 +22,12 @@ public class WanderingPerson extends Person implements Actor {
     public WanderingPerson() {
     }
 
-    public WanderingPerson(String imgName, boolean cbso, GMenu onClick,
+    public WanderingPerson(String imgName, boolean cbso,
             Direction dir, int w, int h, int rx, int ry, float x, float y, Grid g) {
         this.imgName = imgName;
         pixelOffsetX = 0;
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
-        this.onClick = onClick;
 
         this.w = w;
         this.h = h;
@@ -40,8 +39,6 @@ public class WanderingPerson extends Person implements Actor {
         this.y = y;
 
         this.g = g;
-
-        onClick.container = this;
 
         loadImage();
 
@@ -104,9 +101,8 @@ public class WanderingPerson extends Person implements Actor {
     }
 
     public boolean act() {
-        if ((onClick != null && !onClick.active) || onClick == null)
-            return wander();
-        return false;
+    	return wander();
+        //return false;
     }
 
     public void initializeSecondaryReferences(Grid g) {
@@ -114,10 +110,7 @@ public class WanderingPerson extends Person implements Actor {
     }
 
     public Object deepCopy() {
-        GMenu g = null;
-        if (onClick != null)
-            g = (GMenu) onClick.deepCopy();
-        return new WanderingPerson(new String(imgName), canBeSteppedOn, g, dir,
+        return new WanderingPerson(new String(imgName), canBeSteppedOn, dir,
                 w, h, rx, ry, x, y, this.g);
     }
 

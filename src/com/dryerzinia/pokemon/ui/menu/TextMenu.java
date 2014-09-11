@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.ui.menu.RevealingTextGroup.RevealingText;
@@ -13,7 +14,7 @@ import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.input.InputController;
 
 public class TextMenu implements Menu {	
-	private static final int x = 0, y = 86;
+	private static final int x = 0, y = 96;
 	
 	private enum Speed {
 		SLOW(100), NORMAL(50), FAST(15);
@@ -51,7 +52,10 @@ public class TextMenu implements Menu {
 	
 	public TextMenu(String text) {
 		List<String> lines = new ArrayList<String>();
-		lines.add(text);
+		String s[] = text.split("\n\n");
+		for(int i = 0; i < s.length; i++) {
+			lines.add(s[i]);
+		}
 		initialize(lines);
 	}
 	
@@ -65,7 +69,7 @@ public class TextMenu implements Menu {
 			groups.add(LineSplitter.split(line));
 		}
 		gracePeriod = 350;
-		animationSpeed = 300;
+		animationSpeed = 150;
 		animatingText = false;
 		speed = Speed.NORMAL;
 		arrow = new FlashingArrow();
@@ -134,7 +138,7 @@ public class TextMenu implements Menu {
 	
 	private void animateText(long deltaTime) {
 		animationOffset -= animationSpeed/1000.0 * deltaTime;
-		if (animationOffset < -30) {
+		if (animationOffset < -15) {
 			animationOffset = 0;
 			animatingText = false;
 			firstLine = secondLine;
@@ -209,13 +213,14 @@ public class TextMenu implements Menu {
 	private void renderText(Graphics g) {
 		// clipping goodness to make text go away when animating
 		g.setClip(new Rectangle(x, y, 160, 48));
+		g.clipRect(x, y+14, 160, 34);
 
 		g.setFont(menuFont);
 		g.setColor(new Color(24, 24, 24));
-		g.drawString(firstLine.getCurrentText(), x+16, 
+		g.drawString(firstLine.getCurrentText(), x+8, 
 				y+22+animationOffset);
 		if (secondLine != null) {
-			g.drawString(secondLine.getCurrentText(), x+16, 
+			g.drawString(secondLine.getCurrentText(), x+8, 
 					y+38+(int)animationOffset);
 		}
 		
@@ -245,7 +250,6 @@ public class TextMenu implements Menu {
 
 	public void registerListener(TextMenuListener listener) {
 		this.listener = listener;
-		
 	}
 	
 	public String toString() {

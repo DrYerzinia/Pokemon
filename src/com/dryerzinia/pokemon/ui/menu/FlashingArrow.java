@@ -12,7 +12,7 @@ import com.dryerzinia.pokemon.util.ResourceLoader;
  */
 public class FlashingArrow {	
 	private static final int FLASH_DELAY = 750; 	// ms between flashes 
-	private static final int X = 290, Y = 258;
+	private static final int X = 145, Y = 129;
 	private static final int WIDTH = 7, HEIGHT = 5;
 	
 	private Image sprite;
@@ -42,8 +42,7 @@ public class FlashingArrow {
 	 */
 	public void render(Graphics g) {
 		if (visible) {
-			g.drawImage(sprite, X, Y, X+WIDTH*2, Y+HEIGHT*2, 
-					0, 0, WIDTH, HEIGHT, null);
+			g.drawImage(sprite, X, Y, null);
 		}
 	}
 	

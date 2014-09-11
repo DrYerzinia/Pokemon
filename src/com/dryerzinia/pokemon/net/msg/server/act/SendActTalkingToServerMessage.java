@@ -13,7 +13,7 @@ import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Player;
-
+// TODO FIX
 public class SendActTalkingToServerMessage extends SendActServerMessage {
 
     // static final long serialVersionUID = 6177261564125944892L;
@@ -42,7 +42,7 @@ public class SendActTalkingToServerMessage extends SendActServerMessage {
         Person person = GameState.people.get(id);
 
 		person.dir = dir;
-        person.onClick.active = b;
+        //person.onClick.active = b;
 
         Iterator<Player> playerIterator = GameState.getMap().getLevel(person.level).nearbyPlayerIterator();
         while(playerIterator.hasNext()) {

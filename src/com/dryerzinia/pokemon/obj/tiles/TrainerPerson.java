@@ -30,14 +30,13 @@ public class TrainerPerson extends Person implements Actor {
     public TrainerPerson() {
     }
 
-    public TrainerPerson(String imgName, boolean cbso, GMenu onClick, Direction dir,
+    public TrainerPerson(String imgName, boolean cbso, Direction dir,
             int x, int y, int viewDist) {
         this.imgName = imgName;
         this.dir = dir;
         pixelOffsetX = 0;
         pixelOffsetY = 0;
         canBeSteppedOn = cbso;
-        this.onClick = onClick;
 
         this.x = x;
         this.y = y;
@@ -124,10 +123,7 @@ public class TrainerPerson extends Person implements Actor {
     }
 
     public Object deepCopy() {
-        GMenu g = null;
-        if (onClick != null)
-            g = (GMenu) onClick.deepCopy();
-        return new TrainerPerson(new String(imgName), canBeSteppedOn, onClick,
+        return new TrainerPerson(new String(imgName), canBeSteppedOn,
                 dir, x, y, viewDist);
     }
 
