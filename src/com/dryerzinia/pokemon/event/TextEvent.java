@@ -30,7 +30,7 @@ public class TextEvent extends Event implements TextMenuListener {
 	@Override
 	public void fire() {
 
-		String text = StringStore.getString(textID, ClientState.LOCALE);
+		String text = StringStore.getString(textID, ClientState.locale);
 		TextMenu menu = new TextMenu(text);
 
 		menu.registerListener(this);

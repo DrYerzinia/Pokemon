@@ -26,6 +26,7 @@ import com.dryerzinia.pokemon.net.msg.server.SMLogin;
 import com.dryerzinia.pokemon.net.msg.server.ServerMessage;
 import com.dryerzinia.pokemon.net.msg.server.act.SendActTalkingToServerMessage;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Item;
 import com.dryerzinia.pokemon.obj.tiles.Person;
 import com.dryerzinia.pokemon.obj.Pokemon;
@@ -132,7 +133,7 @@ public final class Client {
         /*
          * Tokenize location configuration from Login Menu
          */
-        StringTokenizer st = new StringTokenizer(Login.location, "|:");
+        StringTokenizer st = new StringTokenizer(ClientState.location, "|:");
 
         host = st.nextToken();
         if (st.hasMoreTokens()) {
@@ -176,7 +177,7 @@ public final class Client {
 
         streamToServer = new ObjectOutputStream(socketToServer.getOutputStream());
 
-        streamToServer.writeObject(new SMLogin(Login.username, Login.password));
+        streamToServer.writeObject(new SMLogin(ClientState.username, ClientState.password));
         streamToServer.flush();
 
         ObjectInputStream ois = new ObjectInputStream(socketToServer.getInputStream());
@@ -294,7 +295,7 @@ public final class Client {
     public static void initDatagramConnect() throws IOException {
 
         DatagramSocket ds = new DatagramSocket();
-        InetAddress loc = InetAddress.getByName(Login.location);
+        InetAddress loc = InetAddress.getByName(ClientState.location);
         ds.connect(loc, PokemonServer.PORT_NUM);
 
         DatagramSocketStreamer dss = new DatagramSocketStreamer(ds,

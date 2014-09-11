@@ -80,8 +80,8 @@ public class YesNoMenu implements Menu {
 	private void renderText(Graphics g) {
 		g.setFont(Menu.menuFont);
 		g.setColor(Menu.fontColor);
-		g.drawString(StringStore.getString(4, ClientState.LOCALE), x+32, y+32);
-		g.drawString(StringStore.getString(5, ClientState.LOCALE), x+32, y+57);
+		g.drawString(StringStore.getString(4, ClientState.locale), x+32, y+32);
+		g.drawString(StringStore.getString(5, ClientState.locale), x+32, y+57);
 	}
 	
 	private void renderArrow(Graphics g) {

@@ -35,7 +35,7 @@ public class ItemEvent extends Event
 
 	@Override
 	public void fire() {
-		TextMenu menu = new TextMenu(StringStore.getString(textID, ClientState.LOCALE));
+		TextMenu menu = new TextMenu(StringStore.getString(textID, ClientState.locale));
 		menu.registerListener(this);
 		MenuStack.push(menu);
 		

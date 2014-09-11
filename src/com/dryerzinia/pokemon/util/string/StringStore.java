@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.util.StringStream;
@@ -82,10 +83,10 @@ public final class StringStore {
 	public static String getString(int id, Locale locale) {
 
 		String s = strings.get(id).get(locale);
-		if(s != null)
-			return s;
+		if(s == null)
+			s = strings.get(id).get(Locale.EN);
 
-		return strings.get(id).get(Locale.EN);
+		return s.replace("{Player}", ClientState.username);
 
 	}
 

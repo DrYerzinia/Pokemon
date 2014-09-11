@@ -1,25 +1,21 @@
 package com.dryerzinia.pokemon.ui.views;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.net.Client;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 
 public class Login implements View, KeyListener {
+
 	private static final Logger LOG =
 			Logger.getLogger(Login.class.getName());
 
@@ -34,13 +30,6 @@ public class Login implements View, KeyListener {
 	public static final byte LOCATION = 2;
 	public static final byte LOGIN = 3;
 
-	/*
-	 * Global login information
-	 */
-    public static String username = "";
-    public static String password = "";
-    public static String location = "";
-
     private byte state;
     private byte selection;
 
@@ -48,30 +37,6 @@ public class Login implements View, KeyListener {
 
     	state = NORMAL;
     	selection = USERNAME;
-
-    	String fs = System.getProperty("file.separator");
-        File f = new File(System.getProperty("user.home") + fs + ".pokemonData");
-
-        if(!f.exists())
-        	f.mkdir();
-
-        f = getSettingsFile();
-        
-        if(!f.exists()) {
-
-        	try {
-
-        		f.createNewFile();
-        		writeSettingsData(f);
-
-        	} catch(IOException ioe){
-
-        		System.err.println("Coulden't create settings file: " + ioe.getMessage());
-
-        	}
-
-        } else
-        	readSettingsData(f);
 
     }
 
@@ -130,14 +95,14 @@ public class Login implements View, KeyListener {
         if (selection == 0)
         	graphics.setColor(Color.BLUE);
 
-        graphics.drawString("Username: " + username, 10, 40);
+        graphics.drawString("Username: " + ClientState.username, 10, 40);
         graphics.setColor(Color.WHITE);
 
         if (selection == 1)
         	graphics.setColor(Color.BLUE);
 
         String s = "";
-        for (int i = 0; i < password.length(); i++)
+        for (int i = 0; i < ClientState.password.length(); i++)
             s += "*";
         graphics.drawString("Password: " + s, 10, 60);
         graphics.setColor(Color.WHITE);
@@ -147,21 +112,21 @@ public class Login implements View, KeyListener {
 
         graphics.drawString("Location:", 10, 80);
 
-        if (location.length() < 9)
-        	graphics.drawString(location, 80, 80);
+        if (ClientState.location.length() < 9)
+        	graphics.drawString(ClientState.location, 80, 80);
 
         else {
 
             int start = 9;
 
-            graphics.drawString(location.substring(0, 9), 80, 80);
+            graphics.drawString(ClientState.location.substring(0, 9), 80, 80);
 
             int i = 1;
-            while (start < location.length()) {
+            while (start < ClientState.location.length()) {
                 int end = start + 20;
-                if (end > location.length())
-                    end = location.length();
-                graphics.drawString(location.substring(start, end), 10, 80 + 20 * i);
+                if (end > ClientState.location.length())
+                    end = ClientState.location.length();
+                graphics.drawString(ClientState.location.substring(start, end), 10, 80 + 20 * i);
                 i++;
                 start += 20;
             }
@@ -214,45 +179,6 @@ public class Login implements View, KeyListener {
 
     }
 
-    public static void writeSettingsData(File f) {
-    	try {
-	    	Properties properties = new Properties();
-	    	properties.setProperty("username", username);
-	    	properties.setProperty("password", password);
-	    	properties.setProperty("location", location);
-	    	OutputStream out = new FileOutputStream(f);
-	    	properties.store(out, "User related settings");
-	    	
-	    } catch (FileNotFoundException e) {
-	    	LOG.warning("File " + f.toString() + " was not found!");
-	    } catch (IOException e) {
-	    	LOG.warning("Failed to write user properties file!");
-	    }
-	}
-
-    public static void readSettingsData(File f) {
-    	Properties properties = new Properties();
-    	try (InputStream in = new FileInputStream(f)) {
-    		
-    		properties.load(in);
-    		username = properties.getProperty("username");
-    		password = properties.getProperty("password");
-    		location = properties.getProperty("location");
-    		
-    	} catch (IOException e) {
-    		LOG.warning("Failed to read user properties file: " 
-    				+ e.getMessage());
-        }
-    }
-
-    public static File getSettingsFile() {
-
-    	String fs = System.getProperty("file.separator");
-
-    	return new File(System.getProperty("user.home") + fs + ".pokemonData"
-                + fs + "user.properties");
-    }
-
 	@Override
     public void keyPressed(KeyEvent e) {
         int c = e.getKeyCode();
@@ -278,7 +204,7 @@ public class Login implements View, KeyListener {
 
             	selection = NORMAL;
 
-            	writeSettingsData(Login.getSettingsFile());
+            	ClientState.saveSettings();
 
             	state = ATTEMPT_LOGIN;
 
@@ -299,13 +225,13 @@ public class Login implements View, KeyListener {
             try {
                 switch (selection) {
                 case USERNAME:
-                    username = username.substring(0, username.length() - 1);
+                    ClientState.username = ClientState.username.substring(0, ClientState.username.length() - 1);
                     break;
                 case PASSWORD:
-                    password = password.substring(0, password.length() - 1);
+                	ClientState.password = ClientState.password.substring(0, ClientState.password.length() - 1);
                     break;
                 case LOCATION:
-                    location = location.substring(0, location.length() - 1);
+                	ClientState.location = ClientState.location.substring(0, ClientState.location.length() - 1);
                     break;
                 }
             } catch (Exception x) {
@@ -316,13 +242,13 @@ public class Login implements View, KeyListener {
                 char d = e.getKeyChar();
                 switch (selection) {
                 case 0:
-                    username += d;
+                	ClientState.username += d;
                     break;
                 case 1:
-                    password += d;
+                	ClientState.password += d;
                     break;
                 case 2:
-                    location += d;
+                	ClientState.location += d;
                     break;
                 }
             }

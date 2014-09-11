@@ -36,7 +36,7 @@ public class YesNoQuestionEvent extends Event
 	@Override
 	public void fire() {
 		// create a new TextMenu showing the question and push it to the stack
-		TextMenu textMenu = new TextMenu(StringStore.getString(questionTextID, ClientState.LOCALE));
+		TextMenu textMenu = new TextMenu(StringStore.getString(questionTextID, ClientState.locale));
 		textMenu.registerListener(this);
 		MenuStack.push(textMenu);
 	}
