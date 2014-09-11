@@ -1,8 +1,8 @@
 [
 	{
 		"id": 0,
-		"en": "NAME's house",
-		"es": "Casa de NAME"
+		"en": "{Player}'s house",
+		"es": "Casa de {Player}"
 	},
 	{
 		"id": 1,
@@ -31,19 +31,23 @@
 	},
 	{
 		"id": 6,
-		"en": "NAME is\nplaying the SNES!\n...Okay!\nIt\cs time to go!"
+		"en": "NAME is\nplaying the SNES!\n...Okay!\nIt\cs time to go!",
+		"es": "{Player} está jugando a la NES!\n\nBueno, más vale que me ponga en marcha."
 	},
 	{
 		"id": 7,
-		"en": "Crammed full of\nPOKeMON books!"
+		"en": "Crammed full of\nPOKeMON books!",
+		"es": "¡Totalmente lleno de libros sobre los Pokémon!"
 	},
 	{
 		"id": 8,
-		"en": "There\cs a movie\n on TV. Four boys\n are walking on\nrailroad tracks.\n\nI better go too."
+		"en": "There\cs a movie\n on TV. Four boys\n are walking on\nrailroad tracks.\n\nI better go too.",
+		"es": "Están poniendo una película. Salen cuatro niños caminando por las vías del tren.\n\nVoy a ponerme en marcha."
 	},
 	{
 		"id": 9,
-		"en": "BLUE\cs house"
+		"en": "{Rival}'s house",
+		"es": "Casa de {Rival}"
 	},
 	{
 		"id": 10,
@@ -51,35 +55,43 @@
 	},
 	{
 		"id": 11,
-		"en": "OAK POKeMON\nRESEARCH LAB"
+		"en": "OAK POKeMON\nRESEARCH LAB",
+		"es": "Laboratorio de investigación de Pokémon del Profesor Oak"
 	},
 	{
 		"id": 12,
-		"en": "Push START to\nopen the MENU!"
+		"en": "Push START to\nopen the MENU!",
+		"es": "¡Pulsa START para abrir el menú!"
 	},
 	{
 		"id": 13,
-		"en": "The SAVE option is\non the MENU\nscreen."
+		"en": "The SAVE option is\non the MENU\nscreen.",
+		"es": "La opción guardar está en la pantalla del menú."
 	},
 	{
 		"id": 14,
-		"en": "There\cs an e-mail\nmessage here!\n\n...\n\nCalling all\nPOKeMON trainers!\n\nThe elite trainers\nof POKeMON LEAGUE\nare ready to take\non all comers!\n\nBring your best\nPOKeMON and see\nhow you rate as a\ntrainer!\n\nPOKeMON LEAGUE HQ\nINDIGO PLATEAU\n\nPS: PROF.OAK,\nplease visit us!\n..."
+		"en": "There\cs an e-mail\nmessage here!\n\n...\n\nCalling all\nPOKeMON trainers!\n\nThe elite trainers\nof POKeMON LEAGUE\nare ready to take\non all comers!\n\nBring your best\nPOKeMON and see\nhow you rate as a\ntrainer!\n\nPOKeMON LEAGUE HQ\nINDIGO PLATEAU\n\nPS: PROF.OAK,\nplease visit us!\n...",
+		"es": "Hay un correro electrónico!\n\n...\n\n¡Aviso a todos los entrenadores de Pokémon!\n\n¡Los entrenadores de élite de la Liga Pokémon están listos para desafiaros a todos! Traed a vuestros mejores Pokémon para ver lo buenos que sois!\n\nOficina Central de la Liga Pokémon\n\nPD: Profesor Oak, visítenos por favor!"
 	},
 	{
 		"id": 15,
-		"en": "It\cs encyclopedia-\nlike, but the\npages are blank!"
+		"en": "It\cs encyclopedia-\nlike, but the\npages are blank!",
+		"es": "Es como una enciclopedia, pero la páginas están en blanco!"
 	},
 	{
 		"id": 16,
-		"en": "That\cs a POKe\nBALL. There\cs a\nPOKeMON inside!"
+		"en": "That\cs a POKe\nBALL. There\cs a\nPOKeMON inside!",
+		"es": "Eso es una Poké ball. Dentro de ella hay un Pokémon!"
 	},
 	{
 		"id": 17,
-		"en": "ROUTE 1\nPALLET TOWN -\nVIRIDIAN CITY"
+		"en": "ROUTE 1\nPALLET TOWN -\nVIRIDIAN CITY",
+		"es": "Ruta 1\nPueblo Paleta -\nCiudad Verde"
 	},
 	{
 		"id": 18,
-		"en": "TRAINER TIPS\n\nThe battle moves\nof POKeMON are\nlimited by their\nPOWER POINTs, PP.\n\nTo replenish PP,\nrest your tired\nPOKeMON at a\nPOKeMON CENTER!"
+		"en": "TRAINER TIPS\n\nThe battle moves\nof POKeMON are\nlimited by their\nPOWER POINTs, PP.\n\nTo replenish PP,\nrest your tired\nPOKeMON at a\nPOKeMON CENTER!",
+		"es": "Pistas Entrenador\n\nLos ataques del Pokémon dependen de sus Puntos de Poder o PP.\n\n¡Para rellenar los PP, deja que tus Pokémon cansados descansen en un centro Pokémon!"
 	},
 	{
 		"id": 19,
@@ -103,19 +115,23 @@
 	},
 	{
 		"id": 24,
-		"en": "Beware! ZUBAT is\na bloodsucker!"
+		"en": "Beware! ZUBAT is\na bloodsucker!",
+		"es": "¡Ten cuidado! ¡Zubat es un chupasangre!"
 	},
 	{
 		"id": 25,
-		"en": "Name turned on\nthe PC."
+		"en": "{Player} turned on\nthe PC.",
+		"es": "{Player} encendió el PC."
 	},
 	{
 		"id": 26,
-		"en": "Widthdraw"
+		"en": "Widthdraw",
+		"es": "Sacar"
 	},
 	{
 		"id": 27,
-		"en": "Deposit"
+		"en": "Deposit",
+		"es": "Dejar"
 	},
 	{
 		"id": 28,
@@ -123,7 +139,8 @@
 	},
 	{
 		"id": 29,
-		"en": "See Ya!"
+		"en": "See Ya!",
+		"es": "Salir"
 	},
 	{
 		"id": 30,
@@ -175,15 +192,18 @@
 	},
 	{
 		"id": 42,
-		"en": "Hi! I work at a POKéMON MART.\n\nIt's a convenient shop, so please visit us in VIRIDIAN CITY.\n\nI know, I'll give you a sample! Here you go!"
+		"en": "Hi! I work at a POKéMON MART.\n\nIt's a convenient shop, so please visit us in VIRIDIAN CITY.\n\nI know, I'll give you a sample! Here you go!",
+		"es": "¡Hola! Trabajo en una Tienda Pokémon.\n\nTenemos muchas cosas. Visítanos en Ciudad Verde.\n\n¡Mira, te daré una muestra!\n\n¡Aquí tienes!"
 	},
 	{
 		"id": 43,
-		"en": "Name got\nPOTION!"
+		"en": "{Player} got\nPOTION!",
+		"es": "¡Has conseguido una Poción!"
 	},
 	{
 		"id": 44,
-		"en": "We also carry POKé BALLS for catching POKéMON!"
+		"en": "We also carry POK챕 BALLS for catching POKéMON!",
+		"es": "¡También tenemos Poké balls para capturar los Pokémon!"
 	},
 	{
 		"id": 45,
