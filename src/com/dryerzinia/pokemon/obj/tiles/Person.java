@@ -8,12 +8,10 @@ import java.awt.*;
 import com.dryerzinia.pokemon.event.EventCore;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
-import com.dryerzinia.pokemon.net.Client;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.obj.Actor;
-import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.Player;
 
 public class Person extends Tile implements Actor, OnClick {
@@ -50,7 +48,7 @@ public class Person extends Tile implements Actor, OnClick {
 	protected transient boolean wasTalking = false;
 	protected transient boolean wasTalkingToYou = false;
 
-	public transient boolean animationEnabled = true;;
+	public transient boolean animationEnabled;
 
     public Person() {
 
@@ -87,6 +85,7 @@ public class Person extends Tile implements Actor, OnClick {
     public void init(){
 
     	animationElapsedTime = 0;
+    	animationEnabled = true;
 
     	movements = new LinkedList<Pose>();
 
@@ -267,6 +266,8 @@ public class Person extends Tile implements Actor, OnClick {
     	y = ((Float)json.get("y")).floatValue();
 
     	onClickEventID = ((Float)json.get("onClickEventID")).intValue();
+
+    	animationEnabled = true;
 
     }
 
