@@ -913,7 +913,6 @@ public class PokemonServer {
             //    oos.writeObject(new SendActTalkingToClientMessage(p.id, (int)p.x,
             //    		(int)p.y, p.dir, p.level, p.onClick.getActive()));
             //else
-        	System.out.println(p.x + " " + p.y + " " + p.level + " " + p.dir);
                 oos.writeObject(new SendActMovedClientMessage(p.id, (int)p.x, (int)p.y,
                         p.dir, p.level));
             oos.flush();

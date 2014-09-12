@@ -88,7 +88,7 @@ public class Level implements Serializable, JSON {
 
 		for(Person person : peopleInLevel)
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), new Pose((int)person.x, (int)person.y, person.level, Direction.NONE)))
-    			person.draw(person.x - x, person.y - y, 0, 0, graphics);
+    			person.draw(person.x - x, person.y - y, graphics);
 
 		for(Player player : playersInLevel)
 			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
@@ -102,7 +102,7 @@ public class Level implements Serializable, JSON {
 
     	for(Person person : peopleInLevel)
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), person.getPose()))
-    			person.draw(person.x - x - xOffset, person.y - y - yOffset, 0, 0, graphics);
+    			person.draw(person.x - x - xOffset, person.y - y - yOffset, graphics);
 
 		for(Player player : playersInLevel)
 			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))

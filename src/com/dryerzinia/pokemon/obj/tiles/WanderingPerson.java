@@ -6,7 +6,6 @@ import com.dryerzinia.pokemon.PokemonServer;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Pose;
-import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.obj.Actor;
 

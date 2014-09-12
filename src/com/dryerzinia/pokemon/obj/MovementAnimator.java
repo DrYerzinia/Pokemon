@@ -205,7 +205,7 @@ public class MovementAnimator {
     	else if(!movements.isEmpty()){
 
     		newPosition = movements.remove();
-    		System.out.println(newPosition);
+
     		/*
     		 * If we get a new position where character is facing
     		 * Direction.NONE that means player is in fog of war so we need to

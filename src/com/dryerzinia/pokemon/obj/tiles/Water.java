@@ -7,7 +7,7 @@ public class Water extends Tile {
 	private static final long serialVersionUID = 2585536972543470396L;
 
 	@Override
-    public void draw(float x, float y, int xo, int yo, Graphics g) {
+    public void draw(float x, float y, Graphics g) {
 
 		long time = System.currentTimeMillis();
 
@@ -17,8 +17,8 @@ public class Water extends Tile {
 		int offset = (int) ((time/(period/segments))%segments);
 		if(offset > 4) offset = 8 - offset;
 
-		int dx1 = (int) (x * 16 + pixelOffsetX - xo + offset);
-		int dy1 = (int) (y * 16 + pixelOffsetY - yo);
+		int dx1 = (int) (x * 16 + pixelOffsetX + offset);
+		int dy1 = (int) (y * 16 + pixelOffsetY);
 		int dx2 = dx1 + 16 - offset;
 		int dy2 = dy1 + 16;
 
@@ -31,7 +31,7 @@ public class Water extends Tile {
 
 		if(offset != 0){
 
-			dx1 = (int) (x * 16 + pixelOffsetX - xo);
+			dx1 = (int) (x * 16 + pixelOffsetX);
 			dx2 = dx1 + offset;
 
 			sx1 = 16-offset;

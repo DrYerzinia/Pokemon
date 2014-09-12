@@ -114,7 +114,7 @@ public class Person extends Tile implements Actor, OnClick {
     }
 
     @Override
-    public void draw(float x, float y, int xo, int yo, Graphics graphics) {
+    public void draw(float x, float y, Graphics graphics) {
 
     	movement.draw(location, sprite, graphics);
 

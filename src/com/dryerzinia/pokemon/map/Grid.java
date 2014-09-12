@@ -93,8 +93,8 @@ public class Grid implements Serializable, JSON {
     	/*
     	 * Pixel shift due to characters position float
     	 */
-    	int xOff = (int) Math.floor((x - ((int)x))*16);
-    	int yOff = (int) Math.floor((y - ((int)y))*16);
+    	float xOff = (x - ((int)x));
+    	float yOff = (y - ((int)y));
 
     	/*
     	 * Draw 10x10 swath of tiles for the game
@@ -103,7 +103,7 @@ public class Grid implements Serializable, JSON {
     		for(int k = 0; k < 10; k++)
     			if(j + xSquare >= 0 && j + xSquare < getWidth() && k + ySquare >= 0 && k + ySquare < getHeight())
     				for(int i = 0; i < grid[j + xSquare][k + ySquare].size(); i++)
-    					grid[j + xSquare][k + ySquare].get(i).draw(j, k, xOff, yOff, graphics);
+    					grid[j + xSquare][k + ySquare].get(i).draw(j - xOff, k - yOff, graphics);
 
     }
 

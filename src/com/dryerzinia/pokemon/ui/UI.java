@@ -51,6 +51,7 @@ public class UI {
     public static void init(Container container){
 
     	uiCanvas = new Canvas();
+    	uiCanvas.setIgnoreRepaint(true);
     	uiCanvas.setSize(getWidth(), getTotalHeight());
     	container.add(uiCanvas);
 

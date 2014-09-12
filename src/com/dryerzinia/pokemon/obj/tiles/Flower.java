@@ -7,7 +7,7 @@ public class Flower extends Tile {
 	private static final long serialVersionUID = -5927606477512395929L;
 
 	@Override
-    public void draw(float x, float y, int xo, int yo, Graphics g) {
+    public void draw(float x, float y, Graphics g) {
 
 
 		long time = System.currentTimeMillis();
@@ -16,8 +16,8 @@ public class Flower extends Tile {
 
 		int pos = (int) (time%period);
 
-		int dx1 = (int) (x * 16 + pixelOffsetX - xo);
-		int dy1 = (int) (y * 16 + pixelOffsetY - yo);
+		int dx1 = (int) (x * 16 + pixelOffsetX);
+		int dy1 = (int) (y * 16 + pixelOffsetY);
 		int dx2 = dx1 + 8;
 		int dy2 = dy1 + 8;
 
