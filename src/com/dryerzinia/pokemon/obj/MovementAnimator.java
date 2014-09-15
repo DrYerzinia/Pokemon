@@ -179,10 +179,12 @@ public class MovementAnimator {
     	    		newPose = pose.copy();
 
     		} else if(state == JUMPING){
+
     			Point newPoint = nextTile(pose);
     			newPose = new Pose(newPoint.getX(), newPoint.getY(), pose.getLevel(), direction);
     			newPoint = nextTile(newPose);
     			newPose = new Pose(newPoint.getX(), newPoint.getY(), pose.getLevel(), direction);
+
     		}
 
     		/*
@@ -277,7 +279,7 @@ public class MovementAnimator {
 	private boolean setState(Pose position, Point nextCoordinate, boolean sameSpot){
 
 		/*
-		 * If we are not turning we could possible be jumping
+		 * If we are not turning we could possibly be jumping
 		 */
 		boolean isLedge = GameState.getMap().getLevel(position.getLevel()).isLedge(nextCoordinate.getX(), nextCoordinate.getY());
 
@@ -445,11 +447,11 @@ public class MovementAnimator {
 
     			deltaTime = (int) (elapsedTime - stepTime);
     			elapsedTime = 0;
-    			
+
     			/*
     			 * Continue with next update
     			 */
-    			update(direction, position, elapsedTime);
+    			update(direction, position, deltaTime);
 
     		}
 
