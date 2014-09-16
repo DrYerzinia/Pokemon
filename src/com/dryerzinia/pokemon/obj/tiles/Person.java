@@ -8,7 +8,6 @@ import com.dryerzinia.pokemon.event.EventCore;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
-import com.dryerzinia.pokemon.util.JSONObject;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.obj.Actor;
 import com.dryerzinia.pokemon.obj.MovementAnimator;
@@ -27,13 +26,9 @@ public class Person extends Tile implements Actor, OnClick {
 
 	private int onClickEventID;
 
-	public Direction dir;
-	public int level;
-
-	public float x, y;
+	protected Pose location;
 
 	protected transient MovementAnimator movement;
-	protected transient Pose location;
 
 	protected transient Direction directionBeforeTalk;
 	protected transient boolean wasTalking = false;
@@ -47,12 +42,15 @@ public class Person extends Tile implements Actor, OnClick {
 
     }
 
-    public Person(String imgName, boolean cbso, Direction dir) {
+    public Person(String imgName, boolean cbso, Pose location) {
 
     	this.imgName = imgName;
-        this.dir = dir;
-        pixelOffsetX = 0;
+
+    	this.location = location;
+
+    	pixelOffsetX = 0;
         pixelOffsetY = 0;
+
         canBeSteppedOn = cbso;
 
         init();
@@ -77,9 +75,6 @@ public class Person extends Tile implements Actor, OnClick {
     	animationEnabled = true;
 
     	loadImage();
-
-    	// Setup pose
-    	location = new Pose(x, y, level, dir);
 
     }
     
@@ -130,11 +125,6 @@ public class Person extends Tile implements Actor, OnClick {
 
 		movement.update(Direction.NONE, location, deltaTime);
 
-    	// TODO make person entirely pose based
-    	this.x = location.getX();
-    	this.y = location.getY();
-    	this.dir = location.facing();
-
     }
 
     @Override
@@ -160,7 +150,7 @@ public class Person extends Tile implements Actor, OnClick {
 
     public Object deepCopy() {
 
-        return new Person(new String(imgName), canBeSteppedOn, dir);
+        return new Person(new String(imgName), canBeSteppedOn, location);
     }
 
     @Override
@@ -171,11 +161,7 @@ public class Person extends Tile implements Actor, OnClick {
     	px = ((Float)json.get("px")).intValue(); 
     	py = ((Float)json.get("py")).intValue();
 
-    	dir = Direction.getFromString((String) json.get("dir"));
-    	level = ((Float)json.get("level")).intValue();
-
-    	x = ((Float)json.get("x")).floatValue();
-    	y = ((Float)json.get("y")).floatValue();
+    	location = (Pose) json.get("location");
 
     	onClickEventID = ((Float)json.get("onClickEventID")).intValue();
 
@@ -184,13 +170,6 @@ public class Person extends Tile implements Actor, OnClick {
     	init();
 
     }
-
-	@Override
-	public String toJSON() throws IllegalAccessException {
-
-		return JSONObject.defaultToJSON(this);
-
-	}
 
 	@Override
 	public void click() {

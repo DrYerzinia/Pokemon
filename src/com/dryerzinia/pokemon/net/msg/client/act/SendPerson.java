@@ -25,7 +25,7 @@ public class SendPerson extends ClientMessage {
 	 */
     public void proccess() throws ClassNotFoundException, IOException {
 
-    	GameState.getMap().getLevel(receivedPerson.level).addPerson(receivedPerson);
+    	GameState.getMap().getLevel(receivedPerson.getPose().getLevel()).addPerson(receivedPerson);
     	GameState.people.put(receivedPerson.id, receivedPerson);
 
     }

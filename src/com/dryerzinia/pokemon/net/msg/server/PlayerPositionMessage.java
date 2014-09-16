@@ -84,13 +84,13 @@ public class PlayerPositionMessage extends ServerMessage {
         	 * Sweet spot for Spotting people
         	 */
     		if((distance < PokemonServer.VISIBLE_DISTANCE && distance > PokemonServer.VISIBLE_DISTANCE-PokemonServer.TRANSITION_ZONE) || (distance < PokemonServer.VISIBLE_DISTANCE && levelChange))
-    			p.writeClientMessage(new SendActMovedClientMessage(person.id, (int)person.x, (int)person.y, person.dir, person.level));
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, person.getPose()));
 
     		/*
         	 * Sweet spot for people leaving
         	 */
     		if((distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && distance < PokemonServer.FOG_OF_WAR) || (distance >= PokemonServer.FOG_OF_WAR-PokemonServer.TRANSITION_ZONE && levelChange))
-    			p.writeClientMessage(new SendActMovedClientMessage(person.id, 0, 0, Direction.NONE, -1));
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, Pose.NOWHERE_LAND));
 
         }
 

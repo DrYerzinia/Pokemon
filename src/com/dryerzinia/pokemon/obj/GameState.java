@@ -97,9 +97,9 @@ public class GameState {
 
             	Person person = (Person) actor;
 
-            	person.initializeSecondaryReferences(map.getLevel(person.level).grid);
+            	person.initializeSecondaryReferences(map.getLevel(person.getPose().getLevel()).grid);
             	people.put(person.id, person);
-            	getMap().getLevel(person.level).addPerson(person);
+            	getMap().getLevel(person.getPose().getLevel()).addPerson(person);
 
             }
 

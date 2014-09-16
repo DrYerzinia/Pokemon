@@ -41,10 +41,10 @@ public class SendActTalkingToServerMessage extends SendActServerMessage {
 
         Person person = GameState.people.get(id);
 
-		person.dir = dir;
+		person.getPose().changeDirection(dir);
         //person.onClick.active = b;
 
-        Iterator<Player> playerIterator = GameState.getMap().getLevel(person.level).nearbyPlayerIterator();
+        Iterator<Player> playerIterator = GameState.getMap().getLevel(person.getPose().getLevel()).nearbyPlayerIterator();
         while(playerIterator.hasNext()) {
             PokemonServer.PlayerInstanceData pid = PokemonServer.players.get(playerIterator.next().getID());
             if (pid != p)

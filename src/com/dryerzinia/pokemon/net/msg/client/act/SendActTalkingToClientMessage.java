@@ -16,10 +16,10 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
 	boolean b;
 
-    public SendActTalkingToClientMessage(int id, int x, int y, Direction dir, int level, boolean b) {
+    public SendActTalkingToClientMessage(int id, Pose location, boolean b) {
 
         this.id = id;
-        position = new Pose(x, y, level, dir);
+        position = location;
 
         this.b = b;
 
@@ -29,7 +29,7 @@ public class SendActTalkingToClientMessage extends SendActClientMessage {
 
         Person person = GameState.people.get(id);
 
-        person.dir = position.facing();
+        person.getPose().changeDirection(position.facing());
         //person.onClick.active = b;
 
     }

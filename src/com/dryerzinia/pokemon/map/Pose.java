@@ -1,8 +1,12 @@
 package com.dryerzinia.pokemon.map;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
-public class Pose implements Serializable {
+import com.dryerzinia.pokemon.util.JSON;
+import com.dryerzinia.pokemon.util.JSONObject;
+
+public class Pose implements Serializable, JSON {
 
 	private static final long serialVersionUID = 5663646265119040753L;
 
@@ -17,6 +21,8 @@ public class Pose implements Serializable {
 	private int level;
 
 	private Direction facing;
+
+	public Pose(){}
 
 	public Pose(float x, float y, int level, Direction facing){
 
@@ -96,6 +102,24 @@ public class Pose implements Serializable {
 
 	public String toString(){
 		return "{x:"+x+",y:"+y+",level:"+level+",facing:"+facing+"}";
+	}
+
+	@Override
+	public String toJSON() throws IllegalAccessException {
+
+		return JSONObject.defaultToJSON(this);
+
+	}
+
+	@Override
+	public void fromJSON(HashMap<String, Object> json) {
+
+		facing = Direction.getFromString((String) json.get("facing"));
+    	level = ((Float)json.get("level")).intValue();
+
+    	x = ((Float)json.get("x")).floatValue();
+    	y = ((Float)json.get("y")).floatValue();
+
 	}
 
 }

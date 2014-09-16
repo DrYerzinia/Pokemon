@@ -71,7 +71,7 @@ public class GetPlayerServerMessage extends ServerMessage {
         	int distance = GameState.getMap().manhattanDistance(p.getPlayer().getPose(), person.getPose());
 
     		if(distance < PokemonServer.VISIBLE_DISTANCE)
-    			p.writeClientMessage(new SendActMovedClientMessage(person.id, (int)person.x, (int)person.y, person.dir, person.level));
+    			p.writeClientMessage(new SendActMovedClientMessage(person.id, person.getPose()));
 
         }
 

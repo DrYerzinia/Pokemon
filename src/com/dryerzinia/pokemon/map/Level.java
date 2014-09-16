@@ -87,8 +87,8 @@ public class Level implements Serializable, JSON {
         }
 
 		for(Person person : peopleInLevel)
-    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), new Pose((int)person.x, (int)person.y, person.level, Direction.NONE)))
-    			person.draw(person.x - x, person.y - y, graphics);
+    		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), person.getPose()))
+    			person.draw(person.getPose().getY() - x, person.getPose().getY() - y, graphics);
 
 		for(Player player : playersInLevel)
 			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
@@ -102,7 +102,7 @@ public class Level implements Serializable, JSON {
 
     	for(Person person : peopleInLevel)
     		if(UI.visibleManhattanDistance > GameState.getMap().manhattanDistance(ClientState.player.getPose(), person.getPose()))
-    			person.draw(person.x - x - xOffset, person.y - y - yOffset, graphics);
+    			person.draw(person.getPose().getX() - x - xOffset, person.getPose().getY() - y - yOffset, graphics);
 
 		for(Player player : playersInLevel)
 			if(PokemonServer.VISIBLE_DISTANCE > GameState.getMap().manhattanDistance(ClientState.player.getPose(), player.getPose()))
@@ -188,7 +188,7 @@ public class Level implements Serializable, JSON {
 
     public Pokemon attacked(Player player) {
 
-    	RandomFight rf = grid.getRandomFight((int) player.getPose().getY(), (int) player.getPose().getY());
+    	RandomFight rf = grid.getRandomFight((int) player.getPose().getX(), (int) player.getPose().getY());
 
     	if (rf != null)
             return rf.getAttack();
@@ -203,7 +203,7 @@ public class Level implements Serializable, JSON {
 
     	if(isPlayer){
     		for(Person person : peopleInLevel){
-    			if(((int)person.x) == x && ((int)person.y) == y){
+    			if(((int)person.getPose().getX()) == x && ((int)person.getPose().getY()) == y){
     				return false;
     			}
     		}

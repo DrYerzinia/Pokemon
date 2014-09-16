@@ -6,6 +6,7 @@ import com.dryerzinia.pokemon.PokemonGame;
 import com.dryerzinia.pokemon.map.Direction;
 import com.dryerzinia.pokemon.map.Grid;
 import com.dryerzinia.pokemon.map.Level;
+import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.ui.Fight;
 import com.dryerzinia.pokemon.ui.UI;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
@@ -30,16 +31,16 @@ public class TrainerPerson extends Person implements Actor {
     public TrainerPerson() {
     }
 
-    public TrainerPerson(String imgName, boolean cbso, Direction dir,
-            int x, int y, int viewDist) {
-        this.imgName = imgName;
-        this.dir = dir;
-        pixelOffsetX = 0;
+    public TrainerPerson(String imgName, boolean cbso, Pose location, int viewDist) {
+
+    	this.imgName = imgName;
+
+    	pixelOffsetX = 0;
         pixelOffsetY = 0;
+
         canBeSteppedOn = cbso;
 
-        this.x = x;
-        this.y = y;
+        this.location = location;
 
         this.viewDist = viewDist;
 
@@ -56,7 +57,7 @@ public class TrainerPerson extends Person implements Actor {
 
         Grid g = GameState.getMap().getLevel(ClientState.player.getPose().getLevel()).grid;
 
-        face = dir;// (int)(Math.random()*3);
+        face = location.facing();// (int)(Math.random()*3);
 
     }
 
@@ -123,8 +124,7 @@ public class TrainerPerson extends Person implements Actor {
     }
 
     public Object deepCopy() {
-        return new TrainerPerson(new String(imgName), canBeSteppedOn,
-                dir, x, y, viewDist);
+        return new TrainerPerson(new String(imgName), canBeSteppedOn, location, viewDist);
     }
 
     public void fromJSON(HashMap<String, Object> json){

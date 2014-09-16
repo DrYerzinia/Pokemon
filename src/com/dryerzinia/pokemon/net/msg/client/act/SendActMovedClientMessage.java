@@ -16,10 +16,10 @@ public class SendActMovedClientMessage extends SendActClientMessage {
 
 	private static final long serialVersionUID = 5940996662837349203L;
 
-	public SendActMovedClientMessage(int id, int x, int y, Direction dir, int level) {
+	public SendActMovedClientMessage(int id, Pose position) {
 
         this.id = id;
-        position = new Pose(x, y, level, dir);
+        this.position = position;
 
     }
 

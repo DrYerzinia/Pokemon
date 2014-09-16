@@ -3,10 +3,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":1,
-		"x":5.0,
-		"y":4.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":5.0,
+				"y":4.0,
+				"level":1,
+				"facing":"LEFT"
+			},
 		"imgName":"Mom",
 		"canBeSteppedOn":false,
 		"id":23,
@@ -29,10 +33,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":2,
-		"x":11.0,
-		"y":10.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":11.0,
+				"y":10.0,
+				"level":2,
+				"facing":"DOWN"
+			},
 		"imgName":"Lady2",
 		"canBeSteppedOn":false,
 		"id":51,
@@ -55,10 +63,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":2,
-		"x":21.0,
-		"y":18.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":21.0,
+				"y":18.0,
+				"level":2,
+				"facing":"LEFT"
+			},
 		"imgName":"Man1",
 		"canBeSteppedOn":false,
 		"id":79,
@@ -76,10 +88,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"RIGHT",
-		"level":3,
-		"x":2.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":3.0,
+				"level":3,
+				"facing":"RIGHT"
+			},
 		"imgName":"Lady1",
 		"canBeSteppedOn":false,
 		"id":84,
@@ -97,10 +113,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":4,
-		"x":5.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":5.0,
+				"y":2.0,
+				"level":4,
+				"facing":"DOWN"
+			},
 		"imgName":"Oak",
 		"canBeSteppedOn":false,
 		"id":104,
@@ -123,10 +143,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":4,
-		"x":1.0,
-		"y":8.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":1.0,
+				"y":8.0,
+				"level":4,
+				"facing":"UP"
+			},
 		"imgName":"Lady2",
 		"canBeSteppedOn":false,
 		"id":106,
@@ -149,10 +173,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":4,
-		"x":2.0,
-		"y":9.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":9.0,
+				"level":4,
+				"facing":"DOWN"
+			},
 		"imgName":"Scientist1",
 		"canBeSteppedOn":false,
 		"id":107,
@@ -175,10 +203,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":4,
-		"x":9.0,
-		"y":9.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":9.0,
+				"y":9.0,
+				"level":4,
+				"facing":"DOWN"
+			},
 		"imgName":"Scientist1",
 		"canBeSteppedOn":false,
 		"id":108,
@@ -201,10 +233,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":18,
-		"x":3.0,
-		"y":6.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":6.0,
+				"level":18,
+				"facing":"LEFT"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":216,
@@ -227,10 +263,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":5,
-		"x":3.0,
-		"y":34.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":34.0,
+				"level":5,
+				"facing":"DOWN"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":222,
@@ -253,10 +293,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":5,
-		"x":7.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":7.0,
+				"y":3.0,
+				"level":5,
+				"facing":"DOWN"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":223,
@@ -274,10 +318,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":6,
-		"x":2.0,
-		"y":24.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":24.0,
+				"level":6,
+				"facing":"DOWN"
+			},
 		"imgName":"Man1",
 		"canBeSteppedOn":false,
 		"id":224,
@@ -300,10 +348,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":6,
-		"x":2.0,
-		"y":17.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":17.0,
+				"level":6,
+				"facing":"UP"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":225,
@@ -326,10 +378,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":6,
-		"x":18.0,
-		"y":11.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":18.0,
+				"y":11.0,
+				"level":6,
+				"facing":"LEFT"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":226,
@@ -347,10 +403,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"RIGHT",
-		"level":6,
-		"x":13.0,
-		"y":9.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":13.0,
+				"y":9.0,
+				"level":6,
+				"facing":"RIGHT"
+			},
 		"imgName":"Lady2",
 		"canBeSteppedOn":false,
 		"id":227,
@@ -373,10 +433,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":6,
-		"x":19.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":19.0,
+				"y":2.0,
+				"level":6,
+				"facing":"LEFT"
+			},
 		"imgName":"BaldMan",
 		"canBeSteppedOn":false,
 		"id":228,
@@ -394,10 +458,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":6,
-		"x":26.0,
-		"y":9.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":26.0,
+				"y":9.0,
+				"level":6,
+				"facing":"DOWN"
+			},
 		"imgName":"BaldMan",
 		"canBeSteppedOn":false,
 		"id":229,
@@ -420,10 +488,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":9,
-		"x":10.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":10.0,
+				"y":5.0,
+				"level":9,
+				"facing":"DOWN"
+			},
 		"imgName":"OldMan",
 		"canBeSteppedOn":false,
 		"id":230,
@@ -441,10 +513,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":23,
-		"x":11.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":11.0,
+				"y":2.0,
+				"level":23,
+				"facing":"DOWN"
+			},
 		"imgName":"TradeLady",
 		"canBeSteppedOn":false,
 		"id":231,
@@ -462,10 +538,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":9,
-		"x":4.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":3.0,
+				"level":9,
+				"facing":"UP"
+			},
 		"imgName":"Man2",
 		"canBeSteppedOn":false,
 		"id":232,
@@ -483,10 +563,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":10,
-		"x":3.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":3.0,
+				"level":10,
+				"facing":"DOWN"
+			},
 		"imgName":"Man2",
 		"canBeSteppedOn":false,
 		"id":233,
@@ -509,10 +593,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":10,
-		"x":6.0,
-		"y":6.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":6.0,
+				"y":6.0,
+				"level":10,
+				"facing":"DOWN"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":234,
@@ -530,10 +618,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":7,
-		"x":4.0,
-		"y":1.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":1.0,
+				"level":7,
+				"facing":"DOWN"
+			},
 		"imgName":"Lady3",
 		"canBeSteppedOn":false,
 		"id":238,
@@ -551,10 +643,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":7,
-		"x":3.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":5.0,
+				"level":7,
+				"facing":"UP"
+			},
 		"imgName":"Lady4",
 		"canBeSteppedOn":false,
 		"id":239,
@@ -572,10 +668,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":7,
-		"x":4.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":5.0,
+				"level":7,
+				"facing":"UP"
+			},
 		"imgName":"Girl2",
 		"canBeSteppedOn":false,
 		"id":240,
@@ -593,10 +693,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":8,
-		"x":5.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":5.0,
+				"y":3.0,
+				"level":8,
+				"facing":"UP"
+			},
 		"imgName":"Man4",
 		"canBeSteppedOn":false,
 		"id":241,
@@ -619,10 +723,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":8,
-		"x":7.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":7.0,
+				"y":2.0,
+				"level":8,
+				"facing":"UP"
+			},
 		"imgName":"Girl2",
 		"canBeSteppedOn":false,
 		"id":242,
@@ -645,10 +753,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":8,
-		"x":0.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":0.0,
+				"y":3.0,
+				"level":8,
+				"facing":"DOWN"
+			},
 		"imgName":"Pidgey",
 		"canBeSteppedOn":false,
 		"id":243,
@@ -666,10 +778,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":18,
-		"x":1.0,
-		"y":4.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":1.0,
+				"y":4.0,
+				"level":18,
+				"facing":"LEFT"
+			},
 		"imgName":"Scientist1",
 		"canBeSteppedOn":false,
 		"id":244,
@@ -687,10 +803,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"RIGHT",
-		"level":20,
-		"x":2.0,
-		"y":4.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":4.0,
+				"level":20,
+				"facing":"RIGHT"
+			},
 		"imgName":"Scientist1",
 		"canBeSteppedOn":false,
 		"id":247,
@@ -708,10 +828,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":20,
-		"x":4.0,
-		"y":1.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":1.0,
+				"level":20,
+				"facing":"DOWN"
+			},
 		"imgName":"MrCoffe",
 		"canBeSteppedOn":false,
 		"id":248,
@@ -729,10 +853,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":13,
-		"x":8.0,
-		"y":4.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":8.0,
+				"y":4.0,
+				"level":13,
+				"facing":"LEFT"
+			},
 		"imgName":"Lady2",
 		"canBeSteppedOn":false,
 		"id":249,
@@ -755,10 +883,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":13,
-		"x":2.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":2.0,
+				"level":13,
+				"facing":"LEFT"
+			},
 		"imgName":"Girl2",
 		"canBeSteppedOn":false,
 		"id":250,
@@ -776,10 +908,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":15,
-		"x":3.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":2.0,
+				"level":15,
+				"facing":"DOWN"
+			},
 		"imgName":"Man6",
 		"canBeSteppedOn":false,
 		"id":251,
@@ -797,10 +933,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":15,
-		"x":2.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":5.0,
+				"level":15,
+				"facing":"LEFT"
+			},
 		"imgName":"OldMan2",
 		"canBeSteppedOn":false,
 		"id":252,
@@ -818,10 +958,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":16,
-		"x":17.0,
-		"y":29.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":17.0,
+				"y":29.0,
+				"level":16,
+				"facing":"DOWN"
+			},
 		"imgName":"Man2",
 		"canBeSteppedOn":false,
 		"id":253,
@@ -844,10 +988,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":16,
-		"x":31.0,
-		"y":0.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":31.0,
+				"y":0.0,
+				"level":16,
+				"facing":"DOWN"
+			},
 		"imgName":"Man2",
 		"canBeSteppedOn":false,
 		"id":254,
@@ -865,10 +1013,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":16,
-		"x":27.0,
-		"y":21.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":27.0,
+				"y":21.0,
+				"level":16,
+				"facing":"UP"
+			},
 		"imgName":"Man2",
 		"canBeSteppedOn":false,
 		"id":255,
@@ -886,10 +1038,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":16,
-		"x":8.0,
-		"y":19.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":8.0,
+				"y":19.0,
+				"level":16,
+				"facing":"DOWN"
+			},
 		"imgName":"Lady3",
 		"canBeSteppedOn":false,
 		"id":256,
@@ -907,10 +1063,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"RIGHT",
-		"level":21,
-		"x":2.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":3.0,
+				"level":21,
+				"facing":"RIGHT"
+			},
 		"imgName":"BaldMan",
 		"canBeSteppedOn":false,
 		"id":259,
@@ -928,10 +1088,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":21,
-		"x":4.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":5.0,
+				"level":21,
+				"facing":"LEFT"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":260,
@@ -949,10 +1113,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":22,
-		"x":1.0,
-		"y":2.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":1.0,
+				"y":2.0,
+				"level":22,
+				"facing":"LEFT"
+			},
 		"imgName":"BaldMan2",
 		"canBeSteppedOn":false,
 		"id":263,
@@ -970,10 +1138,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"RIGHT",
-		"level":22,
-		"x":3.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":3.0,
+				"y":5.0,
+				"level":22,
+				"facing":"RIGHT"
+			},
 		"imgName":"Girl2",
 		"canBeSteppedOn":false,
 		"id":264,
@@ -991,10 +1163,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":22,
-		"x":4.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":5.0,
+				"level":22,
+				"facing":"LEFT"
+			},
 		"imgName":"Mankey",
 		"canBeSteppedOn":false,
 		"id":265,
@@ -1012,10 +1188,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":23,
-		"x":4.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":4.0,
+				"y":3.0,
+				"level":23,
+				"facing":"UP"
+			},
 		"imgName":"Lady3",
 		"canBeSteppedOn":false,
 		"id":268,
@@ -1033,10 +1213,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":23,
-		"x":11.0,
-		"y":7.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":11.0,
+				"y":7.0,
+				"level":23,
+				"facing":"LEFT"
+			},
 		"imgName":"OldMan",
 		"canBeSteppedOn":false,
 		"id":269,
@@ -1054,10 +1238,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"LEFT",
-		"level":24,
-		"x":5.0,
-		"y":5.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":5.0,
+				"y":5.0,
+				"level":24,
+				"facing":"LEFT"
+			},
 		"imgName":"Man6",
 		"canBeSteppedOn":false,
 		"id":272,
@@ -1080,10 +1268,14 @@
 		"con":0,
 		"px":-1,
 		"py":-1,
-		"dir":"UP",
-		"level":24,
-		"x":2.0,
-		"y":4.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":2.0,
+				"y":4.0,
+				"level":24,
+				"facing":"UP"
+			},
 		"imgName":"Boy1",
 		"canBeSteppedOn":false,
 		"id":273,
@@ -1101,10 +1293,14 @@
 		"class":"com.dryerzinia.pokemon.obj.tiles.Person",
 		"px":-1,
 		"py":-1,
-		"dir":"DOWN",
-		"level":23,
-		"x":1.0,
-		"y":3.0,
+		"location":
+			{
+				"class":"com.dryerzinia.pokemon.map.Pose",
+				"x":1.0,
+				"y":3.0,
+				"level":23,
+				"facing":"DOWN"
+			},
 		"imgName":"Jigglypuff",
 		"canBeSteppedOn":false,
 		"id":274,

@@ -307,7 +307,7 @@ public class Player implements Serializable {
 		Iterator<Person> people = ClientState.getPlayerLevel().nearbyPersonIterator();
 		while(people.hasNext()){
 			Person person = people.next();
-			if(person.x == px && person.y == py && person.level == ClientState.getPlayerLevel().id){
+			if(person.getPose().getX() == px && person.getPose().getY() == py && person.getPose().getLevel() == ClientState.getPlayerLevel().id){
 				person.click();
 				break;
 			}

@@ -23,13 +23,13 @@ public class PersonTextEvent extends TextEvent {
 
 		Direction newDirection = Direction.NONE;
 
-		if(ClientState.player.getPose().getX() > person.x)
+		if(ClientState.player.getPose().getX() > person.getPose().getX())
 			newDirection = Direction.RIGHT;
-		else if(ClientState.player.getPose().getX() < person.x)
+		else if(ClientState.player.getPose().getX() < person.getPose().getX())
 			newDirection = Direction.LEFT;
-		else if(ClientState.player.getPose().getY() > person.y)
+		else if(ClientState.player.getPose().getY() > person.getPose().getY())
 			newDirection = Direction.DOWN;
-		else if(ClientState.player.getPose().getY() < person.y)
+		else if(ClientState.player.getPose().getY() < person.getPose().getY())
 			newDirection = Direction.UP;
 
 		person.getPose().changeDirection(newDirection);
