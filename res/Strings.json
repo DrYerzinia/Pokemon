@@ -76,7 +76,7 @@
 	{
 		"id": 15,
 		"en": "It\cs encyclopedia-\nlike, but the\npages are blank!",
-		"es": "Es como una enciclopedia, pero la páginas están en blanco!"
+		"es": "Es como una enciclopedia, pero las páginas están en blanco!"
 	},
 	{
 		"id": 16,
@@ -164,7 +164,8 @@
 	},
 	{
 		"id": 35,
-		"en": "I\cm raising\nPOKeMON too!\n\nWhen they get\nstrong, they can\nprotect me!"
+		"en": "I\cm raising\nPOKeMON too!\n\nWhen they get\nstrong, they can\nprotect me!",
+		"es": "¡Yo también entreno a mis Pokémon!\n\n¡Cuando se hagan fuertes me protegerán!"
 	},
 	{
 		"id": 36,
