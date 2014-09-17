@@ -2,8 +2,11 @@ package com.dryerzinia.pokemon.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -33,7 +36,22 @@ public class Database {
 			Logger.getLogger(Database.class.getName());
 	
 	private enum DBMS {
-		MYSQL, SQLITE;
+		MYSQL("mysql"), 
+		SQLITE("sqlite");
+		
+		private DBMS(String name) {
+			this.name = name;
+		}
+		
+		private static DBMS dbmsFromString(String s) {
+			for (DBMS dbms : DBMS.values()) {
+				if (dbms.name.equalsIgnoreCase(s)) 
+					return dbms;
+			}
+			return null;
+		}
+		
+		private String name;
 	}
 	private static DBMS dbms;
 	private static String dbname;
@@ -43,6 +61,28 @@ public class Database {
 	private static String host;
 	private static int port;
 	
+	private static final String dbPropComments =
+			"This is the database properties file.\n"
+			+ "You need to provide the dbms (mysql or sqlite) and "
+			+ "the dbname.\nIf you are using mysql, you also need to "
+			+ "provide a host, port, username, and password.\n";
+	
+	private static void writeDefaultPropertiesFile(File file) {
+		Properties dbProperties = new Properties();
+		try (OutputStream out = new FileOutputStream(file)) {
+			dbProperties.setProperty("dbms", "sqlite");
+			dbProperties.setProperty("dbname", "");
+			dbProperties.store(out, dbPropComments);
+			LOG.info("Writing default property file.");
+			System.out.println("Wrote default properties file; "
+					+ "you will need to make changes to connect to the database.");
+		} catch (Exception e) {
+			String errMsg = "Error writing defaults to properties file!";
+			LOG.severe(errMsg);
+			throw new ExceptionInInitializerError(errMsg);
+		}				
+	}
+	
 	
 	/**
 	 * Load the database properties and initialize the correct class
@@ -50,19 +90,33 @@ public class Database {
 	 */
 	static {
 
-    	String fs = System.getProperty("file.separator");
+    	String fileSeparator = System.getProperty("file.separator");
+    	File propFile = new File(
+    			System.getProperty("user.home")
+    			+ fileSeparator
+    			+ ".pokemonData"
+    			+ fileSeparator
+    			+ "db.properties");
 
 		Properties dbProperties = new Properties();
-		try (InputStream in = 
-				new FileInputStream(System.getProperty("user.home") + fs + ".pokemonData" + fs + "db.properties"))
+		try (InputStream in = new FileInputStream(propFile))
 		{
 			dbProperties.load(in);		
 			LOG.info("Database properties file loaded.");
-			dbms = (dbProperties.getProperty("dbms").equals("mysql")) ?
-					DBMS.MYSQL : DBMS.SQLITE;
+			dbms = DBMS.dbmsFromString(dbProperties.getProperty("dbms"));
+			System.out.println(dbms);
+			if (dbms == null) {
+				writeDefaultPropertiesFile(propFile);
+				System.exit(1);
+			}
+						
 			LOG.info("Using dbms: " + dbms);
-			
 			dbname = dbProperties.getProperty("dbname");
+			if ("".equals(dbname)) {
+				System.err.println(
+						"You must provide a dbname in the database properties file.");
+				System.exit(1);
+			}
 			
 			switch(dbms) {
 			
@@ -81,6 +135,12 @@ public class Database {
 				Class.forName("org.sqlite.JDBC");
 				break;
 			}
+			
+		} catch (FileNotFoundException e) {
+			String errMsg = "Properties file not found!";
+			LOG.warning(errMsg);
+			writeDefaultPropertiesFile(propFile);
+			System.exit(1);
 			
 		} catch (NumberFormatException e) {
 			String errMsg = "Invalid port number in database properties file.";
