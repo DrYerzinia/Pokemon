@@ -10,6 +10,7 @@ import com.dryerzinia.pokemon.map.Pose;
 import com.dryerzinia.pokemon.ui.menu.GMenu;
 import com.dryerzinia.pokemon.util.ResourceLoader;
 import com.dryerzinia.pokemon.obj.Actor;
+import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.MovementAnimator;
 
 public class Person extends Tile implements Actor, OnClick {
@@ -130,6 +131,23 @@ public class Person extends Tile implements Actor, OnClick {
     @Override
     public boolean act() {
         return false;
+    }
+
+    public void facePlayer(){
+
+    	Direction newDirection = Direction.NONE;
+
+		if(ClientState.player.getPose().getX() > location.getX())
+			newDirection = Direction.RIGHT;
+		else if(ClientState.player.getPose().getX() < location.getX())
+			newDirection = Direction.LEFT;
+		else if(ClientState.player.getPose().getY() > location.getY())
+			newDirection = Direction.DOWN;
+		else if(ClientState.player.getPose().getY() < location.getY())
+			newDirection = Direction.UP;
+
+		location.changeDirection(newDirection);
+
     }
 
     public void addMovement(Pose position){

@@ -14,7 +14,6 @@ public class TextEvent extends Event implements TextMenuListener {
 
 	private int textID;
 
-	private int nextEvent;
 	protected transient boolean complete;
 
 	public TextEvent(){}

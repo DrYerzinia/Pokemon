@@ -23,6 +23,7 @@
 		"questionTextID":1,
 		"yesEventChain":0,
 		"noEventChain":-1,
+		"nextEvent":-1,
 		"id":2
 	},
 	{
@@ -215,9 +216,8 @@
 		"id":32
 	},
 	{
-		"class":"com.dryerzinia.pokemon.event.PersonTextEvent",
+		"class":"com.dryerzinia.pokemon.event.TextEvent",
 		"textID":42,
-		"actorID":222,
 		"nextEvent":34,
 		"id":33
 	},
@@ -231,7 +231,7 @@
 			"number":1
 		},
 		"textID":43,
-		"nextEvent":-1,
+		"nextEvent":77,
 		"id":34
 	},
 	{
@@ -519,5 +519,25 @@
 		"actorID":274,
 		"nextEvent":-1,
 		"id":75
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.DisableEnableAnimationEvent",
+		"nextEvent":78,
+		"actorID":222,
+		"isEnabled":false,
+		"id":76
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.DisableEnableAnimationEvent",
+		"nextEvent":-1,
+		"actorID":222,
+		"isEnabled":true,
+		"id":77
+	},
+	{
+		"class":"com.dryerzinia.pokemon.event.FacePlayerEvent",
+		"nextEvent":33,
+		"actorID":222,
+		"id":78
 	}
 ]

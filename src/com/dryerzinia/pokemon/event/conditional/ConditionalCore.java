@@ -9,7 +9,7 @@ public class ConditionalCore {
 
 	static {
 
-		conditions.put(0, new BooleanConditional(0, false, 33, 35));
+		conditions.put(0, new BooleanConditional(0, false, 76, 35));
 
 	}
 

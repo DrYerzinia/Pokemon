@@ -11,6 +11,8 @@ public abstract class Event implements JSON {
 
 	public abstract void fire();
 
+	protected int nextEvent;
+
 	public int getID(){
 		return id;
 	}
@@ -26,6 +28,7 @@ public abstract class Event implements JSON {
 	public void fromJSON(HashMap<String, Object> json) {
 
 		id = ((Float) json.get("id")).intValue();
+		nextEvent = ((Float) json.get("nextEvent")).intValue();
 
 	}
 

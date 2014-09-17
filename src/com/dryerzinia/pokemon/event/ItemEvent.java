@@ -18,7 +18,6 @@ public class ItemEvent extends Event
 
 	private Item item;
 	private int textID;
-	private int nextEvent;
 	private transient boolean soundPlayed, textFinished;
 	
 	public ItemEvent(){}

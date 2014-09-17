@@ -3,7 +3,6 @@ package com.dryerzinia.pokemon.event;
 import java.util.HashMap;
 
 import com.dryerzinia.pokemon.map.Direction;
-import com.dryerzinia.pokemon.obj.ClientState;
 import com.dryerzinia.pokemon.obj.GameState;
 import com.dryerzinia.pokemon.obj.tiles.Person;
 
@@ -21,22 +20,12 @@ public class PersonTextEvent extends TextEvent {
 		Person person = GameState.people.get(actorID);
 		oldDirection = person.getPose().facing();
 
-		Direction newDirection = Direction.NONE;
-
-		if(ClientState.player.getPose().getX() > person.getPose().getX())
-			newDirection = Direction.RIGHT;
-		else if(ClientState.player.getPose().getX() < person.getPose().getX())
-			newDirection = Direction.LEFT;
-		else if(ClientState.player.getPose().getY() > person.getPose().getY())
-			newDirection = Direction.DOWN;
-		else if(ClientState.player.getPose().getY() < person.getPose().getY())
-			newDirection = Direction.UP;
-
-		person.getPose().changeDirection(newDirection);
+		person.facePlayer();
 
 		person.animationEnabled = false;
 
 		super.fire();
+
 	}
 
 	@Override

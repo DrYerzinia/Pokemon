@@ -23,9 +23,12 @@ public class WanderingPerson extends Person implements Actor {
     }
 
     public WanderingPerson(String imgName, boolean cbso, int w, int h, int rx, int ry, Pose location, Grid g) {
-        this.imgName = imgName;
-        pixelOffsetX = 0;
+
+    	this.imgName = imgName;
+
+    	pixelOffsetX = 0;
         pixelOffsetY = 0;
+
         canBeSteppedOn = cbso;
 
         this.w = w;
@@ -64,23 +67,32 @@ public class WanderingPerson extends Person implements Actor {
         pos = (int) (Math.random() * 20);
 
         if (pos > 2 && con % 4 == 0) {
-            if (dir == Direction.UP) {
-                if (!PokemonServer.isPlayer(x, y - 1, level)
+
+        	if (dir == Direction.UP) {
+
+        		if (!PokemonServer.isPlayer(x, y - 1, level)
                         && g.canStepOn(x, y - 1))
                     canMove = true;
-            } else if (dir == Direction.DOWN) {
-                if (!PokemonServer.isPlayer(x, y + 1, level)
+
+        	} else if (dir == Direction.DOWN) {
+
+        		if (!PokemonServer.isPlayer(x, y + 1, level)
                         && g.canStepOn(x, y + 1))
                     canMove = true;
-            } else if (dir == Direction.LEFT) {
-                if (!PokemonServer.isPlayer(x - 1, y, level)
+
+        	} else if (dir == Direction.LEFT) {
+
+        		if (!PokemonServer.isPlayer(x - 1, y, level)
                         && g.canStepOn(x - 1, y))
                     canMove = true;
-            } else if (dir == Direction.RIGHT) {
-                if (!PokemonServer.isPlayer(x + 1, y, level)
+
+        	} else if (dir == Direction.RIGHT) {
+
+        		if (!PokemonServer.isPlayer(x + 1, y, level)
                         && g.canStepOn(x + 1, y))
                     canMove = true;
-            }
+
+        	}
         }
 
         if (canMove && con % 7 == 0) {

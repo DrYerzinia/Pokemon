@@ -241,15 +241,19 @@ public class MovementAnimator {
         	 * they are coming out of Fog of War
         	 */
         	if(level == null){
+
         		if(newPosition.getLevel() != -1){
         			position.setLevel(newPosition.getLevel());
         			level = GameState.getMap().getLevel(position.getLevel());
         		} else
         			return null;
+
         	} else {
-            	LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
+
+        		LevelChange levelChange = level.grid.changeLevel(futurePoint.getX(), futurePoint.getY());
             	if(levelChange != null)
             		levelChanged = true;
+
         	}
 
         	boolean canStepNew = level.canStepOn(futurePoint.getX(), futurePoint.getY(), isPlayer);
